@@ -1,5 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
+const REPO = "SHELBYY-21/razen-wallet-console";
+
 export function verifyGithubSignature(raw: string, header: string | null, secret: string): boolean {
   if (!header || !secret) return false;
   const expected = `sha256=${createHmac("sha256", secret).update(raw).digest("hex")}`;
@@ -13,11 +15,16 @@ export function mainPush(body: { ref?: string; deleted?: boolean }): boolean {
   return body.ref === "refs/heads/main" && !body.deleted;
 }
 
-export async function headSha(repo = "SHELBYY-21/razen-wallet-console"): Promise<string | null> {
-  const res = await fetch(`https://api.github.com/repos/${repo}/commits/main`, {
-    headers: { Accept: "application/vnd.github+json", "User-Agent": "razen-ship" },
+export async function verifyGithubRepoToken(header: string | null): Promise<boolean> {
+  if (!header?.startsWith("Bearer ")) return false;
+  const token = header.slice(7).trim();
+  if (!token) return false;
+  const res = await fetch(`https://api.github.com/repos/${REPO}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "User-Agent": "razen-ship",
+    },
   });
-  if (!res.ok) return null;
-  const json = (await res.json()) as { sha?: string };
-  return json.sha ?? null;
+  return res.ok;
 }

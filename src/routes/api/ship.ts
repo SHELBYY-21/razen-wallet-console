@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { headSha, mainPush, verifyGithubSignature } from "@/lib/ship/github";
+import { mainPush, verifyGithubRepoToken, verifyGithubSignature } from "@/lib/ship/github";
 import { shipMain } from "@/lib/ship/deploy";
 
 export const Route = createFileRoute("/api/ship")({
@@ -10,20 +10,17 @@ export const Route = createFileRoute("/api/ship")({
         const secret = process.env.SHIP_SECRET?.trim() ?? "";
         const raw = await request.text();
         const signed = verifyGithubSignature(raw, request.headers.get("x-hub-signature-256"), secret);
-        let body: { ref?: string; deleted?: boolean; after?: string } = {};
+        const fromActions = await verifyGithubRepoToken(request.headers.get("authorization"));
+        if (!signed && !fromActions) {
+          return Response.json({ error: "unauthorized" }, { status: 401 });
+        }
+        let body: { ref?: string; deleted?: boolean } = {};
         try {
-          body = JSON.parse(raw) as { ref?: string; deleted?: boolean; after?: string };
+          body = JSON.parse(raw) as { ref?: string; deleted?: boolean };
         } catch {
           return Response.json({ error: "parse error" }, { status: 400 });
         }
         if (!mainPush(body)) return Response.json({ ok: true, skipped: true });
-        if (!signed) {
-          const after = String(body.after ?? "");
-          const head = await headSha();
-          if (!after || !head || after !== head) {
-            return Response.json({ error: "unauthorized" }, { status: 401 });
-          }
-        }
         const out = await shipMain();
         return Response.json(out, { status: out.ok ? 200 : 502 });
       },

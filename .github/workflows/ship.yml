@@ -18,10 +18,12 @@ jobs:
       - name: Trigger /api/ship
         env:
           SHA: ${{ github.sha }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           code=$(curl -sS -o /tmp/ship.json -w '%{http_code}' \
             -X POST https://razen-wallet-console.vercel.app/api/ship \
             -H 'content-type: application/json' \
+            -H "Authorization: Bearer $GH_TOKEN" \
             -d "{\"ref\":\"refs/heads/main\",\"after\":\"$SHA\"}")
           cat /tmp/ship.json
           echo
