@@ -8,6 +8,7 @@ declare class TMNOne {
     wallet_tmn_id: string,
     wallet_device_id?: string,
   ): void;
+  setProxy(proxy_ip: string, proxy_username?: string, proxy_password?: string): void;
   enableDebugging(): void;
   loginWithPin6(pin: string): Promise<string | { error: string }>;
   getBalance(): Promise<unknown>;

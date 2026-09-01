@@ -7,12 +7,6 @@ import os from 'os';
 import zlib from 'zlib';
 import { URL } from 'url';
 
-function catchMsg(e) {
-    const msg = e && e.message ? e.message : String(e);
-    const line = e && e.stack ? String(e.stack).split('\n')[1] : '';
-    return line ? `${msg} (${line.trim()})` : msg;
-}
-
 class TMNOne {
 
     #tmnone_endpoint = 'https://api.tmn.one/api.php';
@@ -126,8 +120,8 @@ class TMNOne {
                 await this.#uploadMetaData();
             }
         } catch (e) {
-            console.log(`Error: ${catchMsg(e)}`);
-            return { error: catchMsg(e) };
+            console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]}`);
+            return { error: e.message };
         }
         return this.#wallet_access_token;
     }
@@ -345,8 +339,8 @@ class TMNOne {
             }
             return wallet_response_body;
         } catch (e) {
-            console.log(`Error: ${catchMsg(e)}`);
-            return { error: catchMsg(e) };
+            console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]}`);
+            return { error: e.message };
         }
     }
 
@@ -440,8 +434,8 @@ class TMNOne {
             return wallet_response_body;
 
         } catch (e) {
-            console.log(`Error: ${catchMsg(e)}`);
-            return { error: catchMsg(e) };
+            console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]}`);
+            return { error: e.message };
         }
     }
 
@@ -531,8 +525,8 @@ class TMNOne {
             return wallet_response_body;
 
         } catch (e) {
-            console.log(`Error: ${catchMsg(e)}`);
-            return { error: catchMsg(e) };
+            console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]}`);
+            return { error: e.message };
         }
     }
 
@@ -627,8 +621,8 @@ class TMNOne {
             return wallet_response_body;
 
         } catch (e) {
-            console.log(`Error: ${catchMsg(e)}`);
-            return { error: catchMsg(e) };
+            console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]} (${e.lineNumber})`);
+            return { error: `${e.message} (line:${e.lineNumber})` };
         }
     }
 
@@ -789,8 +783,8 @@ class TMNOne {
             return wallet_response_body;
 
         } catch (e) {
-            console.log(`Error: ${catchMsg(e)}`);
-            return { error: catchMsg(e) };
+            console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]}`);
+            return { error: e.message };
         }
     }
 
@@ -875,8 +869,8 @@ class TMNOne {
             return wallet_response_body;
 
         } catch (e) {
-            console.log(`Error: ${catchMsg(e)}`);
-            return { error: catchMsg(e) };
+            console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]}`);
+            return { error: e.message };
         }
     }
 
@@ -1003,8 +997,8 @@ class TMNOne {
             this.#print_debugging('tmnone_connect', `response_body = ${JSON.stringify(response_body)}`);
 
         } catch (e) {
-            console.log(`Error: ${catchMsg(e)}`);
-            return { error: catchMsg(e) };
+            console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]}`);
+            return { error: e.message };
         }
         return response_body;
     }
@@ -1081,16 +1075,18 @@ class TMNOne {
                 } catch (json_e) {
                     response_body = e.response.data;
                 }
-
-                if (response_body && response_body.code === 'MAS-401') {
+                
+                if (response_body.code === 'MAS-401') {
                     const clear_cache_body = JSON.stringify({ scope: 'text_storage_obj', cmd: 'set', data: '' });
                     await this.#tmnone_connect(clear_cache_body);
+                } else {
+                    console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]}`);
+                    return { error: e.message };
                 }
-                if (response_body && typeof response_body === 'object') {
-                    return response_body;
-                }
+            } else {
+                console.log(`Error: ${e.message} on line ${e.stack.split('\n')[1]}`);
+                return { error: e.message };
             }
-            return { error: catchMsg(e) };
         }
 
         this.#print_debugging('wallet_connect', `response_body = ${JSON.stringify(response_body)}`);

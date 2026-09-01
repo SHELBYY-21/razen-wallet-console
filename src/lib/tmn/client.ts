@@ -110,43 +110,6 @@ async function sdkCall<T>(
   }
 }
 
-async function proxyCall<T>(
-  apiBase: string,
-  apiToken: string,
-  method: string,
-  params: unknown[],
-  credentials: TmnCredentials,
-): Promise<TmnResult<T>> {
-  const url = apiBase.replace(/\/$/, "");
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(apiToken ? { Authorization: `Bearer ${apiToken}` } : {}),
-      },
-      body: JSON.stringify({ method, params, credentials }),
-    });
-    const json = (await res.json().catch(() => null)) as { error?: string; data?: T } | T | null;
-    if (!res.ok) {
-      const err =
-        json && typeof json === "object" && "error" in json && json.error
-          ? String(json.error)
-          : `HTTP ${res.status}`;
-      return { ok: false, error: err };
-    }
-    if (json && typeof json === "object" && "error" in json && json.error) {
-      return { ok: false, error: String(json.error) };
-    }
-    if (json && typeof json === "object" && "data" in json && json.data !== undefined) {
-      return { ok: true, data: json.data as T };
-    }
-    return { ok: true, data: json as T };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : "เชื่อม API ไม่สำเร็จ" };
-  }
-}
-
 export async function tmnInvoke<T>(
   method: string,
   params: unknown[],
@@ -161,9 +124,6 @@ export async function tmnInvoke<T>(
   },
 ): Promise<TmnResult<T>> {
   if (ctx.mode === "live") {
-    if (ctx.apiBase.trim()) {
-      return proxyCall<T>(ctx.apiBase, ctx.apiToken, method, params, ctx.credentials);
-    }
     return sdkCall<T>(method, params, ctx.credentials, ctx.pin || "", ctx.settings);
   }
   return simInvoke<T>(method, params, ctx);

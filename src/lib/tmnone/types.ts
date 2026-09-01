@@ -7,6 +7,9 @@ export type TmnCreds = {
   pin: string;
   faceWebhook?: string;
   faceWait?: number;
+  proxyIp?: string;
+  proxyUser?: string;
+  proxyPass?: string;
 };
 
 export type TmnOp =

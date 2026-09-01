@@ -11,6 +11,9 @@ export type OfficialTmn = {
   device_id?: string;
   faceauth_webhook_url?: string;
   faceauth_wait_timeout?: number;
+  proxy_ip?: string;
+  proxy_username?: string;
+  proxy_password?: string;
 };
 
 export function configureTmn(instance: InstanceType<typeof TMNOne>, _TMN: OfficialTmn) {
@@ -22,6 +25,14 @@ export function configureTmn(instance: InstanceType<typeof TMNOne>, _TMN: Offici
     _TMN.tmn_id,
     _TMN.device_id || "",
   );
+  const ip = _TMN.proxy_ip || process.env.TMN_PROXY_IP || "";
+  if (ip) {
+    instance.setProxy(
+      ip,
+      _TMN.proxy_username || process.env.TMN_PROXY_USERNAME || "",
+      _TMN.proxy_password || process.env.TMN_PROXY_PASSWORD || "",
+    );
+  }
   if (_TMN.faceauth_webhook_url) instance.faceauth_webhook_url = _TMN.faceauth_webhook_url;
   if (_TMN.faceauth_wait_timeout && _TMN.faceauth_wait_timeout > 0) {
     instance.faceauth_wait_timeout = _TMN.faceauth_wait_timeout;

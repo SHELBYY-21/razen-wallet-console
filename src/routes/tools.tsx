@@ -195,18 +195,18 @@ export function ToolsPage() {
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">API Base URL (ไม่บังคับ — proxy สำรอง)</Label>
+            <Label className="text-xs text-muted">setProxy — proxy_ip (ไม่บังคับ)</Label>
             <Input
-              placeholder="เว้นว่าง = ใช้ TMNOne.js ตามเอกสาร"
+              placeholder="host:port หรือ http://ip:port — เว้นว่าง = IP ของ api.tmn.one"
               value={apiBase}
               onChange={(e) => setApiBase(e.target.value)}
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">API Token (ใช้กับ proxy)</Label>
+            <Label className="text-xs text-muted">setProxy — password (ไม่บังคับ)</Label>
             <Input
               type="password"
-              placeholder="Bearer token…"
+              placeholder="proxy_password"
               value={apiToken}
               onChange={(e) => setApiToken(e.target.value)}
             />

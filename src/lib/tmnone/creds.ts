@@ -15,5 +15,8 @@ export function credsOf(c: TmnCredentials, pin: string, settings?: Settings): Tm
     pin,
     faceWebhook: settings?.faceauth_webhook_url,
     faceWait: settings?.faceauth_wait_timeout,
+    proxyIp: settings?.apiBase,
+    proxyUser: process.env.TMN_PROXY_USERNAME || "",
+    proxyPass: settings?.apiToken || process.env.TMN_PROXY_PASSWORD || "",
   };
 }

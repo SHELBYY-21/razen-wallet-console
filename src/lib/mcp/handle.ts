@@ -33,11 +33,21 @@ export function ctxFromEnv() {
   };
   return {
     mode,
-    apiBase: process.env.TMN_API_BASE ?? "",
-    apiToken: process.env.TMN_API_TOKEN ?? "",
+    apiBase: process.env.TMN_PROXY_IP || process.env.TMN_API_BASE || "",
+    apiToken: process.env.TMN_PROXY_PASSWORD || process.env.TMN_API_TOKEN || "",
     credentials,
     pin: process.env.TMN_PIN ?? "",
-    balance: 12_680,
+    balance: 0,
+    settings: {
+      notifPush: true,
+      notifEmail: false,
+      dailyLimit: 200_000,
+      apiBase: process.env.TMN_PROXY_IP || process.env.TMN_API_BASE || "",
+      apiToken: process.env.TMN_PROXY_PASSWORD || process.env.TMN_API_TOKEN || "",
+      mode,
+      faceauth_webhook_url: process.env.TMN_FACE_WEBHOOK || "",
+      faceauth_wait_timeout: Number(process.env.TMN_FACE_WAIT) || 180,
+    },
   };
 }
 

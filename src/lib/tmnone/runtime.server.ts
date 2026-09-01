@@ -19,6 +19,9 @@ async function session(creds: TmnCreds) {
     device_id: creds.deviceId?.trim() || "",
     faceauth_webhook_url: creds.faceWebhook?.trim() || "",
     faceauth_wait_timeout: creds.faceWait,
+    proxy_ip: creds.proxyIp?.trim() || "",
+    proxy_username: creds.proxyUser?.trim() || "",
+    proxy_password: creds.proxyPass?.trim() || "",
   });
   const accessToken = await tmn.loginWithPin6(creds.pin);
   const fail = pinLoginFailed(accessToken);
@@ -103,6 +106,9 @@ export async function runTmn(req: TmnRequest): Promise<TmnWire> {
           device_id: creds.deviceId?.trim() || "",
           faceauth_webhook_url: creds.faceWebhook?.trim() || "",
           faceauth_wait_timeout: creds.faceWait,
+          proxy_ip: creds.proxyIp?.trim() || "",
+          proxy_username: creds.proxyUser?.trim() || "",
+          proxy_password: creds.proxyPass?.trim() || "",
         },
         {
           start: String(payload.start || ""),
