@@ -232,7 +232,7 @@ export function ToolsPage() {
               บันทึก
             </Button>
             <Button variant="secondary" className="flex-1" disabled={testing} onClick={() => void testApi()}>
-              รันตัวอย่าง PHP (login → balance → history)
+              รันตัวอย่าง JS (login → balance → history → txinfo)
             </Button>
           </div>
           {session && (
@@ -361,9 +361,9 @@ export function ToolsPage() {
           ))}
         </ul>
         <p className="mt-3 text-[11px] leading-relaxed text-subtle">
-          LIVE เรียกคลาส TMNOne ตาม PHP บน tmn.one/apidoc:
-          setData(key, mobile, login_token, tmn_id, device_id) → loginWithPin6(pin)
-          → getBalance() → fetchTransactionHistory(เมื่อวาน, พรุ่งนี้)
+          LIVE ตามตัวอย่าง JS บน tmn.one:
+          new TMNOne() → enableDebugging() → setData(...) → loginWithPin6(pin)
+          → getBalance() → fetchTransactionHistory() → fetchTransactionInfo(report_id)
           PIN ใช้ตอน login เท่านั้น ไม่ถามตอนโอน
         </p>
       </section>

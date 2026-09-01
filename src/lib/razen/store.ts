@@ -716,34 +716,35 @@ export const useRazen = create<RazenState>()(
       testLogin: async () => {
         const s = get();
         const ctx = ctxOf(s);
-        const login = await tmnInvoke<{ access_token?: string; connected?: boolean }>(
-          "loginWithPin6",
-          [s.pin],
-          ctx,
-        );
-        if (!login.ok) return login;
-        const ymd = (ms: number) => new Date(ms).toISOString().slice(0, 10);
-        const start = ymd(Date.now() - 86_400_000);
-        const end = ymd(Date.now() + 86_400_000);
-        const balance = await tmnInvoke("getBalance", [], ctx);
-        if (!balance.ok) return balance;
-        const history = await tmnInvoke("fetchTransactionHistory", [start, end, 10, 1], ctx);
-        if (!history.ok) return history;
+        const start = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
+        const end = new Date(Date.now() + 86_400_000).toISOString().slice(0, 10);
+        const res = await tmnInvoke<{
+          login?: { access_token?: string };
+          balance?: unknown;
+          transactions?: unknown;
+          transaction?: unknown;
+          start?: string;
+          end?: string;
+          reportId?: string;
+        }>("bootstrap", [start, end], ctx);
+        if (!res.ok) return res;
         set({
-          sessionToken: login.data.access_token ?? "ok",
+          sessionToken: res.data.login?.access_token ?? "ok",
           lastProbe: {
             setData: {
               tmn_key_id: ctx.credentials.tmn_key_id,
               mobile_number: ctx.credentials.msisdn,
               tmn_id: ctx.credentials.tmn_id,
+              device_id: ctx.credentials.device_id,
             },
-            loginWithPin6: login.data,
-            getBalance: balance.data,
-            fetchTransactionHistory: history.data,
-            window: { start, end },
+            loginWithPin6: res.data.login,
+            getBalance: res.data.balance,
+            fetchTransactionHistory: res.data.transactions,
+            fetchTransactionInfo: res.data.transaction,
+            window: { start: res.data.start, end: res.data.end, reportId: res.data.reportId },
           },
         });
-        toast.success("setData → loginWithPin6 → getBalance → history สำเร็จ");
+        toast.success("JS sample: setData → loginWithPin6 → getBalance → history → txinfo");
         return { ok: true };
       },
 

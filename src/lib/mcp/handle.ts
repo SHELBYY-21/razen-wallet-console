@@ -54,18 +54,8 @@ async function callTool(name: string, args: Record<string, unknown>) {
       };
     case "tmn_login":
       return tmnInvoke("loginWithPin6", [ctx.pin], ctx);
-    case "tmn_bootstrap": {
-      const login = await tmnInvoke("loginWithPin6", [ctx.pin], ctx);
-      if (!login.ok) return login;
-      const ymd = (ms: number) => new Date(ms).toISOString().slice(0, 10);
-      const start = ymd(Date.now() - 86_400_000);
-      const end = ymd(Date.now() + 86_400_000);
-      const balance = await tmnInvoke("getBalance", [], ctx);
-      if (!balance.ok) return balance;
-      const history = await tmnInvoke("fetchTransactionHistory", [start, end, 10, 1], ctx);
-      if (!history.ok) return history;
-      return { ok: true as const, data: { login: login.data, balance: balance.data, history: history.data, start, end } };
-    }
+    case "tmn_bootstrap":
+      return tmnInvoke("bootstrap", [], ctx);
     case "tmn_balance":
       return tmnInvoke("getBalance", [], ctx);
     case "tmn_recipient":

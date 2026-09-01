@@ -31,6 +31,7 @@ const OP: Record<string, TmnOp> = {
   transferBankAC: "bank",
   getPaymentCode: "paymentCode",
   getAmityToken: "amity",
+  bootstrap: "probe",
 };
 
 function payloadOf(method: string, params: unknown[]) {
@@ -46,6 +47,12 @@ function payloadOf(method: string, params: unknown[]) {
       };
     case "fetchTransactionInfo":
       return { reportId: String(params[0] ?? "") };
+    case "bootstrap":
+      return {
+        start: String(params[0] ?? ""),
+        end: String(params[1] ?? ""),
+        reportId: String(params[2] ?? ""),
+      };
     case "fetchQRDetail":
       return { qr: String(params[0] ?? "") };
     case "generateVoucher":

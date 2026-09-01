@@ -259,6 +259,32 @@ export async function simInvoke<T>(
       return { ok: true, data: { token: `amity-sim-${Date.now().toString(36)}` } as T };
     case "getWithdrawalStatus":
       return { ok: true, data: { status: "NONE" } as T };
+    case "bootstrap": {
+      const start = String(params[0] ?? "2025-02-01");
+      const end = String(params[1] ?? "2025-03-02");
+      return {
+        ok: true,
+        data: {
+          login: { access_token: `AT-SIM-${Date.now().toString(36)}` },
+          balance: { current_balance: ctx.balance ?? 0 },
+          transactions: {
+            activities: [
+              {
+                report_id: "umk1678000000",
+                title: "รับโอน",
+                amount: 500,
+                type: "credit",
+                date_time: `${start} 12:00:00`,
+              },
+            ],
+          },
+          transaction: { report_id: "umk1678000000", amount: 500, status: "SUCCESS" },
+          start,
+          end,
+          reportId: "umk1678000000",
+        } as T,
+      };
+    }
     default:
       return { ok: false, error: `ไม่รู้จักเมธอด ${method}` };
   }

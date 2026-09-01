@@ -23,7 +23,8 @@ export type TmnOp =
   | "promptpay"
   | "bank"
   | "paymentCode"
-  | "amity";
+  | "amity"
+  | "probe";
 
 export type TmnRequest = {
   op: TmnOp;

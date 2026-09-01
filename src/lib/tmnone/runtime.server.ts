@@ -1,4 +1,5 @@
 import TMNOne from "./TMNOne.js";
+import { runOfficialExample } from "./bootstrap";
 import { safeErrMessage, verdictOf } from "./errors";
 import type { TmnCreds, TmnOp, TmnRequest, TmnWire } from "./types";
 
@@ -8,7 +9,7 @@ function wire(ok: boolean, error: string, data?: unknown): TmnWire {
 
 async function session(creds: TmnCreds) {
   const tmn = new TMNOne();
-  if (process.env.TMN_DEBUG === "1") tmn.enableDebugging();
+  tmn.enableDebugging();
   tmn.setData(
     creds.keyId.trim(),
     creds.msisdn.trim(),
@@ -77,6 +78,8 @@ async function dispatch(tmn: InstanceType<typeof TMNOne>, op: TmnOp, payload: Re
       return tmn.getPaymentCode();
     case "amity":
       return tmn.getAmityToken();
+    case "probe":
+      return null;
     default:
       return { error: "unknown op" };
   }
@@ -91,6 +94,24 @@ export async function runTmn(req: TmnRequest): Promise<TmnWire> {
     return wire(false, "PIN ต้องเป็น 6 หลัก");
   }
   try {
+    if (op === "probe") {
+      const data = await runOfficialExample(
+        {
+          tmn_key_id: creds.keyId.trim(),
+          mobile_number: creds.msisdn.trim(),
+          login_token: creds.loginToken.trim(),
+          pin: creds.pin,
+          tmn_id: creds.tmnId.trim(),
+          device_id: creds.deviceId?.trim() || "",
+        },
+        {
+          start: String(payload.start || ""),
+          end: String(payload.end || ""),
+          reportId: String(payload.reportId || ""),
+        },
+      );
+      return wire(true, "", data);
+    }
     let tmn = await session(creds);
     if (op === "bank") payload.pin = creds.pin;
     let data = await dispatch(tmn, op, payload);
