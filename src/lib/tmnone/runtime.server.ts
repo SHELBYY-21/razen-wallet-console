@@ -1,5 +1,5 @@
 import TMNOne from "./TMNOne.js";
-import { runOfficialExample } from "./bootstrap";
+import { configureTmn, runOfficialExample } from "./bootstrap";
 import { safeErrMessage, verdictOf } from "./errors";
 import type { TmnCreds, TmnOp, TmnRequest, TmnWire } from "./types";
 
@@ -9,15 +9,16 @@ function wire(ok: boolean, error: string, data?: unknown): TmnWire {
 
 async function session(creds: TmnCreds) {
   const tmn = new TMNOne();
-  tmn.enableDebugging();
-  tmn.setData(
-    creds.keyId.trim(),
-    creds.msisdn.trim(),
-    creds.loginToken.trim(),
-    creds.tmnId.trim(),
-    creds.deviceId?.trim() || "",
-  );
-  if (creds.faceWebhook?.trim()) tmn.faceauth_webhook_url = creds.faceWebhook.trim();
+  configureTmn(tmn, {
+    tmn_key_id: creds.keyId.trim(),
+    mobile_number: creds.msisdn.trim(),
+    login_token: creds.loginToken.trim(),
+    pin: creds.pin,
+    tmn_id: creds.tmnId.trim(),
+    device_id: creds.deviceId?.trim() || "",
+    faceauth_webhook_url: creds.faceWebhook?.trim() || "",
+    faceauth_wait_timeout: creds.faceWait,
+  });
   const token = await tmn.loginWithPin6(creds.pin);
   if (token && typeof token === "object" && "error" in token) {
     throw new Error(token.error || "เข้าสู่ระบบไม่สำเร็จ");
@@ -103,6 +104,8 @@ export async function runTmn(req: TmnRequest): Promise<TmnWire> {
           pin: creds.pin,
           tmn_id: creds.tmnId.trim(),
           device_id: creds.deviceId?.trim() || "",
+          faceauth_webhook_url: creds.faceWebhook?.trim() || "",
+          faceauth_wait_timeout: creds.faceWait,
         },
         {
           start: String(payload.start || ""),

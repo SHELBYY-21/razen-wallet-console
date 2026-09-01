@@ -6,6 +6,7 @@ export type TmnCreds = {
   deviceId?: string;
   pin: string;
   faceWebhook?: string;
+  faceWait?: number;
 };
 
 export type TmnOp =

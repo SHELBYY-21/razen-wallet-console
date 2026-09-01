@@ -14,5 +14,6 @@ export function credsOf(c: TmnCredentials, pin: string, settings?: Settings): Tm
     deviceId: c.device_id,
     pin,
     faceWebhook: settings?.faceauth_webhook_url,
+    faceWait: settings?.faceauth_wait_timeout,
   };
 }

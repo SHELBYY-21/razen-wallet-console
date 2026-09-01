@@ -158,11 +158,11 @@ export function ToolsPage() {
             บัญชีที่เลือก: {active?.nickname ?? "—"} · LIVE ใช้ SDK TMNOne.js (ไม่ต้องใส่ URL)
           </p>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">$_TMN['tmn_key_id']</Label>
+            <Label className="text-xs text-muted">tmnone_keyid</Label>
             <Input value={keyId} onChange={(e) => setKeyId(e.target.value)} placeholder="x1234" />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">$_TMN['mobile_number']</Label>
+            <Label className="text-xs text-muted">wallet_msisdn</Label>
             <Input
               inputMode="tel"
               value={msisdn}
@@ -171,7 +171,7 @@ export function ToolsPage() {
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">$_TMN['login_token']</Label>
+            <Label className="text-xs text-muted">wallet_login_token</Label>
             <Input
               value={loginToken}
               onChange={(e) => setLoginToken(e.target.value)}
@@ -179,7 +179,7 @@ export function ToolsPage() {
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">$_TMN['tmn_id']</Label>
+            <Label className="text-xs text-muted">wallet_tmn_id</Label>
             <Input
               value={tmnId}
               onChange={(e) => setTmnId(e.target.value)}
@@ -187,7 +187,7 @@ export function ToolsPage() {
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">$_TMN['device_id'] (เว้นว่างได้)</Label>
+            <Label className="text-xs text-muted">wallet_device_id — ไม่บังคับ</Label>
             <Input
               value={deviceId}
               onChange={(e) => setDeviceId(e.target.value)}
@@ -212,12 +212,16 @@ export function ToolsPage() {
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">faceauth_webhook_url</Label>
+            <Label className="text-xs text-muted">faceauth_webhook_url — ไม่บังคับ (Notify)</Label>
             <Input
               placeholder="https://webhook.app/api"
               value={webhook}
               onChange={(e) => setWebhook(e.target.value)}
             />
+            <p className="text-[11px] leading-relaxed text-subtle">
+              VerifyFace เกิดเมื่อเข้าสู่ระบบจากเบอร์อื่นภายใต้เลขบัตรเดียวกัน หรือโอนเกิน 50,000 บาท/ครั้ง
+              หรือ 200,000 บาท/วัน — ระบบ POST ไป URL นี้แล้วรอ faceauth_wait_timeout วินาที
+            </p>
           </div>
           <div className="space-y-1">
             <Label className="text-xs text-muted">faceauth_wait_timeout (วินาที)</Label>

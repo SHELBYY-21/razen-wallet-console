@@ -8,7 +8,24 @@ export type OfficialTmn = {
   pin: string;
   tmn_id: string;
   device_id?: string;
+  faceauth_webhook_url?: string;
+  faceauth_wait_timeout?: number;
 };
+
+export function configureTmn(instance: InstanceType<typeof TMNOne>, _TMN: OfficialTmn) {
+  instance.enableDebugging();
+  instance.setData(
+    _TMN.tmn_key_id,
+    _TMN.mobile_number,
+    _TMN.login_token,
+    _TMN.tmn_id,
+    _TMN.device_id || "",
+  );
+  if (_TMN.faceauth_webhook_url) instance.faceauth_webhook_url = _TMN.faceauth_webhook_url;
+  if (_TMN.faceauth_wait_timeout && _TMN.faceauth_wait_timeout > 0) {
+    instance.faceauth_wait_timeout = _TMN.faceauth_wait_timeout;
+  }
+}
 
 export function ymd(offsetDays: number) {
   return new Date(Date.now() + offsetDays * 86_400_000).toISOString().slice(0, 10);
@@ -43,14 +60,7 @@ export async function runOfficialExample(
   range?: { start?: string; end?: string; reportId?: string },
 ) {
   const instance = new TMNOne();
-  instance.enableDebugging();
-  instance.setData(
-    _TMN.tmn_key_id,
-    _TMN.mobile_number,
-    _TMN.login_token,
-    _TMN.tmn_id,
-    _TMN.device_id || "",
-  );
+  configureTmn(instance, _TMN);
 
   const login = await instance.loginWithPin6(_TMN.pin);
   const balance = await instance.getBalance();
