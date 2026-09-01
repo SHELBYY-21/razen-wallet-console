@@ -68,6 +68,7 @@ type RazenState = {
   paymentCode: PaymentCodeOut | null;
   lastQr: QrSlip | null;
   lastFees: FeeInfo[];
+  lastProbe: Record<string, unknown> | null;
   sessionToken: string | null;
   setHydrated: (v: boolean) => void;
   markHydrated: () => void;
@@ -152,6 +153,7 @@ function applySeed() {
     paymentCode: null as PaymentCodeOut | null,
     lastQr: null as QrSlip | null,
     lastFees: [] as FeeInfo[],
+    lastProbe: null as Record<string, unknown> | null,
     sessionToken: null as string | null,
   };
 }
@@ -713,14 +715,35 @@ export const useRazen = create<RazenState>()(
 
       testLogin: async () => {
         const s = get();
-        const res = await tmnInvoke<{ access_token?: string; connected?: boolean }>(
+        const ctx = ctxOf(s);
+        const login = await tmnInvoke<{ access_token?: string; connected?: boolean }>(
           "loginWithPin6",
           [s.pin],
-          ctxOf(s),
+          ctx,
         );
-        if (!res.ok) return res;
-        set({ sessionToken: res.data.access_token ?? (res.data.connected ? "ok" : "ok") });
-        toast.success("loginWithPin6 สำเร็จ");
+        if (!login.ok) return login;
+        const ymd = (ms: number) => new Date(ms).toISOString().slice(0, 10);
+        const start = ymd(Date.now() - 86_400_000);
+        const end = ymd(Date.now() + 86_400_000);
+        const balance = await tmnInvoke("getBalance", [], ctx);
+        if (!balance.ok) return balance;
+        const history = await tmnInvoke("fetchTransactionHistory", [start, end, 10, 1], ctx);
+        if (!history.ok) return history;
+        set({
+          sessionToken: login.data.access_token ?? "ok",
+          lastProbe: {
+            setData: {
+              tmn_key_id: ctx.credentials.tmn_key_id,
+              mobile_number: ctx.credentials.msisdn,
+              tmn_id: ctx.credentials.tmn_id,
+            },
+            loginWithPin6: login.data,
+            getBalance: balance.data,
+            fetchTransactionHistory: history.data,
+            window: { start, end },
+          },
+        });
+        toast.success("setData → loginWithPin6 → getBalance → history สำเร็จ");
         return { ok: true };
       },
 

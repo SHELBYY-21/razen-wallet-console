@@ -10,6 +10,12 @@ export type McpTool = {
 
 export const MCP_TOOLS: McpTool[] = [
   {
+    name: "tmn_bootstrap",
+    description:
+      "PHP apidoc sequence: setData + loginWithPin6 + getBalance + fetchTransactionHistory(yesterday, tomorrow)",
+    inputSchema: { type: "object", properties: {}, required: [] },
+  },
+  {
     name: "tmn_login",
     description: "loginWithPin6 — เปิดเซสชันกระเป๋า TrueMoney",
     inputSchema: { type: "object", properties: {}, required: [] },

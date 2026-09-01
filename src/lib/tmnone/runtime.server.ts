@@ -8,6 +8,7 @@ function wire(ok: boolean, error: string, data?: unknown): TmnWire {
 
 async function session(creds: TmnCreds) {
   const tmn = new TMNOne();
+  if (process.env.TMN_DEBUG === "1") tmn.enableDebugging();
   tmn.setData(
     creds.keyId.trim(),
     creds.msisdn.trim(),
@@ -38,7 +39,7 @@ async function dispatch(tmn: InstanceType<typeof TMNOne>, op: TmnOp, payload: Re
       return tmn.fetchTransactionHistory(
         String(payload.start || ""),
         String(payload.end || ""),
-        Number(payload.limit || 20),
+        Number(payload.limit || 10),
         Number(payload.page || 1),
       );
     case "txinfo":

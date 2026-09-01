@@ -30,6 +30,7 @@ export function ToolsPage() {
   const inspectQr = useRazen((s) => s.inspectQr);
   const lastQr = useRazen((s) => s.lastQr);
   const session = useRazen((s) => s.sessionToken);
+  const lastProbe = useRazen((s) => s.lastProbe);
   const accounts = useRazen((s) => s.accounts);
   const activeId = useRazen((s) => s.activeAccountId);
   const updateCreds = useRazen((s) => s.updateCreds);
@@ -157,11 +158,11 @@ export function ToolsPage() {
             บัญชีที่เลือก: {active?.nickname ?? "—"} · LIVE ใช้ SDK TMNOne.js (ไม่ต้องใส่ URL)
           </p>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">tmnone_keyid</Label>
+            <Label className="text-xs text-muted">$_TMN['tmn_key_id']</Label>
             <Input value={keyId} onChange={(e) => setKeyId(e.target.value)} placeholder="x1234" />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">wallet_msisdn</Label>
+            <Label className="text-xs text-muted">$_TMN['mobile_number']</Label>
             <Input
               inputMode="tel"
               value={msisdn}
@@ -170,7 +171,7 @@ export function ToolsPage() {
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">wallet_login_token</Label>
+            <Label className="text-xs text-muted">$_TMN['login_token']</Label>
             <Input
               value={loginToken}
               onChange={(e) => setLoginToken(e.target.value)}
@@ -178,7 +179,7 @@ export function ToolsPage() {
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">wallet_tmn_id</Label>
+            <Label className="text-xs text-muted">$_TMN['tmn_id']</Label>
             <Input
               value={tmnId}
               onChange={(e) => setTmnId(e.target.value)}
@@ -186,7 +187,7 @@ export function ToolsPage() {
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted">wallet_device_id (ไม่บังคับ)</Label>
+            <Label className="text-xs text-muted">$_TMN['device_id'] (เว้นว่างได้)</Label>
             <Input
               value={deviceId}
               onChange={(e) => setDeviceId(e.target.value)}
@@ -231,11 +232,16 @@ export function ToolsPage() {
               บันทึก
             </Button>
             <Button variant="secondary" className="flex-1" disabled={testing} onClick={() => void testApi()}>
-              ทดสอบ loginWithPin6
+              รันตัวอย่าง PHP (login → balance → history)
             </Button>
           </div>
           {session && (
             <p className="font-mono text-[11px] text-in">session {session.slice(0, 18)}…</p>
+          )}
+          {lastProbe && (
+            <pre className="max-h-56 overflow-auto rounded-md bg-black/40 p-3 font-mono text-[10px] leading-relaxed text-cyan">
+              {JSON.stringify(lastProbe, null, 2)}
+            </pre>
           )}
         </div>
       </section>
@@ -355,8 +361,10 @@ export function ToolsPage() {
           ))}
         </ul>
         <p className="mt-3 text-[11px] leading-relaxed text-subtle">
-          LIVE เรียกคลาส TMNOne ตามเอกสาร tmn.one (loginWithPin6 → getBalance / transferP2P / …)
-          ผ่านเซิร์ฟเวอร์ของคอนโซลนี้ หากใส่ API Base จะยิง POST {"{ method, params, credentials }"} ไปที่ URL นั้นแทน
+          LIVE เรียกคลาส TMNOne ตาม PHP บน tmn.one/apidoc:
+          setData(key, mobile, login_token, tmn_id, device_id) → loginWithPin6(pin)
+          → getBalance() → fetchTransactionHistory(เมื่อวาน, พรุ่งนี้)
+          PIN ใช้ตอน login เท่านั้น ไม่ถามตอนโอน
         </p>
       </section>
     </div>

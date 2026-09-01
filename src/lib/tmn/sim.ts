@@ -221,9 +221,40 @@ export async function simInvoke<T>(
         } as T,
       };
     }
-    case "fetchTransactionHistory":
+    case "fetchTransactionHistory": {
+      const start = String(params[0] ?? "");
+      const end = String(params[1] ?? "");
+      return {
+        ok: true,
+        data: {
+          activities: [
+            {
+              report_id: "umk1678000000",
+              title: "รับโอน",
+              amount: 500,
+              type: "credit",
+              date_time: `${start || "2026-09-01"} 12:00:00`,
+            },
+            {
+              report_id: "umk1678000001",
+              title: "โอนออก",
+              amount: -120,
+              type: "debit",
+              date_time: `${end || "2026-09-02"} 09:00:00`,
+            },
+          ],
+        } as T,
+      };
+    }
     case "fetchTransactionInfo":
-      return { ok: true, data: { source: "sim" } as T };
+      return {
+        ok: true,
+        data: {
+          report_id: String(params[0] ?? "umk1678000000"),
+          amount: 500,
+          status: "SUCCESS",
+        } as T,
+      };
     case "getAmityToken":
       return { ok: true, data: { token: `amity-sim-${Date.now().toString(36)}` } as T };
     case "getWithdrawalStatus":

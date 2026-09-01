@@ -24,6 +24,6 @@ describe("mcp catalog", () => {
     assert.ok(names.includes("tmn_transfer_p2p"));
     assert.ok(names.includes("tmn_balance"));
     assert.ok(names.includes("razen_status"));
-    assert.equal(MCP_TOOLS.length, 12);
+    assert.equal(MCP_TOOLS.length, 13);
   });
 });
