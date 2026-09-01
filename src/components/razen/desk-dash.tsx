@@ -1,14 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import {
-  ArrowDownLeft,
-  ArrowUpRight,
-  Clock3,
-  Gauge,
-  Search,
-  Wallet,
-} from "lucide-react";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Search } from "lucide-react";
 import { FlowChart } from "@/components/razen/flow-chart";
 import { BrandMark } from "@/components/razen/brand-mark";
 import { baht, formatDateTime } from "@/lib/razen/format";
@@ -25,10 +17,10 @@ const METHOD: Record<Transaction["method"], string> = {
 };
 
 const STATUS: Record<Transaction["status"], { label: string; cls: string }> = {
-  completed: { label: "สำเร็จ", cls: "bg-in/15 text-in" },
-  pending: { label: "รอส่ง", cls: "bg-warn/15 text-warn" },
-  processing: { label: "กำลังส่ง", cls: "bg-cyan/15 text-cyan" },
-  failed: { label: "ไม่ผ่าน", cls: "bg-danger/15 text-danger" },
+  completed: { label: "สำเร็จ", cls: "text-in" },
+  pending: { label: "รอส่ง", cls: "text-warn" },
+  processing: { label: "กำลังส่ง", cls: "text-cyan" },
+  failed: { label: "ไม่ผ่าน", cls: "text-danger" },
 };
 
 export function DeskDash() {
@@ -51,8 +43,6 @@ export function DeskDash() {
   const spent = dailySpent();
   const remain = Math.max(0, limit - spent);
   const usedPct = limit > 0 ? Math.min(100, Math.round((spent / limit) * 100)) : 0;
-  const flowTotal = stats.incoming + stats.outgoing;
-  const inPct = flowTotal > 0 ? Math.round((stats.incoming / flowTotal) * 100) : 0;
 
   const recent = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -69,87 +59,118 @@ export function DeskDash() {
       .slice(0, 8);
   }, [txs, activeId, q]);
 
-  const pieFlow = [
-    { name: "เข้า", value: stats.incoming || 0, fill: "var(--color-in)" },
-    { name: "ออก", value: stats.outgoing || 0, fill: "var(--color-brand)" },
-  ];
-
   const hour = new Date().getHours();
   const hello = hour < 12 ? "สวัสดีตอนเช้า" : hour < 18 ? "สวัสดีตอนบ่าย" : "สวัสดีตอนเย็น";
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p className="text-sm text-muted">{hello}</p>
-          <p className="font-display text-2xl sm:text-3xl">
-            {synced ? `พร้อมโอน ${baht(balance)}` : "เชื่อมกระเป๋า แล้วโอนได้ทันที"}
-          </p>
+    <div className="mx-auto max-w-6xl space-y-5">
+      <section className="panel-hero px-5 py-6 sm:px-8 sm:py-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="kicker">{hello}</p>
+            <p className="mt-3 text-sm text-muted">ยอดพร้อมโอน</p>
+            <p className="mt-1 font-display text-5xl leading-none tabular-nums text-brand sm:text-6xl">
+              {synced ? baht(balance) : "—"}
+            </p>
+            <p className="mt-3 text-xs text-subtle">
+              {synced ? "ซิงก์จาก TrueMoney · getBalance" : "เชื่อมกระเป๋าก่อนโอน"}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              to="/transfer"
+              search={{ method: "p2p" }}
+              className="inline-flex min-h-11 items-center rounded-md bg-brand px-5 text-sm font-medium text-brand-fg transition-opacity duration-200 hover:opacity-90"
+            >
+              โอนเลย
+            </Link>
+            <Link
+              to="/transfer"
+              search={{ method: "promptpay" }}
+              className="inline-flex min-h-11 items-center rounded-md px-5 text-sm text-fg shadow-[var(--shadow-border)] transition-[box-shadow] duration-200 hover:shadow-[var(--shadow-border-hover)]"
+            >
+              สแกน QR
+            </Link>
+            <Link
+              to="/transfer"
+              search={{ method: "bank" }}
+              className="inline-flex min-h-11 items-center rounded-md px-5 text-sm text-fg shadow-[var(--shadow-border)] transition-[box-shadow] duration-200 hover:shadow-[var(--shadow-border-hover)]"
+            >
+              บัญชีธนาคาร
+            </Link>
+            <Link
+              to="/tools"
+              className="inline-flex min-h-11 items-center rounded-md px-5 text-sm text-muted"
+            >
+              {synced ? "ซิงก์ยอด" : "เชื่อมกระเป๋า"}
+            </Link>
+          </div>
         </div>
-        <label className="flex min-h-11 items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 lg:w-96">
-          <Search className="size-4 text-subtle" aria-hidden />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="ค้นหาเบอร์ ชื่อ หรือเลขอ้างอิง"
-            aria-label="ค้นหารายการ"
-            className="h-8 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-subtle md:text-sm"
-          />
-        </label>
+      </section>
+
+      <div className="stat-strip">
+        <Stat k="รับเข้า" v={baht(stats.incoming)} tone="pos" />
+        <Stat k="จ่ายออก" v={baht(stats.outgoing)} />
+        <Stat k="ค้างส่ง" v={String(stats.pending)} />
+        <Stat k="โควต้าวันนี้" v={`${usedPct}%`} hint={`เหลือ ${baht(remain)}`} />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 xl:grid-cols-5">
-        <Kpi icon={Wallet} label="ยอดวอลเล็ต" value={synced ? baht(balance) : "—"} gold hint="ซิงก์จาก TrueMoney" />
-        <Kpi icon={ArrowDownLeft} label="รับเข้า" value={baht(stats.incoming)} tone="pos" hint="รายการสำเร็จ" />
-        <Kpi icon={ArrowUpRight} label="จ่ายออก" value={baht(stats.outgoing)} tone="neg" hint="ไม่รวมรายการที่ล้ม" />
-        <Kpi icon={Clock3} label="ค้างส่ง" value={String(stats.pending)} hint={stats.pending ? "ยังรอผลจากวอลเล็ต" : "ไม่มีคิวค้าง"} />
-        <Kpi icon={Gauge} label="โควต้าวันนี้" value={`${usedPct}%`} hint={`เหลือ ${baht(remain)}`} />
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        <Link to="/transfer" search={{ method: "p2p" }} className="inline-flex min-h-11 items-center rounded-full bg-brand px-5 text-sm font-medium text-brand-fg transition-opacity duration-200 hover:opacity-90">
-          โอนเลย
-        </Link>
-        <Link to="/transfer" search={{ method: "promptpay" }} className="inline-flex min-h-11 items-center rounded-full border border-line px-5 text-sm transition-colors duration-200 hover:border-cyan/40">
-          สแกน QR
-        </Link>
-        <Link to="/transfer" search={{ method: "bank" }} className="inline-flex min-h-11 items-center rounded-full border border-line px-5 text-sm transition-colors duration-200 hover:border-cyan/40">
-          บัญชีธนาคาร
-        </Link>
-        <Link to="/tools" className="inline-flex min-h-11 items-center rounded-full border border-line px-5 text-sm transition-colors duration-200 hover:border-cyan/40">
-          {synced ? "ซิงก์ยอด" : "เชื่อมกระเป๋า"}
-        </Link>
-      </div>
-
-      <div className="grid gap-3 xl:grid-cols-[minmax(0,1.5fr)_minmax(16rem,0.9fr)]">
-        <section className="rounded-3xl border border-line bg-surface p-4">
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <h2 className="font-display text-lg">กระแส 7 วัน</h2>
-            <p className="text-xs text-muted">เข้า {baht(stats.incoming)} · ออก {baht(stats.outgoing)}</p>
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(15rem,0.8fr)]">
+        <section className="panel p-5">
+          <div className="mb-4 flex items-end justify-between">
+            <div>
+              <p className="kicker">Flow</p>
+              <h2 className="mt-1 text-lg font-semibold">กระแส 7 วัน</h2>
+            </div>
+            <p className="text-xs text-muted">
+              เข้า {baht(stats.incoming)} · ออก {baht(stats.outgoing)}
+            </p>
           </div>
           <FlowChart data={series} />
         </section>
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-          <MonthGrid />
-          <Donut title={inPct ? `เข้า ${inPct}%` : "—"} data={pieFlow} caption="เข้าต่อออก" />
-        </div>
+        <MonthGrid />
       </div>
 
-      <section className="rounded-3xl border border-line bg-surface p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="font-display text-lg">รายการล่าสุด</h2>
-          <Link to="/history" className="text-sm text-cyan">
-            ดูทั้งหมด
-          </Link>
+      <section className="panel p-5">
+        <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="kicker">Ledger</p>
+            <h2 className="mt-1 text-lg font-semibold">รายการล่าสุด</h2>
+          </div>
+          <label className="flex min-h-11 w-full items-center gap-2 rounded-md px-3 shadow-[var(--shadow-border)] sm:w-80">
+            <Search className="size-4 text-subtle" aria-hidden />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="ค้นหาเบอร์ ชื่อ หรือเลขอ้างอิง"
+              aria-label="ค้นหารายการ"
+              className="h-8 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-subtle md:text-sm"
+            />
+          </label>
         </div>
-        <ul className="divide-y divide-line">
+        <ul>
           {recent.length === 0 ? (
-            <li className="py-8 text-center text-sm text-muted">ยังไม่มีรายการในกระเป๋านี้</li>
+            <li className="py-10 text-center text-sm text-muted">ยังไม่มีรายการในกระเป๋านี้</li>
           ) : (
             recent.map((tx) => <TxRow key={tx.id} tx={tx} onOpen={() => setReceipt(tx.id)} />)
           )}
         </ul>
+        <div className="mt-3 text-right">
+          <Link to="/history" className="text-sm text-cyan">
+            ดูทั้งหมด
+          </Link>
+        </div>
       </section>
+    </div>
+  );
+}
+
+function Stat({ k, v, tone, hint }: { k: string; v: string; tone?: "pos"; hint?: string }) {
+  return (
+    <div className="stat-cell">
+      <p className="text-[11px] tracking-wide text-subtle">{k}</p>
+      <p className={cn("mt-1 font-display text-2xl tabular-nums", tone === "pos" && "text-in")}>{v}</p>
+      {hint ? <p className="mt-1 text-[10px] text-subtle">{hint}</p> : null}
     </div>
   );
 }
@@ -161,82 +182,26 @@ function TxRow({ tx, onOpen }: { tx: Transaction; onOpen: () => void }) {
     tx.method === "promptpay" ? "promptpay" : tx.method === "p2p" || tx.method === "gift" ? "truemoney" : bank?.abbr ?? "KBANK";
   const inn = tx.direction === "in";
   return (
-    <li>
-      <button type="button" onClick={onOpen} className="flex min-h-11 w-full cursor-pointer items-center gap-3 py-3 text-left transition-colors duration-200 hover:bg-elevated/40">
-        <BrandMark id={mark} alt="" className="size-9 rounded-lg bg-white/95 p-0.5" />
+    <li className="border-t border-line/70">
+      <button
+        type="button"
+        onClick={onOpen}
+        className="flex min-h-11 w-full cursor-pointer items-center gap-3 py-3.5 text-left transition-colors duration-200 hover:bg-elevated/40"
+      >
+        <BrandMark id={mark} alt="" className="size-9 rounded-md bg-white p-0.5" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm">{tx.counterpart}</p>
-          <p className="text-[11px] text-muted">
+          <p className="text-[11px] text-subtle">
             {METHOD[tx.method]} · {formatDateTime(tx.createdAt)}
           </p>
         </div>
-        <span className={cn("hidden rounded-full px-2 py-0.5 text-[11px] sm:inline", st.cls)}>{st.label}</span>
-        <p className={cn("font-display text-base tabular-nums", inn ? "text-in" : "text-brand")}>
+        <span className={cn("hidden text-[11px] sm:inline", st.cls)}>{st.label}</span>
+        <p className={cn("font-display text-lg tabular-nums", inn ? "text-in" : "text-brand")}>
           {inn ? "+" : "−"}
           {baht(inn ? tx.amount : tx.amount + tx.fee)}
         </p>
       </button>
     </li>
-  );
-}
-
-function Kpi({
-  icon: Icon,
-  label,
-  value,
-  gold,
-  tone,
-  hint,
-}: {
-  icon: typeof Wallet;
-  label: string;
-  value: string;
-  gold?: boolean;
-  tone?: "pos" | "neg";
-  hint?: string;
-}) {
-  return (
-    <div className={cn("rounded-3xl p-4", gold ? "bg-brand text-brand-fg" : "border border-line bg-surface")}>
-      <div className="mb-3 flex size-9 items-center justify-center rounded-xl bg-black/15">
-        <Icon className="size-4" />
-      </div>
-      <p className="text-[11px] tracking-wide opacity-80">{label}</p>
-      <p className={`mt-1 font-display text-2xl tabular-nums ${tone === "pos" ? "text-in" : tone === "neg" ? "text-brand" : ""}`}>
-        {value}
-      </p>
-      {hint ? <p className="mt-1 text-[10px] opacity-70">{hint}</p> : null}
-    </div>
-  );
-}
-
-function Donut({
-  title,
-  data,
-  caption,
-}: {
-  title: string;
-  data: { name: string; value: number; fill: string }[];
-  caption: string;
-}) {
-  const sum = data.reduce((n, d) => n + d.value, 0);
-  return (
-    <section className="rounded-3xl border border-line bg-surface p-4">
-      <p className="text-xs text-muted">{caption}</p>
-      <div className="relative mx-auto h-36 w-36">
-        <ResponsiveContainer>
-          <PieChart>
-            <Pie data={data} dataKey="value" innerRadius={42} outerRadius={58} stroke="none">
-              {data.map((d) => (
-                <Cell key={d.name} fill={d.fill} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <span className="font-display text-xl tabular-nums">{sum ? title : "—"}</span>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -257,8 +222,9 @@ function MonthGrid() {
   const names = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"];
 
   return (
-    <section className="rounded-3xl border border-line bg-surface p-4">
-      <h2 className="mb-2 font-display text-base">
+    <section className="panel p-5">
+      <p className="kicker">Calendar</p>
+      <h2 className="mt-1 mb-3 text-lg font-semibold">
         {now.toLocaleDateString("th-TH", { month: "long", year: "numeric" })}
       </h2>
       <div className="grid grid-cols-7 gap-1 text-center text-[10px] text-subtle">
@@ -272,7 +238,7 @@ function MonthGrid() {
           return (
             <div
               key={d}
-              className={`rounded-md py-1 ${today ? "bg-brand text-brand-fg" : mark ? "text-cyan" : "text-muted"}`}
+              className={`rounded py-1 ${today ? "bg-brand text-brand-fg" : mark ? "text-cyan" : "text-muted"}`}
             >
               {d}
             </div>

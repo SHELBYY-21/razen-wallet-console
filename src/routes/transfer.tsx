@@ -27,8 +27,8 @@ function TransferPage() {
   return (
     <div className="mx-auto max-w-lg space-y-6">
       <header>
-        <p className="text-xs font-medium tracking-wide text-cyan">โอนเงิน</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">เลือกช่องทางการโอน</h1>
+        <p className="kicker">จ่ายออก</p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight">เลือกช่องทาง</h1>
         <p className="mt-1 text-sm text-muted">ยอดใช้ได้ {baht(balance)}</p>
       </header>
 
@@ -38,29 +38,29 @@ function TransferPage() {
           navigate({ to: "/transfer", search: { method: v as Method } })
         }
       >
-        <TabsList className="grid h-auto w-full grid-cols-3 p-1">
-          <TabsTrigger value="p2p" className="h-11 gap-1.5">
+        <TabsList className="grid h-auto w-full grid-cols-3 rounded-md p-1">
+          <TabsTrigger value="p2p" className="h-11 gap-1.5 rounded-sm">
             <BrandMark id="truemoney" alt="TrueMoney" className="size-5" /> P2P
           </TabsTrigger>
-          <TabsTrigger value="promptpay" className="h-11 gap-1.5">
+          <TabsTrigger value="promptpay" className="h-11 gap-1.5 rounded-sm">
             <BrandMark id="promptpay" alt="PromptPay" className="size-5" /> พร้อมเพย์
           </TabsTrigger>
-          <TabsTrigger value="bank" className="h-11 gap-1.5">
+          <TabsTrigger value="bank" className="h-11 gap-1.5 rounded-sm">
             <BrandMark id="KBANK" alt="" className="size-5" /> ธนาคาร
           </TabsTrigger>
         </TabsList>
         <TabsContent value="p2p">
-          <div className="glass rounded-2xl p-4 md:p-5">
+          <div className="panel p-4 md:p-5">
             <TransferForm method="p2p" />
           </div>
         </TabsContent>
         <TabsContent value="promptpay">
-          <div className="glass rounded-2xl p-4 md:p-5">
+          <div className="panel p-4 md:p-5">
             <TransferForm method="promptpay" />
           </div>
         </TabsContent>
         <TabsContent value="bank">
-          <div className="glass rounded-2xl p-4 md:p-5">
+          <div className="panel p-4 md:p-5">
             <TransferForm method="bank" />
           </div>
         </TabsContent>

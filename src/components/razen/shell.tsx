@@ -91,14 +91,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
         ข้ามไปเนื้อหา
       </a>
       <div className="atmosphere pointer-events-none fixed inset-0 z-0" aria-hidden />
-      <aside className="fixed inset-y-2 left-2 z-30 hidden w-56 flex-col rounded-3xl border border-line bg-surface md:flex" aria-label="เมนูหลัก">
-        <div className="px-4 pt-5 pb-3">
-          <p className="text-[10px] tracking-[0.22em] text-brand">RAZEN</p>
-          <p className="font-display text-xl">Crown Tether</p>
-          <p className="text-xs text-muted">โต๊ะโอน TrueMoney</p>
+      <aside
+        className="fixed inset-y-0 left-0 z-30 hidden w-56 flex-col border-r border-line bg-surface/80 md:flex"
+        aria-label="เมนูหลัก"
+      >
+        <div className="px-5 pt-7 pb-5">
+          <RazenWordmark />
         </div>
-        <p className="px-5 pt-1 text-[10px] tracking-[0.18em] text-subtle">เมนู</p>
-        <nav className="flex flex-1 flex-col gap-1 px-2 py-2">
+        <nav className="flex flex-1 flex-col gap-0.5 px-3">
           {NAV.map((item) => {
             const active =
               item.to === "/"
@@ -110,9 +110,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 to={item.to}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-11 items-center gap-2.5 rounded-xl px-3 text-sm transition-colors duration-200",
+                  "flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm transition-colors duration-200",
                   active
-                    ? "bg-brand text-brand-fg"
+                    ? "bg-brand/12 text-brand shadow-[inset_2px_0_0_0_var(--color-brand)]"
                     : "text-muted hover:bg-elevated hover:text-fg",
                 )}
               >
@@ -122,7 +122,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-        <div className="m-2 flex items-center gap-2 rounded-2xl border border-line bg-elevated px-3 py-2">
+        <div className="m-3 flex items-center gap-2 rounded-lg bg-elevated px-3 py-2.5 shadow-[var(--shadow-border)]">
           <BrandMark id="truemoney" alt="TrueMoney" className="size-8 rounded-full" />
           <div className="min-w-0">
             <p className="truncate text-sm">{acc?.nickname || "ยังไม่เชื่อม"}</p>
@@ -133,19 +133,19 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      <div className="relative z-10 md:pl-60">
-        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-bg/90 px-3 py-3 md:px-6">
+      <div className="relative z-10 md:pl-56">
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-bg/80 px-4 py-3 backdrop-blur-sm md:px-8">
           <div className="md:hidden">
             <RazenWordmark compact />
           </div>
           <div className="hidden min-w-0 md:block">
-            <p className="text-[11px] tracking-wide text-brand">{heading.kicker}</p>
-            <h1 className="font-display text-2xl leading-none">{heading.title}</h1>
+            <p className="kicker">{heading.kicker}</p>
+            <h1 className="text-xl font-semibold leading-none tracking-tight">{heading.title}</h1>
           </div>
-          <div className="ml-auto font-mono text-[11px] tabular-nums text-muted">{clock}</div>
+          <div className="ml-auto font-mono text-[11px] tabular-nums text-subtle">{clock}</div>
         </header>
         <div className="razen-hud-line" aria-hidden />
-        <main id="main" className="razen-enter min-h-[calc(100dvh-56px)] w-full px-3 py-4 pb-20 md:px-6 md:py-5 md:pb-6">
+        <main id="main" className="razen-enter min-h-[calc(100dvh-56px)] w-full px-4 py-5 pb-20 md:px-8 md:py-7 md:pb-8">
           {mounted ? children : <SkeletonDash />}
         </main>
       </div>
@@ -196,11 +196,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
 function SkeletonDash() {
   return (
-    <div className="space-y-4">
-      <div className="h-24 rounded-2xl bg-elevated" />
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="h-20 rounded-2xl bg-elevated" />
+    <div className="mx-auto max-w-6xl space-y-5">
+      <div className="panel-hero h-40" />
+      <div className="stat-strip">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="stat-cell h-20" />
         ))}
       </div>
     </div>

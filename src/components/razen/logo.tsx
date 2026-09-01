@@ -5,23 +5,16 @@ export function RazenMark({ className }: { className?: string }) {
     <svg viewBox="0 0 32 32" className={cn("size-8", className)} aria-hidden="true">
       <defs>
         <linearGradient id="rz-mark" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#e4c37a" />
+          <stop offset="0" stopColor="#e8d09a" />
           <stop offset="1" stopColor="#c6a15b" />
         </linearGradient>
       </defs>
-      <rect width="32" height="32" rx="8" fill="url(#rz-mark)" />
-      <rect x="0.6" y="0.6" width="30.8" height="30.8" rx="7.4" fill="none" stroke="white" strokeOpacity="0.35" />
-      <text
-        x="16"
-        y="23"
-        textAnchor="middle"
+      <rect width="32" height="32" rx="6" fill="url(#rz-mark)" />
+      <path
+        d="M8 20.5 10.2 12l2.8 4.4L16 9.5l3 6.9 2.8-4.4 2.2 8.5H8Z"
         fill="#140c02"
-        fontSize="18"
-        fontWeight="700"
-        fontFamily="ui-sans-serif, system-ui, sans-serif"
-      >
-        W
-      </text>
+      />
+      <path d="M9 22.2h14v1.6H9z" fill="#140c02" />
     </svg>
   );
 }
@@ -31,10 +24,8 @@ export function RazenWordmark({ compact = false }: { compact?: boolean }) {
     <div className="flex items-center gap-2.5">
       <RazenMark />
       <div className="min-w-0 leading-tight">
-        <div className="font-semibold tracking-[0.22em] text-fg">RAZEN</div>
-        {!compact && (
-          <div className="text-xs text-subtle">Transfer Console</div>
-        )}
+        <div className="text-[11px] font-semibold tracking-[0.28em] text-fg">RAZEN</div>
+        {!compact && <div className="text-xs text-subtle">Crown Tether</div>}
       </div>
     </div>
   );
