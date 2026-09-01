@@ -1,0 +1,14 @@
+node_modules
+dist
+.output
+.nitro
+.vercel
+.tanstack
+artifacts
+attachments
+screenshots
+*.heic
+.grok/preview.log
+.env
+.env.local
+.DS_Store
