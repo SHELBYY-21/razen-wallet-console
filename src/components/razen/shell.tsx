@@ -72,11 +72,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative min-h-dvh bg-bg text-fg">
       <div className="atmosphere pointer-events-none fixed inset-0 z-0" aria-hidden />
-      <aside className="glass-frost fixed inset-y-0 left-0 z-30 hidden w-60 flex-col md:flex">
-        <div className="px-5 py-6">
-          <RazenWordmark />
+      <aside className="glass-frost fixed inset-y-0 left-0 z-30 hidden w-44 flex-col border-r border-[#3c3c3c] md:flex">
+        <div className="border-b border-[#3c3c3c] px-2 py-2">
+          <RazenWordmark compact />
         </div>
-        <nav className="flex flex-1 flex-col gap-1 px-3">
+        <nav className="flex flex-1 flex-col gap-0 px-1 py-1">
           {NAV.map((item) => {
             const active =
               item.to === "/"
@@ -87,46 +87,44 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "flex h-11 items-center gap-3 rounded-lg px-3 text-sm transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.96]",
+                  "flex h-7 items-center gap-2 px-2 font-mono text-[11px] uppercase tracking-wide",
                   active
-                    ? "bg-brand text-brand-fg"
-                    : "text-muted hover:bg-fg/8 hover:text-fg",
+                    ? "bg-[#094771] text-white"
+                    : "text-muted hover:bg-[#3c3c3c] hover:text-fg",
                 )}
               >
-                <item.icon className="size-4" />
+                <item.icon className="size-3.5" />
                 {item.label}
               </Link>
             );
           })}
         </nav>
-        <div className="space-y-1 px-5 py-5">
-          <div className="flex items-center justify-between text-xs text-subtle">
-            <span>คอนโซล</span>
+        <div className="border-t border-[#3c3c3c] px-2 py-2 font-mono text-[11px] tabular-nums text-muted">
+          <div className="flex justify-between">
+            <span>MODE</span>
             <span className={mode === "live" ? "text-in" : "text-cyan"}>
               {mode === "live" ? "LIVE" : "SIM"}
             </span>
           </div>
-          <p className="font-mono text-xs tabular-nums text-muted">{clock || "--:--:--"}</p>
+          <p>{clock || "--:--:--"}</p>
         </div>
       </aside>
 
-      <div className="relative z-10 md:pl-60">
-        <header className="glass-frost sticky top-0 z-20 flex items-center justify-between px-4 py-3 md:px-8">
-          <div className="md:hidden">
+      <div className="relative z-10 md:pl-44">
+        <header className="dense-toolbar sticky top-0 z-20">
+          <div className="dense-cell md:hidden" style={{ flex: 1 }}>
             <RazenWordmark compact />
           </div>
-          <p className="hidden text-xs text-subtle md:block">RAZEN Transfer Console</p>
-          <span
-            className={cn(
-              "flex items-center gap-2 rounded-full px-3 py-1 font-mono text-[11px] uppercase tracking-wider",
-              mode === "live" ? "bg-in/15 text-in" : "bg-cyan/12 text-cyan",
-            )}
-          >
-            <span className="size-1.5 rounded-full bg-current" />
-            {mode === "live" ? "LIVE" : "SIM"}
-          </span>
+          <div className="dense-cell hidden md:flex" style={{ flex: 1 }}>
+            <span className="k">RAZEN</span>
+            <span className="v">TMN desk</span>
+          </div>
+          <div className="dense-cell" style={{ flex: "0 0 auto" }}>
+            <span className="k">FEED</span>
+            <span className={mode === "live" ? "v pos" : "v"}>{mode === "live" ? "LIVE" : "SIM"}</span>
+          </div>
         </header>
-        <main className="mx-auto min-h-[calc(100dvh-52px)] w-full max-w-5xl px-4 pt-5 pb-24 md:px-8 md:pt-8 md:pb-10">
+        <main className="min-h-[calc(100dvh-36px)] w-full px-1 pt-1 pb-16 md:px-2 md:pt-2 md:pb-2">
           {mounted ? children : <SkeletonDash />}
         </main>
       </div>
