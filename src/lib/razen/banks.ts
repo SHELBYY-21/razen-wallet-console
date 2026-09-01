@@ -1,37 +1,69 @@
+import { bankLists, bankLogo } from "./thai-banks-logo.ts";
+
 export type Bank = {
   code: string;
   abbr: string;
   name: string;
   short: string;
   color: string;
+  icon: string;
 };
 
-/** TMNOne transferBankAC bank_code set. Marks: casperstack/thai-banks-logo */
-export const BANKS: Bank[] = [
-  { code: "014", abbr: "SCB", name: "ธนาคารไทยพาณิชย์", short: "ไทยพาณิชย์", color: "#4E2A84" },
-  { code: "004", abbr: "KBANK", name: "ธนาคารกสิกรไทย", short: "กสิกรไทย", color: "#138F2D" },
-  { code: "002", abbr: "BBL", name: "ธนาคารกรุงเทพ", short: "กรุงเทพ", color: "#1E3A8A" },
-  { code: "006", abbr: "KTB", name: "ธนาคารกรุงไทย", short: "กรุงไทย", color: "#1BA5E0" },
-  { code: "025", abbr: "BAY", name: "ธนาคารกรุงศรีอยุธยา", short: "กรุงศรี", color: "#C9A227" },
-  { code: "011", abbr: "TTB", name: "ธนาคารทหารไทยธนชาต", short: "ทีทีบี", color: "#0066B3" },
-  { code: "030", abbr: "GSB", name: "ธนาคารออมสิน", short: "ออมสิน", color: "#EB1E8C" },
-  { code: "034", abbr: "BAAC", name: "ธ.ก.ส.", short: "ธ.ก.ส.", color: "#8B6914" },
-  { code: "022", abbr: "CIMB", name: "ธนาคารซีไอเอ็มบีไทย", short: "CIMB", color: "#ED1C24" },
-  { code: "073", abbr: "LHBANK", name: "ธนาคารแลนด์ แอนด์ เฮ้าส์", short: "LH Bank", color: "#6B2D5B" },
-  { code: "024", abbr: "UOB", name: "ธนาคารยูโอบี", short: "UOB", color: "#1B3A6B" },
-  { code: "069", abbr: "KKP", name: "ธนาคารเกียรตินาคินภัทร", short: "KKP", color: "#1A1A1A" },
-  { code: "033", abbr: "GHB", name: "ธนาคารอาคารสงเคราะห์", short: "ธอส.", color: "#E87722" },
-  { code: "066", abbr: "ISBT", name: "ธนาคารอิสลามแห่งประเทศไทย", short: "อิสลาม", color: "#0B6E4F" },
-  { code: "067", abbr: "TISCO", name: "ธนาคารทิสโก้", short: "ทิสโก้", color: "#0033A0" },
-  { code: "071", abbr: "TCRB", name: "ธนาคารไทยเครดิต", short: "ไทยเครดิต", color: "#F15A22" },
+/** TMNOne transferBankAC bank_code → casperstack symbol */
+const TMN: { code: string; symbol: string }[] = [
+  { code: "014", symbol: "SCB" },
+  { code: "004", symbol: "KBANK" },
+  { code: "002", symbol: "BBL" },
+  { code: "006", symbol: "KTB" },
+  { code: "025", symbol: "BAY" },
+  { code: "011", symbol: "TTB" },
+  { code: "030", symbol: "GSB" },
+  { code: "034", symbol: "BAAC" },
+  { code: "022", symbol: "CIMB" },
+  { code: "073", symbol: "LHB" },
+  { code: "024", symbol: "UOB" },
+  { code: "069", symbol: "KKP" },
+  { code: "033", symbol: "GHB" },
+  { code: "066", symbol: "IBANK" },
+  { code: "067", symbol: "TISCO" },
+  { code: "071", symbol: "TCRB" },
 ];
+
+function row(code: string, symbol: string): Bank {
+  const m = bankLists[symbol];
+  const abbr = symbol === "LHB" ? "LHBANK" : symbol === "IBANK" ? "ISBT" : symbol;
+  return {
+    code,
+    abbr,
+    name: m.fullname,
+    short: m.name,
+    color: m.color,
+    icon: m.icon,
+  };
+}
+
+export const BANKS: Bank[] = TMN.map((t) => row(t.code, t.symbol));
 
 export const HOME_BANK = "KBANK";
 
 export function bankByCode(code?: string) {
   if (!code) return undefined;
   const u = code.toUpperCase();
-  return BANKS.find((b) => b.abbr === u || b.code === u || b.code === code);
+  const logo = bankLogo(u);
+  const hit = BANKS.find(
+    (b) => b.abbr === u || b.code === u || b.code === code || b.short === code,
+  );
+  if (hit) return hit;
+  if (!logo) return undefined;
+  const abbr = logo.symbol === "LHB" ? "LHBANK" : logo.symbol === "IBANK" ? "ISBT" : logo.symbol;
+  return {
+    code: "",
+    abbr,
+    name: logo.fullname,
+    short: logo.name,
+    color: logo.color,
+    icon: logo.icon,
+  };
 }
 
 export function bankFee(code?: string) {

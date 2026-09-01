@@ -1,6 +1,6 @@
+import { bankLogo } from "@/lib/razen/thai-banks-logo";
 import { cn } from "@/lib/utils";
 
-/** Files from https://github.com/casperstack/thai-banks-logo */
 export function BrandMark({
   id,
   alt,
@@ -10,10 +10,11 @@ export function BrandMark({
   alt: string;
   className?: string;
 }) {
+  const mark = bankLogo(id);
   return (
     <img
-      src={`/brands/${id}.png`}
-      alt={alt}
+      src={mark?.icon ?? `/brands/${id}.png`}
+      alt={alt || mark?.name || id}
       className={cn("size-7 object-contain", className)}
     />
   );
