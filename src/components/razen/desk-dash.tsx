@@ -69,7 +69,7 @@ export function DeskDash() {
           <div>
             <p className="kicker">{hello}</p>
             <p className="mt-3 text-sm text-muted">ยอดพร้อมโอน</p>
-            <p className="mt-1 text-4xl font-semibold leading-none tracking-tight tabular-nums text-brand sm:text-5xl">
+            <p className="mt-1 font-display text-4xl font-semibold leading-none tracking-tight tabular-nums text-brand sm:text-5xl">
               {synced ? baht(balance) : "—"}
             </p>
             <p className="mt-3 text-xs text-subtle">

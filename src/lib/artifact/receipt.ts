@@ -15,15 +15,14 @@ export function receiptHtml(input: {
 <title>RAZEN ${escapeHtml(input.ref)}</title>
 <style>
   :root { color-scheme: dark; }
-  body { margin:0; min-height:100vh; background:#070b12; color:#e8eef8;
-    font-family: "Iowan Old Style", Palatino, "Noto Serif Thai", serif; }
+  body { margin:0; min-height:100vh; background:#06090c; color:#eef3f2;
+    font-family: Anuphan, ui-sans-serif, system-ui, sans-serif; }
   .card { max-width: 420px; margin: 8vh auto; padding: 28px 26px;
-    background: rgba(12,18,32,.72); border: 1px solid rgba(212,175,55,.35);
-    box-shadow: 0 24px 80px rgba(0,0,0,.45); }
-  .kicker { font-family: ui-monospace, monospace; letter-spacing:.22em;
-    font-size:11px; color:#3dffc8; }
+    background: #0c1216; border: 1px solid rgba(216,181,110,.28); }
+  .kicker { font-family: ui-monospace, monospace; letter-spacing:.18em;
+    font-size:11px; color:#4ae8c4; }
   h1 { font-size: 22px; font-weight: 600; margin: 8px 0 18px; }
-  .amt { font-variant-numeric: tabular-nums; font-size: 34px; color:#d4af37; }
+  .amt { font-variant-numeric: tabular-nums; font-size: 34px; color:#d8b56e; }
   dl { display:grid; grid-template-columns: 110px 1fr; gap: 8px 12px; font-size:14px; }
   dt { color:#8aa0b8; } dd { margin:0; }
   .note { margin-top:16px; font-size:13px; color:#8aa0b8; }

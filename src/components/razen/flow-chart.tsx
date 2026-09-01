@@ -59,7 +59,7 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
               border: "1px solid rgba(198,161,91,.35)",
               borderRadius: 10,
               fontSize: 12,
-              color: "#ece7d8",
+              color: "#eef3f2",
             }}
             formatter={(value, name) => [
               baht(Number(value ?? 0)),
@@ -75,7 +75,7 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
             fill={`url(#in-${gid})`}
             strokeWidth={2.5}
             dot={false}
-            activeDot={{ r: 5, fill: "var(--color-cyan)", stroke: "#070b0a", strokeWidth: 2 }}
+            activeDot={{ r: 5, fill: "var(--color-cyan)", stroke: "#06090c", strokeWidth: 2 }}
           />
           <Area
             type="natural"
@@ -85,7 +85,7 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
             fill={`url(#out-${gid})`}
             strokeWidth={2.5}
             dot={false}
-            activeDot={{ r: 5, fill: "var(--color-brand)", stroke: "#070b0a", strokeWidth: 2 }}
+            activeDot={{ r: 5, fill: "var(--color-brand)", stroke: "#06090c", strokeWidth: 2 }}
           />
         </AreaChart>
       </ResponsiveContainer>
