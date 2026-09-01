@@ -72,6 +72,7 @@ type RazenState = {
   lastFees: FeeInfo[];
   lastProbe: Record<string, unknown> | null;
   sessionToken: string | null;
+  mascotUntil: number;
   setHydrated: (v: boolean) => void;
   markHydrated: () => void;
   balance: (accountId?: string) => number;
@@ -121,6 +122,7 @@ type RazenState = {
   ) => Promise<{ ok: true; count: number } | { ok: false; error: string }>;
   refreshBalance: () => Promise<{ ok: true; balance: number } | { ok: false; error: string }>;
   syncWallet: () => Promise<void>;
+  flashMascot: () => void;
 };
 
 let pinDeferred: { resolve: (v: boolean) => void } | null = null;
@@ -159,6 +161,7 @@ function applySeed() {
     lastFees: [] as FeeInfo[],
     lastProbe: null as Record<string, unknown> | null,
     sessionToken: null as string | null,
+    mascotUntil: 0,
   };
 }
 
@@ -386,7 +389,9 @@ export const useRazen = create<RazenState>()(
         }
         const res = await tmnInvoke<{ draft_transaction_id?: string }>(method, params, ctx);
         if (!res.ok) return { ok: false, error: res.error };
-        return get().send({ ...input, draftId: res.data.draft_transaction_id });
+        const sent = get().send({ ...input, draftId: res.data.draft_transaction_id });
+        if (sent.ok) get().flashMascot();
+        return sent;
       },
 
       lookupRecipient: async (msisdn) => {
@@ -801,6 +806,7 @@ export const useRazen = create<RazenState>()(
           toast.error("ซิงก์ยอดไม่สำเร็จ", { description: bal.error });
           return;
         }
+        get().flashMascot();
         const start = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
         const end = new Date().toISOString().slice(0, 10);
         await get().pullHistory(start, end);
@@ -827,6 +833,8 @@ export const useRazen = create<RazenState>()(
         set({ txs: [...local, ...mapped, ...other] });
         return { ok: true, count: mapped.length };
       },
+
+      flashMascot: () => set({ mascotUntil: Date.now() + SETTLE_AFTER }),
     }),
     {
       name: "razen-console-v5",

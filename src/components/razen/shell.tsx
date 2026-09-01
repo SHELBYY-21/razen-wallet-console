@@ -12,6 +12,7 @@ import { Toaster } from "sonner";
 import { RazenWordmark } from "@/components/razen/logo";
 import { BrandMark } from "@/components/razen/brand-mark";
 import { ReceiptSheet } from "@/components/razen/receipt-sheet";
+import { SyncOverlay } from "@/components/razen/sync-overlay";
 import { useRazen } from "@/lib/razen/store";
 import { cn } from "@/lib/utils";
 
@@ -177,6 +178,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       {mounted && (
         <>
           <ReceiptSheet />
+          <SyncOverlay />
         </>
       )}
       <Toaster
