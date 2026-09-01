@@ -23,13 +23,13 @@ function Home() {
   const getSeries = useRazen((s) => s.chartSeries);
   const txs = useRazen((s) => s.txs);
   const setReceipt = useRazen((s) => s.setLastReceipt);
-  const mode = useRazen((s) => s.settings.mode);
   const balance = getBalance();
   const stats = getStats();
   const series = getSeries();
   const acc = accounts.find((a) => a.id === activeId) ?? accounts[0];
   const recent = txs.filter((t) => t.accountId === activeId).slice(0, 5);
   const idx = accounts.findIndex((a) => a.id === activeId) + 1;
+  const synced = acc?.walletBalance != null;
 
   return (
     <div className="space-y-6">
@@ -39,18 +39,18 @@ function Home() {
       </header>
 
       <Link
-        to="/accounts"
+        to={synced ? "/accounts" : "/tools"}
         className="glass-hero block rounded-2xl p-5 text-brand-fg transition-[transform,box-shadow] duration-150 ease-out active:scale-[0.98] md:p-6"
       >
-        <p className="text-sm opacity-80">ยอดเงินคงเหลือ</p>
+        <p className="text-sm opacity-80">{synced ? "ยอดเงินคงเหลือ · getBalance" : "ยอดเงินคงเหลือ"}</p>
         <p className="mt-2 text-4xl font-semibold tracking-tight tabular-nums md:text-5xl">
-          {baht(balance)}
+          {synced ? baht(balance) : "—"}
         </p>
-        {acc && (
-          <p className="mt-3 text-xs opacity-80">
-            บัญชีที่ {idx} · {acc.masked} · {accountAgeDays(acc.openedAt)} วัน · {mode.toUpperCase()}
-          </p>
-        )}
+        <p className="mt-3 text-xs opacity-80">
+          {synced
+            ? `บัญชีที่ ${idx} · ${acc?.masked} · ${acc ? accountAgeDays(acc.openedAt) : 0} วัน · LIVE`
+            : "เชื่อมกระเป๋า TrueMoney ที่เครื่องมือ แล้วรัน setData → loginWithPin6 → getBalance"}
+        </p>
       </Link>
 
       <section className="grid grid-cols-3 gap-2 md:gap-3">
@@ -113,9 +113,11 @@ function Home() {
           </Link>
         </div>
         <div>
-          {recent.map((tx) => (
-            <TxRow key={tx.id} tx={tx} onClick={() => setReceipt(tx.id)} />
-          ))}
+          {recent.length ? (
+            recent.map((tx) => <TxRow key={tx.id} tx={tx} onClick={() => setReceipt(tx.id)} />)
+          ) : (
+            <p className="px-2 py-6 text-sm text-muted">ยังไม่มีรายการจากกระเป๋า — ซิงก์ประวัติหลังเชื่อมบัญชี</p>
+          )}
         </div>
       </section>
     </div>

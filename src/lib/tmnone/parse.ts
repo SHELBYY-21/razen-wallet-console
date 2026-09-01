@@ -1,3 +1,5 @@
+import type { Transaction } from "../razen/types";
+
 function walk(value: unknown, keys: string[]): number | null {
   if (typeof value === "number" && Number.isFinite(value)) return value;
   if (typeof value === "string" && value.trim() && !Number.isNaN(Number(value))) {
@@ -49,4 +51,31 @@ export function pickStr(row: Record<string, unknown>, ...keys: string[]) {
     if (typeof v === "number") return String(v);
   }
   return "";
+}
+
+export function mapHistory(data: unknown, accountId: string): Transaction[] {
+  return asList(data).map((row, i) => {
+    const amt = Number(pickStr(row, "amount", "total_amount", "transaction_amount") || 0);
+    const type = pickStr(row, "type", "action", "transaction_type").toLowerCase();
+    const out =
+      amt < 0 || type.includes("debit") || type.includes("out") || type.includes("transfer");
+    const when = pickStr(row, "date_time", "created_at", "timestamp", "date");
+    const ts = when ? Date.parse(when) : Date.now();
+    const rid = pickStr(row, "report_id", "id") || `tx-${i}`;
+    return {
+      id: `w-${rid}`,
+      ref: rid,
+      method: "p2p",
+      direction: out ? "out" : "in",
+      status: "completed",
+      amount: Math.abs(amt) || 0,
+      fee: 0,
+      counterpart: pickStr(row, "title", "description", "counter_party", "subtitle") || "Wallet",
+      counterpartMeta: pickStr(row, "subtitle", "ref1") || "TMN",
+      note: pickStr(row, "note", "message"),
+      accountId,
+      createdAt: Number.isFinite(ts) ? ts : Date.now(),
+      reportId: rid,
+    };
+  });
 }

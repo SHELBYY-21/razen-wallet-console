@@ -3,7 +3,9 @@ import { persist } from "zustand/middleware";
 import { toast } from "sonner";
 import { bankFee, bankByCode } from "./banks";
 import { isThaiMobile, maskPhone } from "./format";
-import { buildSeed, openingBalanceFor, SEED_PIN } from "./seed";
+import { buildSeed, SEED_PIN } from "./seed";
+import { tmnConfigured } from "@/lib/tmnone/creds";
+import { mapHistory, parseBalance } from "@/lib/tmnone/parse";
 import type {
   Account,
   Contact,
@@ -117,6 +119,8 @@ type RazenState = {
     start: string,
     end: string,
   ) => Promise<{ ok: true; count: number } | { ok: false; error: string }>;
+  refreshBalance: () => Promise<{ ok: true; balance: number } | { ok: false; error: string }>;
+  syncWallet: () => Promise<void>;
 };
 
 let pinDeferred: { resolve: (v: boolean) => void } | null = null;
@@ -190,17 +194,16 @@ export const useRazen = create<RazenState>()(
       balance: (accountId) => {
         const s = get();
         const id = accountId ?? s.activeAccountId;
-        const txs = s.txs.filter((t) => t.accountId === id);
-        let n = openingBalanceFor(txs, id);
-        for (const t of txs) {
-          if (t.status === "failed") continue;
-          if (t.direction === "in") {
-            if (t.status === "completed") n += t.amount;
-          } else {
-            n -= t.amount + t.fee;
-          }
+        const acc = s.accounts.find((a) => a.id === id);
+        const snap = acc?.walletBalance;
+        if (snap == null) return 0;
+        let hold = 0;
+        for (const t of s.txs) {
+          if (t.accountId !== id) continue;
+          if (t.status !== "pending" && t.status !== "processing") continue;
+          if (t.direction === "out") hold += t.amount + t.fee;
         }
-        return Math.round(n * 100) / 100;
+        return Math.round((snap - hold) * 100) / 100;
       },
 
       stats: (accountId) => {
@@ -528,6 +531,7 @@ export const useRazen = create<RazenState>()(
             tmn_id: input.tmn_id.trim() || `tmn.${d}`,
             device_id: input.device_id.trim() || `dev${seq}`,
           },
+          walletBalance: null,
         };
         set({ accounts: [...s.accounts, acc], seq, activeAccountId: acc.id });
         const login = await tmnInvoke("loginWithPin6", [input.pin || s.pin], ctxOf(get()));
@@ -535,6 +539,7 @@ export const useRazen = create<RazenState>()(
           toast.message("เชื่อมบัญชีแล้ว — ล็อกอิน PIN ยังไม่ผ่าน", { description: login.error });
         } else {
           toast.success("เชื่อมบัญชีแล้ว");
+          void get().syncWallet();
         }
         return acc;
       },
@@ -625,6 +630,7 @@ export const useRazen = create<RazenState>()(
           });
         }
         set({ txs, notices: notices.slice(0, 40) });
+        void get().refreshBalance();
       },
 
       markNoticesRead: () => {
@@ -726,6 +732,7 @@ export const useRazen = create<RazenState>()(
           reportId?: string;
         }>("bootstrap", [start, end], ctx);
         if (!res.ok) return res;
+        const n = parseBalance(res.data.balance);
         set({
           sessionToken: res.data.login?.access_token ?? "ok",
           lastProbe: {
@@ -741,8 +748,15 @@ export const useRazen = create<RazenState>()(
             fetchTransactionInfo: res.data.transaction,
             window: { start: res.data.start, end: res.data.end, reportId: res.data.reportId },
           },
+          accounts: get().accounts.map((a) =>
+            a.id === s.activeAccountId && n != null ? { ...a, walletBalance: n } : a,
+          ),
         });
-        toast.success("JS sample: setData → loginWithPin6 → getBalance → history → txinfo");
+        if (res.data.transactions) {
+          const mapped = mapHistory(res.data.transactions, s.activeAccountId);
+          set({ txs: mapped });
+        }
+        toast.success("ซิงก์ยอดจาก getBalance แล้ว");
         return { ok: true };
       },
 
@@ -761,13 +775,39 @@ export const useRazen = create<RazenState>()(
           }),
         });
         toast.success("บันทึก setData แล้ว");
+        void get().syncWallet();
+      },
+
+      refreshBalance: async () => {
+        const s = get();
+        const res = await tmnInvoke("getBalance", [], ctxOf(s));
+        if (!res.ok) return res;
+        const n = parseBalance(res.data);
+        if (n == null) return { ok: false as const, error: "อ่านยอดจาก getBalance ไม่ได้" };
+        set({
+          accounts: get().accounts.map((a) =>
+            a.id === s.activeAccountId ? { ...a, walletBalance: n } : a,
+          ),
+        });
+        return { ok: true as const, balance: n };
+      },
+
+      syncWallet: async () => {
+        const s = get();
+        const acc = s.accounts.find((a) => a.id === s.activeAccountId);
+        if (!acc || !tmnConfigured(acc.creds)) return;
+        const bal = await get().refreshBalance();
+        if (!bal.ok) {
+          toast.error("ซิงก์ยอดไม่สำเร็จ", { description: bal.error });
+          return;
+        }
+        const start = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
+        const end = new Date().toISOString().slice(0, 10);
+        await get().pullHistory(start, end);
       },
 
       pullHistory: async (start, end) => {
         const s = get();
-        if (s.settings.mode !== "live") {
-          return { ok: true, count: 0 };
-        }
         const endEx = new Date(end);
         endEx.setDate(endEx.getDate() + 1);
         const res = await tmnInvoke<unknown>(
@@ -776,40 +816,20 @@ export const useRazen = create<RazenState>()(
           ctxOf(s),
         );
         if (!res.ok) return res;
-        const { asList, pickStr } = await import("@/lib/tmnone/parse");
-        const mapped: Transaction[] = asList(res.data).map((row, i) => {
-          const amt = Number(pickStr(row, "amount", "total_amount", "transaction_amount") || 0);
-          const type = pickStr(row, "type", "action", "transaction_type").toLowerCase();
-          const out =
-            amt < 0 || type.includes("debit") || type.includes("out") || type.includes("transfer");
-          const when = pickStr(row, "date_time", "created_at", "timestamp", "date");
-          const ts = when ? Date.parse(when) : Date.now();
-          const rid = pickStr(row, "report_id", "id") || String(i);
-          return {
-            id: `w-${rid}`,
-            ref: rid,
-            method: "p2p",
-            direction: out ? "out" : "in",
-            status: "completed",
-            amount: Math.abs(amt) || 0,
-            fee: 0,
-            counterpart:
-              pickStr(row, "title", "description", "counter_party", "subtitle") || "Wallet",
-            counterpartMeta: pickStr(row, "subtitle", "ref1") || "TMN",
-            note: pickStr(row, "note", "message"),
-            accountId: s.activeAccountId,
-            createdAt: Number.isFinite(ts) ? ts : Date.now(),
-            reportId: rid,
-          };
-        });
-        const keep = s.txs.filter((t) => !t.id.startsWith("w-"));
-        const seen = new Set(mapped.map((t) => t.id));
-        set({ txs: [...mapped, ...keep.filter((t) => !seen.has(t.id))] });
+        const mapped = mapHistory(res.data, s.activeAccountId);
+        const local = s.txs.filter(
+          (t) =>
+            t.accountId === s.activeAccountId &&
+            (t.status === "pending" || t.status === "processing") &&
+            !t.id.startsWith("w-"),
+        );
+        const other = s.txs.filter((t) => t.accountId !== s.activeAccountId);
+        set({ txs: [...local, ...mapped, ...other] });
         return { ok: true, count: mapped.length };
       },
     }),
     {
-      name: "razen-console-v4",
+      name: "razen-console-v5",
       skipHydration: true,
       partialize: (s) => ({
         accounts: s.accounts,

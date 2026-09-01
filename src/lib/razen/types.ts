@@ -27,6 +27,7 @@ export type Account = {
   color: "brand" | "info" | "in";
   status: "active" | "inactive";
   creds: TmnCredentials;
+  walletBalance: number | null;
 };
 
 export type Contact = {

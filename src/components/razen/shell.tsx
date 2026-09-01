@@ -32,6 +32,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [clock, setClock] = useState("");
   const mark = useRazen((s) => s.markHydrated);
   const tick = useRazen((s) => s.tickPending);
+  const syncWallet = useRazen((s) => s.syncWallet);
   const mode = useRazen((s) => s.settings.mode);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -43,6 +44,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     }
     mark();
     tick();
+    void syncWallet();
     setMounted(true);
     const id = window.setInterval(() => tick(), 2500);
     const c = window.setInterval(() => {
@@ -65,7 +67,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       window.clearInterval(id);
       window.clearInterval(c);
     };
-  }, [mark, tick]);
+  }, [mark, tick, syncWallet]);
 
   return (
     <div className="relative min-h-dvh bg-bg text-fg">

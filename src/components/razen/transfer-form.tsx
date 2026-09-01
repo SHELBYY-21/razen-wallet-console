@@ -9,6 +9,7 @@ import {
   maskPhone,
 } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
+import { tmnConfigured } from "@/lib/tmnone/creds";
 import type { TransferMethod } from "@/lib/razen/types";
 import type { RecipientInfo } from "@/lib/tmn/client";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,8 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
   const limit = useRazen((s) => s.settings.dailyLimit);
   const lookup = useRazen((s) => s.lookupRecipient);
   const transfer = useRazen((s) => s.transferViaApi);
+  const accounts = useRazen((s) => s.accounts);
+  const activeId = useRazen((s) => s.activeAccountId);
 
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
@@ -63,6 +66,9 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
   }, [method, contacts, phone, ppValue, bankCode, accNo, rec]);
 
   function validate(): string | null {
+    const acc = accounts.find((a) => a.id === activeId);
+    if (!acc || !tmnConfigured(acc.creds)) return "เชื่อมกระเป๋าที่เครื่องมือก่อนโอน";
+    if (acc.walletBalance == null) return "ซิงก์ยอด getBalance ก่อนโอน";
     if (!Number.isFinite(n) || n <= 0) return "กรุณาใส่จำนวนเงิน";
     if (method === "p2p" && !isThaiMobile(phone)) return "เบอร์มือถือไม่ถูกต้อง";
     if (method === "promptpay") {
