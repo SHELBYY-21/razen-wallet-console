@@ -5,4 +5,4 @@ Operator desk for TrueMoney / TMNOne. Live: [razen-wallet-console.vercel.app](ht
 - UI: P2P, PromptPay, bank, envelopes — confirm recipient, no PIN prompt
 - MCP: `POST /api/mcp` (Bearer `RAZEN_MCP_TOKEN`)
 - Env: copy `.env.example` → `.env.local`
-- Skill: `.grok/skills/agent-mcp-tooling/SKILL.md`
+- CD: push `main` → `/api/ship` → production

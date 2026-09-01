@@ -16,6 +16,7 @@ import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TransferRouteImport } from './routes/transfer'
 import { Route as ApiMcpRouteImport } from './routes/api/mcp'
+import { Route as ApiShipRouteImport } from './routes/api/ship'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const ApiMcpRoute = ApiMcpRouteImport.update({
   path: '/api/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiShipRoute = ApiShipRouteImport.update({
+  id: '/api/ship',
+  path: '/api/ship',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/tools': typeof ToolsRoute
   '/transfer': typeof TransferRoute
   '/api/mcp': typeof ApiMcpRoute
+  '/api/ship': typeof ApiShipRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/tools': typeof ToolsRoute
   '/transfer': typeof TransferRoute
   '/api/mcp': typeof ApiMcpRoute
+  '/api/ship': typeof ApiShipRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/tools': typeof ToolsRoute
   '/transfer': typeof TransferRoute
   '/api/mcp': typeof ApiMcpRoute
+  '/api/ship': typeof ApiShipRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/transfer'
     | '/api/mcp'
+    | '/api/ship'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/transfer'
     | '/api/mcp'
+    | '/api/ship'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/transfer'
     | '/api/mcp'
+    | '/api/ship'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   ToolsRoute: typeof ToolsRoute
   TransferRoute: typeof TransferRoute
   ApiMcpRoute: typeof ApiMcpRoute
+  ApiShipRoute: typeof ApiShipRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiMcpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/ship': {
+      id: '/api/ship'
+      path: '/api/ship'
+      fullPath: '/api/ship'
+      preLoaderRoute: typeof ApiShipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsRoute: ToolsRoute,
   TransferRoute: TransferRoute,
   ApiMcpRoute: ApiMcpRoute,
+  ApiShipRoute: ApiShipRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
