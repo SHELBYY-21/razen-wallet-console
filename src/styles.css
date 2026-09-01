@@ -3,27 +3,26 @@
 @theme {
   --font-sans: "IBM Plex Sans Thai", "IBM Plex Sans", ui-sans-serif, system-ui,
     sans-serif;
-  --font-display: "IBM Plex Sans Thai", "IBM Plex Sans", ui-sans-serif, system-ui,
-    sans-serif;
-  --font-mono: "JetBrains Mono", "Share Tech Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: "Newsreader", "Iowan Old Style", Palatino, "Noto Serif Thai", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --color-bg: #061018;
-  --color-surface: #0c1a28;
-  --color-elevated: #122436;
-  --color-panel: #173049;
-  --color-fg: #eef6ff;
-  --color-muted: #9bb4cc;
-  --color-subtle: #6d86a0;
-  --color-line: rgb(255 255 255 / 0.1);
-  --color-brand: #f7931e;
+  --color-bg: #070b0a;
+  --color-surface: #0e1612;
+  --color-elevated: #14201a;
+  --color-panel: #1a2a22;
+  --color-fg: #ece7d8;
+  --color-muted: #9aa392;
+  --color-subtle: #6e7769;
+  --color-line: rgb(198 161 91 / 0.22);
+  --color-brand: #c6a15b;
   --color-brand-fg: #140c02;
-  --color-brand-deep: #d97a0d;
-  --color-cyan: #7ad4ee;
-  --color-in: #3ecf7a;
-  --color-out: #f7931e;
+  --color-brand-deep: #a6863e;
+  --color-cyan: #3dffc8;
+  --color-in: #3d9a6a;
+  --color-out: #c6a15b;
   --color-warn: #e8b84a;
   --color-danger: #ef5b5b;
-  --color-info: #7ad4ee;
+  --color-info: #3dffc8;
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -31,18 +30,22 @@
   --radius-xl: 22px;
   --radius-2xl: 28px;
 
-  --shadow-border: inset 0 1px 0 rgb(255 255 255 / 0.14),
-    0 0 0 1px rgb(255 255 255 / 0.08);
-  --shadow-border-hover: inset 0 1px 0 rgb(255 255 255 / 0.2),
-    0 0 0 1px rgb(255 255 255 / 0.16);
-  --shadow-glass: inset 0 1px 0 rgb(255 255 255 / 0.16),
-    inset 0 -1px 0 rgb(0 0 0 / 0.18), 0 0 0 1px rgb(255 255 255 / 0.07),
-    0 18px 40px rgb(0 8 20 / 0.35);
+  --shadow-border: inset 0 1px 0 rgb(255 255 255 / 0.1),
+    0 0 0 1px rgb(198 161 91 / 0.16);
+  --shadow-border-hover: inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 0 0 1px rgb(61 255 200 / 0.28);
+  --shadow-glass: inset 0 1px 0 rgb(255 255 255 / 0.1),
+    inset 0 -1px 0 rgb(0 0 0 / 0.22), 0 0 0 1px rgb(198 161 91 / 0.14),
+    0 18px 40px rgb(0 8 6 / 0.45);
 
   --motion-micro: 80ms;
-  --motion-quick: 150ms;
-  --motion-fast: 250ms;
-  --motion-slow: 400ms;
+  --motion-quick: 140ms;
+  --motion-fast: 220ms;
+  --motion-slow: 420ms;
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-press: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-hud: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -65,6 +68,7 @@
   h3 {
     text-wrap: balance;
     letter-spacing: -0.03em;
+    font-family: var(--font-display);
   }
   p {
     text-wrap: pretty;
@@ -78,33 +82,32 @@
 @layer utilities {
   .atmosphere {
     background:
-      radial-gradient(800px 420px at 100% 0%, rgb(247 147 30 / 0.06), transparent 55%),
+      radial-gradient(900px 480px at 100% -10%, rgb(198 161 91 / 0.08), transparent 55%),
+      radial-gradient(700px 380px at 0% 100%, rgb(61 255 200 / 0.05), transparent 50%),
       var(--color-bg);
   }
 
   .glass {
-    background: rgb(16 34 52 / 0.4);
+    background: rgb(14 22 18 / 0.72);
     box-shadow: var(--shadow-glass);
   }
 
   .glass-frost {
-    background: rgb(10 22 36 / 0.42);
-    backdrop-filter: blur(22px) saturate(1.4);
-    -webkit-backdrop-filter: blur(22px) saturate(1.4);
+    background: rgb(7 11 10 / 0.78);
     box-shadow: var(--shadow-glass);
   }
 
   .glass-hero {
     background:
-      linear-gradient(165deg, rgb(255 255 255 / 0.18), transparent 42%),
-      linear-gradient(180deg, rgb(247 147 30 / 0.96), rgb(201 108 8 / 0.94));
+      linear-gradient(165deg, rgb(255 255 255 / 0.14), transparent 42%),
+      linear-gradient(180deg, rgb(198 161 91 / 0.96), rgb(140 108 42 / 0.94));
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.35),
-      0 18px 40px rgb(247 147 30 / 0.22);
+      inset 0 1px 0 rgb(255 255 255 / 0.28),
+      0 18px 40px rgb(198 161 91 / 0.18);
   }
 
   .panel-glow {
-    background: rgb(16 34 52 / 0.4);
+    background: rgb(14 22 18 / 0.72);
     box-shadow: var(--shadow-glass);
   }
 
@@ -113,8 +116,8 @@
     flex-wrap: wrap;
     align-items: stretch;
     gap: 0;
-    border: 1px solid #3c3c3c;
-    background: #161b22;
+    border: 1px solid rgb(198 161 91 / 0.28);
+    background: #101814;
   }
 
   .dense-cell {
@@ -196,27 +199,84 @@
     font-weight: 600;
   }
   .data-table tr:nth-child(even) {
-    background: #121820;
+    background: #101814;
   }
   .data-table tbody tr:hover {
-    background: #094771;
-    color: #fff;
+    background: #1a2a22;
+    color: var(--color-fg);
   }
   .data-table tr.click {
     cursor: pointer;
   }
   .data-table .pos {
-    color: #3ecf7a;
+    color: var(--color-in);
   }
   .data-table .neg {
-    color: #f7931e;
+    color: var(--color-brand);
   }
   .data-table .muted {
-    color: #6d86a0;
+    color: var(--color-subtle);
+  }
+
+  .razen-enter {
+    animation: razen-enter 420ms var(--ease-enter) both;
+  }
+  .razen-exit {
+    animation: razen-exit 220ms var(--ease-exit) both;
+  }
+  .razen-press:active {
+    animation: razen-press 140ms var(--ease-press);
+  }
+  .razen-hud path {
+    stroke-dasharray: 1;
+    animation: razen-hud 700ms var(--ease-hud) both;
+  }
+  .razen-hud-line {
+    height: 1px;
+    transform-origin: left center;
+    background: linear-gradient(90deg, transparent, var(--color-cyan), var(--color-brand), transparent);
+    animation: razen-hud-bar 700ms var(--ease-hud) both;
+  }
+  .razen-sync {
+    animation: razen-sync 900ms ease-in-out 2;
   }
 }
 
+@keyframes razen-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes razen-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes razen-press {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+@keyframes razen-hud {
+  from { stroke-dashoffset: 1; opacity: 0; }
+  to   { stroke-dashoffset: 0; opacity: 1; }
+}
+@keyframes razen-hud-bar {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+@keyframes razen-sync {
+  0%, 100% { opacity: 1; }
+  45%      { opacity: 0.55; }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .razen-enter,
+  .razen-exit,
+  .razen-press:active,
+  .razen-hud path,
+  .razen-hud-line,
+  .razen-sync {
+    animation: none;
+  }
   *,
   *::before,
   *::after {
@@ -227,6 +287,6 @@
   .glass-frost {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: rgb(12 26 40 / 0.92);
+    background: rgb(7 11 10 / 0.94);
   }
 }

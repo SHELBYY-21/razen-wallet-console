@@ -89,8 +89,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 className={cn(
                   "flex h-7 items-center gap-2 px-2 font-mono text-[11px] uppercase tracking-wide",
                   active
-                    ? "bg-[#094771] text-white"
-                    : "text-muted hover:bg-[#3c3c3c] hover:text-fg",
+                    ? "bg-in/25 text-cyan"
+                    : "text-muted hover:bg-elevated hover:text-fg",
                 )}
               >
                 <item.icon className="size-3.5" />
@@ -124,7 +124,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <span className={mode === "live" ? "v pos" : "v"}>{mode === "live" ? "LIVE" : "SIM"}</span>
           </div>
         </header>
-        <main className="min-h-[calc(100dvh-36px)] w-full px-1 pt-1 pb-16 md:px-2 md:pt-2 md:pb-2">
+        <div className="razen-hud-line" aria-hidden />
+        <main className="razen-enter min-h-[calc(100dvh-36px)] w-full px-1 pt-1 pb-16 md:px-2 md:pt-2 md:pb-2">
           {mounted ? children : <SkeletonDash />}
         </main>
       </div>
