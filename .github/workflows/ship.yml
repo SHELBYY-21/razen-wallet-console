@@ -1,0 +1,28 @@
+name: Ship
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ship-main
+  cancel-in-progress: true
+
+jobs:
+  ship:
+    name: Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger /api/ship
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          code=$(curl -sS -o /tmp/ship.json -w '%{http_code}' \
+            -X POST https://razen-wallet-console.vercel.app/api/ship \
+            -H 'content-type: application/json' \
+            -d "{\"ref\":\"refs/heads/main\",\"after\":\"$SHA\"}")
+          cat /tmp/ship.json
+          echo
+          test "$code" = "200"

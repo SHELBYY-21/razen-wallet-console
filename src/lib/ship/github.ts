@@ -12,3 +12,12 @@ export function verifyGithubSignature(raw: string, header: string | null, secret
 export function mainPush(body: { ref?: string; deleted?: boolean }): boolean {
   return body.ref === "refs/heads/main" && !body.deleted;
 }
+
+export async function headSha(repo = "SHELBYY-21/razen-wallet-console"): Promise<string | null> {
+  const res = await fetch(`https://api.github.com/repos/${repo}/commits/main`, {
+    headers: { Accept: "application/vnd.github+json", "User-Agent": "razen-ship" },
+  });
+  if (!res.ok) return null;
+  const json = (await res.json()) as { sha?: string };
+  return json.sha ?? null;
+}
