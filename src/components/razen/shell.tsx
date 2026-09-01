@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Toaster } from "sonner";
 import { RazenWordmark } from "@/components/razen/logo";
+import { BrandMark } from "@/components/razen/brand-mark";
 import { ReceiptSheet } from "@/components/razen/receipt-sheet";
 import { useRazen } from "@/lib/razen/store";
 import { cn } from "@/lib/utils";
@@ -34,6 +35,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const tick = useRazen((s) => s.tickPending);
   const syncWallet = useRazen((s) => s.syncWallet);
   const mode = useRazen((s) => s.settings.mode);
+  const accounts = useRazen((s) => s.accounts);
+  const activeId = useRazen((s) => s.activeAccountId);
+  const acc = accounts.find((a) => a.id === activeId) ?? accounts[0];
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
@@ -72,11 +76,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative min-h-dvh bg-bg text-fg">
       <div className="atmosphere pointer-events-none fixed inset-0 z-0" aria-hidden />
-      <aside className="glass-frost fixed inset-y-0 left-0 z-30 hidden w-44 flex-col border-r border-[#3c3c3c] md:flex">
-        <div className="border-b border-[#3c3c3c] px-2 py-2">
-          <RazenWordmark compact />
+      <aside className="glass-frost fixed inset-y-0 left-0 z-30 hidden w-52 flex-col border-r border-line md:flex">
+        <div className="border-b border-line px-4 py-4">
+          <BrandMark id="truemoney" alt="TrueMoney" className="size-12 rounded-full" />
+          <p className="mt-3 font-display text-lg leading-tight">{acc?.nickname || "RAZEN"}</p>
+          <p className="font-mono text-[11px] text-cyan">{acc?.masked || "ยังไม่เชื่อมกระเป๋า"}</p>
         </div>
-        <nav className="flex flex-1 flex-col gap-0 px-1 py-1">
+        <nav className="flex flex-1 flex-col gap-0 px-2 py-2">
           {NAV.map((item) => {
             const active =
               item.to === "/"
@@ -87,7 +93,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "flex h-7 items-center gap-2 px-2 font-mono text-[11px] uppercase tracking-wide",
+                  "flex h-9 items-center gap-2 rounded-md px-2 text-sm",
                   active
                     ? "bg-in/25 text-cyan"
                     : "text-muted hover:bg-elevated hover:text-fg",
@@ -99,7 +105,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-        <div className="border-t border-[#3c3c3c] px-2 py-2 font-mono text-[11px] tabular-nums text-muted">
+        <div className="border-t border-line px-3 py-3 font-mono text-[11px] tabular-nums text-muted">
           <div className="flex justify-between">
             <span>MODE</span>
             <span className={mode === "live" ? "text-in" : "text-cyan"}>
@@ -110,7 +116,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      <div className="relative z-10 md:pl-44">
+      <div className="relative z-10 md:pl-52">
         <header className="dense-toolbar sticky top-0 z-20">
           <div className="dense-cell md:hidden" style={{ flex: 1 }}>
             <RazenWordmark compact />
