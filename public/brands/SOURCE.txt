@@ -1,0 +1,4 @@
+Thai bank, PromptPay, and TrueMoney marks from
+https://github.com/casperstack/thai-banks-logo
+LHB.png → LHBANK.png
+IBANK.png → ISBT.png (TMNOne bank_code)

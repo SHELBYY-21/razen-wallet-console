@@ -6,7 +6,7 @@ export type Bank = {
   color: string;
 };
 
-/** TMNOne transferBankAC bank_code set */
+/** TMNOne transferBankAC bank_code set. Marks: casperstack/thai-banks-logo */
 export const BANKS: Bank[] = [
   { code: "014", abbr: "SCB", name: "ธนาคารไทยพาณิชย์", short: "ไทยพาณิชย์", color: "#4E2A84" },
   { code: "004", abbr: "KBANK", name: "ธนาคารกสิกรไทย", short: "กสิกรไทย", color: "#138F2D" },

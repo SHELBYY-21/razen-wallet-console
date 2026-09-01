@@ -208,11 +208,8 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
                       : "border-line text-muted hover:border-cyan/30",
                   )}
                 >
-                  <span
-                    className="flex size-9 items-center justify-center rounded-md"
-                    style={{ background: b.color }}
-                  >
-                    <BrandMark id={b.abbr} alt={b.name} className="size-7 brightness-0 invert" />
+                  <span className="flex size-9 items-center justify-center rounded-md bg-white/95 p-0.5">
+                    <BrandMark id={b.abbr} alt={b.name} className="size-7" />
                   </span>
                   {b.abbr}
                 </button>
