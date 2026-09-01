@@ -11,8 +11,8 @@
   --color-elevated: #14201a;
   --color-panel: #1a2a22;
   --color-fg: #ece7d8;
-  --color-muted: #9aa392;
-  --color-subtle: #6e7769;
+  --color-muted: #b8bfb0;
+  --color-subtle: #8a9384;
   --color-line: rgb(198 161 91 / 0.22);
   --color-brand: #c6a15b;
   --color-brand-fg: #140c02;
@@ -54,6 +54,7 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
   }
   html,
   body,
@@ -61,7 +62,7 @@
     background: var(--color-bg);
     color: var(--color-fg);
     min-height: 100%;
-    font-size: 12px;
+    font-size: 14px;
   }
   h1,
   h2,
@@ -72,11 +73,44 @@
   }
   p {
     text-wrap: pretty;
+    line-height: 1.6;
   }
+  a,
   button:not(:disabled),
-  [role="button"]:not(:disabled) {
+  [role="button"]:not(:disabled),
+  summary {
     cursor: pointer;
   }
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  @media (min-width: 768px) {
+    input,
+    select,
+    textarea {
+      font-size: 14px;
+    }
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  z-index: 80;
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: var(--color-brand-fg);
+  padding: 8px 16px;
+}
+.skip-link:focus {
+  left: 12px;
 }
 
 @layer utilities {
@@ -154,7 +188,8 @@
     background: transparent;
     color: #ccc;
     border: 1px solid #3c3c3c;
-    padding: 2px 8px;
+    min-height: 44px;
+    padding: 8px 12px;
     border-radius: 2px;
     font-size: 11px;
     font-family: var(--font-mono);

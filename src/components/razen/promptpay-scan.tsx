@@ -107,19 +107,23 @@ export function PromptPayScan({ onHit }: Props) {
       </Button>
       {open && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-bg/70 p-3 sm:items-center">
-          <div className="w-full max-w-md rounded-2xl border border-line bg-surface p-4">
+          <div className="w-full max-w-md rounded-2xl border border-line bg-surface p-4" role="dialog" aria-modal="true" aria-labelledby="scan-title">
             <div className="mb-3 flex items-center justify-between">
-              <p className="flex items-center gap-2 text-sm font-medium">
-                <BrandMark id="promptpay" alt="PromptPay" className="size-6" />
+              <p id="scan-title" className="flex items-center gap-2 text-sm font-medium">
+                <BrandMark id="promptpay" alt="" className="size-6" />
                 สแกน QR พร้อมเพย์
               </p>
-              <button type="button" className="text-sm text-muted" onClick={() => setOpen(false)}>
+              <button type="button" className="min-h-11 px-3 text-sm text-muted" onClick={() => setOpen(false)} aria-label="ปิดหน้าต่างสแกน">
                 ปิด
               </button>
             </div>
             <video ref={videoRef} className="razen-enter aspect-[4/3] w-full rounded-lg bg-bg object-cover" playsInline muted />
             <canvas ref={canvasRef} className="hidden" />
-            {err && <p className="mt-2 text-sm text-danger">{err}</p>}
+            {err && (
+              <p role="alert" className="mt-2 text-sm text-danger">
+                {err}
+              </p>
+            )}
             <div className="mt-3 flex gap-2">
               <Button type="button" variant="outline" className="flex-1" onClick={() => fileRef.current?.click()}>
                 วางรูป QR

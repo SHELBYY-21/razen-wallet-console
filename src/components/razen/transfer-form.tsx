@@ -165,7 +165,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
                   key={c.id}
                   type="button"
                   onClick={() => setPhone(c.phone)}
-                  className="rounded-full border border-line px-3 py-1 text-xs text-muted hover:border-cyan/40 hover:text-fg"
+                  className="min-h-11 rounded-full border border-line px-3 text-xs text-muted transition-colors duration-200 hover:border-cyan/40 hover:text-fg"
                 >
                   {c.name}
                 </button>
@@ -200,9 +200,11 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
                   key={b.abbr}
                   type="button"
                   title={b.name}
+                  aria-pressed={bankCode === b.abbr}
+                  aria-label={b.name}
                   onClick={() => setBankCode(b.abbr)}
                   className={cn(
-                    "flex flex-col items-center gap-1 rounded-md border px-1 py-2 text-[10px] font-medium",
+                    "flex min-h-11 cursor-pointer flex-col items-center gap-1 rounded-md border px-1 py-2 text-[10px] font-medium transition-colors duration-200",
                     bankCode === b.abbr
                       ? "border-cyan text-fg"
                       : "border-line text-muted hover:border-cyan/30",
@@ -255,7 +257,11 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
         </span>
       </div>
 
-      {error && <p className="text-sm text-danger">{error}</p>}
+      {error && (
+        <p role="alert" className="text-sm text-danger">
+          {error}
+        </p>
+      )}
 
       <Button
         className={cn(
@@ -264,6 +270,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
           method === "bank" && "bg-in text-bg hover:opacity-90",
         )}
         disabled={busy}
+        aria-busy={busy}
         onClick={() => void onSubmit()}
       >
         {busy ? "กำลังตรวจสอบผู้รับ…" : "โอนเงิน"}
@@ -271,9 +278,14 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
 
       {rec && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-bg/55 p-3 backdrop-blur-sm sm:items-center">
-          <div className="glass-frost w-full max-w-md rounded-2xl p-5">
+          <div
+            className="glass-frost w-full max-w-md rounded-2xl p-5"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="confirm-title"
+          >
             <div className="mx-auto mb-2 h-1 w-10 rounded-full bg-line" />
-            <p className="text-center font-mono text-xs tracking-[0.2em] text-cyan uppercase">
+            <p id="confirm-title" className="text-center font-mono text-xs tracking-[0.2em] text-cyan uppercase">
               {heading}
             </p>
             <div className="mt-4 text-center">

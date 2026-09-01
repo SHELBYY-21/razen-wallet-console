@@ -11,10 +11,12 @@ export function BrandMark({
   className?: string;
 }) {
   const mark = bankLogo(id);
+  const label = alt || mark?.name || "";
   return (
     <img
       src={mark?.icon ?? `/brands/${id}.png`}
-      alt={alt || mark?.name || id}
+      alt={label}
+      role={label ? undefined : "presentation"}
       className={cn("size-7 object-contain", className)}
     />
   );

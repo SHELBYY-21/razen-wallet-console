@@ -86,13 +86,14 @@ export function DeskDash() {
             {synced ? `พร้อมโอน ${baht(balance)}` : "เชื่อมกระเป๋า แล้วโอนได้ทันที"}
           </p>
         </div>
-        <label className="flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 lg:w-96">
-          <Search className="size-4 text-subtle" />
+        <label className="flex min-h-11 items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 lg:w-96">
+          <Search className="size-4 text-subtle" aria-hidden />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="ค้นหาเบอร์ ชื่อ หรือเลขอ้างอิง"
-            className="h-8 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-subtle"
+            aria-label="ค้นหารายการ"
+            className="h-8 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-subtle md:text-sm"
           />
         </label>
       </div>
@@ -106,16 +107,16 @@ export function DeskDash() {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <Link to="/transfer" search={{ method: "p2p" }} className="rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-brand-fg">
+        <Link to="/transfer" search={{ method: "p2p" }} className="inline-flex min-h-11 items-center rounded-full bg-brand px-5 text-sm font-medium text-brand-fg transition-opacity duration-200 hover:opacity-90">
           โอนเลย
         </Link>
-        <Link to="/transfer" search={{ method: "promptpay" }} className="rounded-full border border-line px-5 py-2.5 text-sm">
+        <Link to="/transfer" search={{ method: "promptpay" }} className="inline-flex min-h-11 items-center rounded-full border border-line px-5 text-sm transition-colors duration-200 hover:border-cyan/40">
           สแกน QR
         </Link>
-        <Link to="/transfer" search={{ method: "bank" }} className="rounded-full border border-line px-5 py-2.5 text-sm">
+        <Link to="/transfer" search={{ method: "bank" }} className="inline-flex min-h-11 items-center rounded-full border border-line px-5 text-sm transition-colors duration-200 hover:border-cyan/40">
           บัญชีธนาคาร
         </Link>
-        <Link to="/tools" className="rounded-full border border-line px-5 py-2.5 text-sm">
+        <Link to="/tools" className="inline-flex min-h-11 items-center rounded-full border border-line px-5 text-sm transition-colors duration-200 hover:border-cyan/40">
           {synced ? "ซิงก์ยอด" : "เชื่อมกระเป๋า"}
         </Link>
       </div>
@@ -161,7 +162,7 @@ function TxRow({ tx, onOpen }: { tx: Transaction; onOpen: () => void }) {
   const inn = tx.direction === "in";
   return (
     <li>
-      <button type="button" onClick={onOpen} className="flex w-full items-center gap-3 py-3 text-left">
+      <button type="button" onClick={onOpen} className="flex min-h-11 w-full cursor-pointer items-center gap-3 py-3 text-left transition-colors duration-200 hover:bg-elevated/40">
         <BrandMark id={mark} alt="" className="size-9 rounded-lg bg-white/95 p-0.5" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm">{tx.counterpart}</p>

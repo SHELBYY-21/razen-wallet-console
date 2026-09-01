@@ -86,8 +86,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative min-h-dvh bg-bg text-fg">
+      <a href="#main" className="skip-link">
+        ข้ามไปเนื้อหา
+      </a>
       <div className="atmosphere pointer-events-none fixed inset-0 z-0" aria-hidden />
-      <aside className="fixed inset-y-2 left-2 z-30 hidden w-56 flex-col rounded-3xl border border-line bg-surface md:flex">
+      <aside className="fixed inset-y-2 left-2 z-30 hidden w-56 flex-col rounded-3xl border border-line bg-surface md:flex" aria-label="เมนูหลัก">
         <div className="px-4 pt-5 pb-3">
           <p className="text-[10px] tracking-[0.22em] text-brand">RAZEN</p>
           <p className="font-display text-xl">Crown Tether</p>
@@ -104,8 +107,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
+                aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex h-10 items-center gap-2.5 rounded-xl px-3 text-sm",
+                  "flex min-h-11 items-center gap-2.5 rounded-xl px-3 text-sm transition-colors duration-200",
                   active
                     ? "bg-brand text-brand-fg"
                     : "text-muted hover:bg-elevated hover:text-fg",
@@ -118,7 +122,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
         <div className="m-2 flex items-center gap-2 rounded-2xl border border-line bg-elevated px-3 py-2">
-          <BrandMark id="truemoney" alt="" className="size-8 rounded-full" />
+          <BrandMark id="truemoney" alt="TrueMoney" className="size-8 rounded-full" />
           <div className="min-w-0">
             <p className="truncate text-sm">{acc?.nickname || "ยังไม่เชื่อม"}</p>
             <p className="font-mono text-[10px] text-cyan">
@@ -140,12 +144,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="ml-auto font-mono text-[11px] tabular-nums text-muted">{clock}</div>
         </header>
         <div className="razen-hud-line" aria-hidden />
-        <main className="razen-enter min-h-[calc(100dvh-56px)] w-full px-3 py-4 pb-20 md:px-6 md:py-5 md:pb-6">
+        <main id="main" className="razen-enter min-h-[calc(100dvh-56px)] w-full px-3 py-4 pb-20 md:px-6 md:py-5 md:pb-6">
           {mounted ? children : <SkeletonDash />}
         </main>
       </div>
 
-      <nav className="glass-frost fixed inset-x-0 bottom-0 z-30 md:hidden">
+      <nav className="glass-frost fixed inset-x-0 bottom-0 z-30 md:hidden" aria-label="เมนูล่าง">
         <div className="flex items-stretch justify-around px-1 pb-[env(safe-area-inset-bottom)]">
           {MOBILE_NAV.map((item) => {
             const active =
@@ -156,8 +160,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
+                aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 text-xs transition-colors duration-150",
+                  "flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 text-xs transition-colors duration-200",
                   active ? "text-brand" : "text-muted",
                 )}
               >
