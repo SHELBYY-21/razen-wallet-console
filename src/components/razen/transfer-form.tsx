@@ -12,6 +12,8 @@ import { useRazen } from "@/lib/razen/store";
 import { tmnConfigured } from "@/lib/tmnone/creds";
 import type { TransferMethod } from "@/lib/razen/types";
 import type { RecipientInfo } from "@/lib/tmn/client";
+import { BrandMark } from "@/components/razen/brand-mark";
+import { PromptPayScan } from "@/components/razen/promptpay-scan";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -175,12 +177,17 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
 
       {method === "promptpay" && (
         <Field label="หมายเลขพร้อมเพย์">
-          <Input
-            inputMode="tel"
-            placeholder="เบอร์มือถือ / เลขบัตรประชาชน"
-            value={ppValue}
-            onChange={(e) => setPpValue(e.target.value)}
-          />
+          <div className="flex items-center gap-2">
+            <BrandMark id="promptpay" alt="PromptPay" className="size-8" />
+            <Input
+              inputMode="tel"
+              placeholder="เบอร์มือถือ / เลขบัตรประชาชน"
+              value={ppValue}
+              onChange={(e) => setPpValue(e.target.value)}
+              className="flex-1"
+            />
+            <PromptPayScan onHit={(v) => setPpValue(v)} />
+          </div>
         </Field>
       )}
 
@@ -202,10 +209,10 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
                   )}
                 >
                   <span
-                    className="flex size-7 items-center justify-center rounded-md text-[9px] font-bold text-white"
+                    className="flex size-9 items-center justify-center rounded-md"
                     style={{ background: b.color }}
                   >
-                    {b.abbr.slice(0, 4)}
+                    <BrandMark id={b.abbr} alt={b.name} className="size-7 brightness-0 invert" />
                   </span>
                   {b.abbr}
                 </button>

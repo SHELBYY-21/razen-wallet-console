@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Building2, Smartphone, Users } from "lucide-react";
 import { TransferForm } from "@/components/razen/transfer-form";
+import { BrandMark } from "@/components/razen/brand-mark";
 import { baht } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
 import type { TransferMethod } from "@/lib/razen/types";
@@ -40,13 +40,13 @@ function TransferPage() {
       >
         <TabsList className="grid h-auto w-full grid-cols-3 p-1">
           <TabsTrigger value="p2p" className="h-11 gap-1.5">
-            <Users className="size-3.5" /> P2P
+            <BrandMark id="truemoney" alt="TrueMoney" className="size-5" /> P2P
           </TabsTrigger>
           <TabsTrigger value="promptpay" className="h-11 gap-1.5">
-            <Smartphone className="size-3.5" /> พร้อมเพย์
+            <BrandMark id="promptpay" alt="PromptPay" className="size-5" /> พร้อมเพย์
           </TabsTrigger>
           <TabsTrigger value="bank" className="h-11 gap-1.5">
-            <Building2 className="size-3.5" /> ธนาคาร
+            <BrandMark id="KBANK" alt="" className="size-5" /> ธนาคาร
           </TabsTrigger>
         </TabsList>
         <TabsContent value="p2p">
