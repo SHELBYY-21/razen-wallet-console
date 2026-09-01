@@ -16,13 +16,22 @@ import { useRazen } from "@/lib/razen/store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/", label: "แดชบอร์ด", short: "หน้าหลัก", icon: Home },
-  { to: "/transfer", label: "โอนเงิน", short: "โอน", icon: Send },
-  { to: "/history", label: "ประวัติรายการ", short: "ประวัติ", icon: Clock3 },
-  { to: "/accounts", label: "บัญชี", short: "บัญชี", icon: Wallet },
-  { to: "/gifts", label: "ซองอั่งเปา", short: "ซอง", icon: Gift },
-  { to: "/tools", label: "เครื่องมือ", short: "ตั้งค่า", icon: Settings2 },
+  { to: "/", label: "ภาพรวม", short: "ภาพรวม", icon: Home },
+  { to: "/transfer", label: "โอน", short: "โอน", icon: Send },
+  { to: "/history", label: "ประวัติ", short: "ประวัติ", icon: Clock3 },
+  { to: "/accounts", label: "กระเป๋า", short: "กระเป๋า", icon: Wallet },
+  { to: "/gifts", label: "ซอง", short: "ซอง", icon: Gift },
+  { to: "/tools", label: "ตั้งค่า", short: "ตั้งค่า", icon: Settings2 },
 ] as const;
+
+const TITLE: Record<string, { kicker: string; title: string }> = {
+  "/": { kicker: "โต๊ะวันนี้", title: "ภาพรวม" },
+  "/transfer": { kicker: "จ่ายออก", title: "โอนเงิน" },
+  "/history": { kicker: "ตรวจสอบ", title: "ประวัติ" },
+  "/accounts": { kicker: "วอลเล็ต", title: "กระเป๋า" },
+  "/gifts": { kicker: "อั่งเปา", title: "ซอง" },
+  "/tools": { kicker: "TMNOne", title: "ตั้งค่า" },
+};
 
 const MOBILE_NAV = NAV.filter((n) =>
   ["/", "/transfer", "/history", "/gifts", "/tools"].includes(n.to),
@@ -73,16 +82,18 @@ export function Shell({ children }: { children: React.ReactNode }) {
     };
   }, [mark, tick, syncWallet]);
 
+  const heading = TITLE[pathname] ?? TITLE["/"];
+
   return (
     <div className="relative min-h-dvh bg-bg text-fg">
       <div className="atmosphere pointer-events-none fixed inset-0 z-0" aria-hidden />
-      <aside className="glass-frost fixed inset-y-0 left-0 z-30 hidden w-52 flex-col border-r border-line md:flex">
-        <div className="border-b border-line px-4 py-4">
-          <BrandMark id="truemoney" alt="TrueMoney" className="size-12 rounded-full" />
-          <p className="mt-3 font-display text-lg leading-tight">{acc?.nickname || "RAZEN"}</p>
-          <p className="font-mono text-[11px] text-cyan">{acc?.masked || "ยังไม่เชื่อมกระเป๋า"}</p>
+      <aside className="fixed inset-y-2 left-2 z-30 hidden w-56 flex-col rounded-3xl border border-line bg-surface md:flex">
+        <div className="px-4 pt-5 pb-3">
+          <p className="text-[10px] tracking-[0.22em] text-brand">RAZEN</p>
+          <p className="font-display text-xl">Crown Tether</p>
+          <p className="text-xs text-muted">โต๊ะโอน TrueMoney</p>
         </div>
-        <nav className="flex flex-1 flex-col gap-0 px-2 py-2">
+        <nav className="flex flex-1 flex-col gap-1 px-2 py-2">
           {NAV.map((item) => {
             const active =
               item.to === "/"
@@ -93,45 +104,42 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "flex h-9 items-center gap-2 rounded-md px-2 text-sm",
+                  "flex h-10 items-center gap-2.5 rounded-xl px-3 text-sm",
                   active
-                    ? "bg-in/25 text-cyan"
+                    ? "bg-brand text-brand-fg"
                     : "text-muted hover:bg-elevated hover:text-fg",
                 )}
               >
-                <item.icon className="size-3.5" />
+                <item.icon className="size-4" />
                 {item.label}
               </Link>
             );
           })}
         </nav>
-        <div className="border-t border-line px-3 py-3 font-mono text-[11px] tabular-nums text-muted">
-          <div className="flex justify-between">
-            <span>MODE</span>
-            <span className={mode === "live" ? "text-in" : "text-cyan"}>
-              {mode === "live" ? "LIVE" : "SIM"}
-            </span>
+        <div className="m-2 flex items-center gap-2 rounded-2xl border border-line bg-elevated px-3 py-2">
+          <BrandMark id="truemoney" alt="" className="size-8 rounded-full" />
+          <div className="min-w-0">
+            <p className="truncate text-sm">{acc?.nickname || "ยังไม่เชื่อม"}</p>
+            <p className="font-mono text-[10px] text-cyan">
+              {acc?.masked || "ตั้งค่ากระเป๋า"} · {mode === "live" ? "LIVE" : "SIM"}
+            </p>
           </div>
-          <p>{clock || "--:--:--"}</p>
         </div>
       </aside>
 
-      <div className="relative z-10 md:pl-52">
-        <header className="dense-toolbar sticky top-0 z-20">
-          <div className="dense-cell md:hidden" style={{ flex: 1 }}>
+      <div className="relative z-10 md:pl-60">
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-bg/90 px-3 py-3 md:px-6">
+          <div className="md:hidden">
             <RazenWordmark compact />
           </div>
-          <div className="dense-cell hidden md:flex" style={{ flex: 1 }}>
-            <span className="k">RAZEN</span>
-            <span className="v">TMN desk</span>
+          <div className="hidden min-w-0 md:block">
+            <p className="text-[11px] tracking-wide text-brand">{heading.kicker}</p>
+            <h1 className="font-display text-2xl leading-none">{heading.title}</h1>
           </div>
-          <div className="dense-cell" style={{ flex: "0 0 auto" }}>
-            <span className="k">FEED</span>
-            <span className={mode === "live" ? "v pos" : "v"}>{mode === "live" ? "LIVE" : "SIM"}</span>
-          </div>
+          <div className="ml-auto font-mono text-[11px] tabular-nums text-muted">{clock}</div>
         </header>
         <div className="razen-hud-line" aria-hidden />
-        <main className="razen-enter min-h-[calc(100dvh-36px)] w-full px-1 pt-1 pb-16 md:px-2 md:pt-2 md:pb-2">
+        <main className="razen-enter min-h-[calc(100dvh-56px)] w-full px-3 py-4 pb-20 md:px-6 md:py-5 md:pb-6">
           {mounted ? children : <SkeletonDash />}
         </main>
       </div>
@@ -180,17 +188,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
 function SkeletonDash() {
   return (
-    <div className="space-y-6">
-      <header>
-        <p className="font-mono text-xs tracking-[0.28em] text-cyan uppercase">แดชบอร์ด</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">ภาพรวมบัญชีเงิน</h1>
-      </header>
-      <div className="glass-hero rounded-2xl p-5 text-brand-fg md:p-6">
-        <p className="text-sm opacity-80">ยอดเงินคงเหลือ</p>
-        <p className="mt-2 text-4xl font-semibold tracking-tight tabular-nums md:text-5xl">
-          ฿12,680.00
-        </p>
-        <p className="mt-3 text-xs opacity-75">บัญชีที่ 1 · 092****708</p>
+    <div className="space-y-4">
+      <div className="h-24 rounded-2xl bg-elevated" />
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="h-20 rounded-2xl bg-elevated" />
+        ))}
       </div>
     </div>
   );

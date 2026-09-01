@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, XAxis } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { FlowChart } from "@/components/razen/flow-chart";
 import { BrandMark } from "@/components/razen/brand-mark";
 import { TxTable } from "@/components/razen/tx-table";
@@ -17,7 +17,6 @@ export function DeskDash() {
   const limit = useRazen((s) => s.settings.dailyLimit);
   const txs = useRazen((s) => s.txs);
   const setReceipt = useRazen((s) => s.setLastReceipt);
-  const mode = useRazen((s) => s.settings.mode);
   const [q, setQ] = useState("");
 
   const balance = getBalance();
@@ -52,26 +51,57 @@ export function DeskDash() {
     { name: "เหลือ", value: Math.max(0, limit - spent), fill: "var(--color-elevated)" },
   ];
 
+  const hour = new Date().getHours();
+  const hello = hour < 12 ? "สวัสดีตอนเช้า" : hour < 18 ? "สวัสดีตอนบ่าย" : "สวัสดีตอนเย็น";
+
   return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2">
-        <BrandMark id="truemoney" alt="" className="size-5" />
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="ค้นหารายการ เบอร์ หรือเลขอ้างอิง…"
-          className="h-9 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-subtle"
-        />
-        <span className="hidden font-mono text-[10px] tracking-widest text-subtle sm:inline">
-          {mode.toUpperCase()}
-        </span>
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-sm text-muted">{hello}</p>
+          <p className="font-display text-2xl">
+            {synced ? `พร้อมโอน ${baht(balance)}` : "เชื่อมกระเป๋าก่อนโอน"}
+          </p>
+        </div>
+        <div className="flex items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 sm:w-80">
+          <BrandMark id="truemoney" alt="" className="size-5" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="ค้นหาเบอร์ ชื่อ หรือเลขอ้างอิง"
+            className="h-9 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-subtle"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+        <Kpi label="ยอดพร้อมใช้" value={synced ? baht(balance) : "—"} gold hint="จาก getBalance" />
+        <Kpi label="รับเข้า" value={baht(stats.incoming)} tone="pos" hint="รายการสำเร็จ" />
+        <Kpi label="จ่ายออก" value={baht(stats.outgoing)} tone="neg" hint="รวมค่าธรรมเนียมในประวัติ" />
+        <Kpi label="ค้างส่ง" value={String(stats.pending)} hint="รอผลจากวอลเล็ต" />
+        <Kpi label="โควต้าวันนี้" value={`${usedPct}%`} hint={`${baht(spent)} จาก ${baht(limit)}`} />
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <Link to="/transfer" search={{ method: "p2p" }} className="rounded-xl bg-brand px-4 py-2 text-sm text-brand-fg">
+          โอน P2P
+        </Link>
+        <Link to="/transfer" search={{ method: "promptpay" }} className="rounded-xl border border-line px-4 py-2 text-sm">
+          สแกนพร้อมเพย์
+        </Link>
+        <Link to="/transfer" search={{ method: "bank" }} className="rounded-xl border border-line px-4 py-2 text-sm">
+          โอนธนาคาร
+        </Link>
+        <Link to="/tools" className="rounded-xl border border-line px-4 py-2 text-sm">
+          {synced ? "ซิงก์ยอด" : "เชื่อมกระเป๋า"}
+        </Link>
       </div>
 
       <div className="grid gap-3 lg:grid-cols-[1.4fr_0.8fr]">
         <section className="rounded-2xl border border-line bg-surface p-3 sm:p-4">
           <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
             <h2 className="font-display text-base">กระแส 7 วัน</h2>
-            <div className="flex items-center gap-3 font-mono text-[11px]">
+            <div className="flex items-center gap-3 text-[11px]">
               <span className="inline-flex items-center gap-1 text-cyan">
                 <i className="inline-block size-2 rounded-full bg-cyan" />
                 เข้า {baht(stats.incoming)}
@@ -84,43 +114,29 @@ export function DeskDash() {
           </div>
           <FlowChart data={series} />
         </section>
-
-        <aside className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
-          <Kpi label="ยอด getBalance" value={synced ? baht(balance) : "—"} gold />
-          <Kpi label="เงินเข้า" value={baht(stats.incoming)} tone="pos" />
-          <Kpi label="เงินออก" value={baht(stats.outgoing)} tone="neg" />
-        </aside>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-        <Donut title={`เข้า ${inPct}%`} data={pieFlow} caption="สัดส่วนเข้า/ออก" />
-        <Donut title={`${usedPct}%`} data={pieQuota} caption={`โควต้าวันนี้ ${baht(spent)} / ${baht(limit)}`} />
-        <section className="rounded-2xl border border-line bg-surface p-3 md:col-span-2 xl:col-span-1">
-          <h2 className="mb-2 text-sm font-medium">แท่งรายวัน</h2>
-          <div className="h-40">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={series}>
-                <XAxis dataKey="label" tick={{ fill: "var(--color-muted)", fontSize: 10 }} axisLine={false} tickLine={false} />
-                <Bar dataKey="inn" fill="var(--color-in)" radius={4} />
-                <Bar dataKey="out" fill="var(--color-brand)" radius={4} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </section>
         <MonthGrid />
       </div>
 
-      <div className="flex flex-wrap gap-1">
-        <Link to="/transfer" search={{ method: "p2p" }} className="dense-btn">P2P</Link>
-        <Link to="/transfer" search={{ method: "promptpay" }} className="dense-btn">สแกนพร้อมเพย์</Link>
-        <Link to="/transfer" search={{ method: "bank" }} className="dense-btn">ธนาคาร</Link>
-        <Link to="/gifts" className="dense-btn">ซอง</Link>
-        <Link to="/tools" className="dense-btn">{synced ? "ซิงก์" : "เชื่อมกระเป๋า"}</Link>
+      <div className="grid gap-3 md:grid-cols-2">
+        <Donut title={sumFlow(inPct)} data={pieFlow} caption="สัดส่วนเข้าต่อออก" />
+        <Donut title={`${usedPct}%`} data={pieQuota} caption="โควต้าวันนี้" />
       </div>
 
-      <TxTable rows={recent} onOpen={setReceipt} />
+      <section className="rounded-2xl border border-line bg-surface p-3">
+        <div className="mb-2 flex items-center justify-between">
+          <h2 className="font-display text-base">รายการล่าสุด</h2>
+          <Link to="/history" className="text-xs text-cyan">
+            ดูทั้งหมด
+          </Link>
+        </div>
+        <TxTable rows={recent} onOpen={setReceipt} />
+      </section>
     </div>
   );
+}
+
+function sumFlow(inPct: number) {
+  return inPct ? `เข้า ${inPct}%` : "—";
 }
 
 function Kpi({
@@ -128,11 +144,13 @@ function Kpi({
   value,
   gold,
   tone,
+  hint,
 }: {
   label: string;
   value: string;
   gold?: boolean;
   tone?: "pos" | "neg";
+  hint?: string;
 }) {
   return (
     <div className={gold ? "rounded-2xl bg-brand p-4 text-brand-fg" : "rounded-2xl border border-line bg-surface p-4"}>
@@ -140,6 +158,7 @@ function Kpi({
       <p className={`mt-1 font-display text-2xl tabular-nums ${tone === "pos" ? "text-in" : tone === "neg" ? "text-brand" : ""}`}>
         {value}
       </p>
+      {hint ? <p className="mt-1 text-[10px] opacity-70">{hint}</p> : null}
     </div>
   );
 }
