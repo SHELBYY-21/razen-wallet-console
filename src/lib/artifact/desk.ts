@@ -1,0 +1,101 @@
+export function deskHtml() {
+  return `<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>RAZEN · TMNOne desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet"/>
+<style>
+  :root { color-scheme: dark; --ink:#ece7d8; --mute:#9aa392; --line:#2a3328; --gold:#c6a15b; --go:#3d9a6a; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#0b100c; color:var(--ink); font: 15px/1.5 "IBM Plex Sans Thai", sans-serif; }
+  header { padding: 28px 28px 18px; border-bottom: 1px solid var(--line); display:flex; justify-content:space-between; gap:16px; align-items:end; }
+  header strong { font-family: Newsreader, serif; font-size: 28px; font-weight: 600; }
+  header span { color: var(--gold); letter-spacing:.18em; font-size:11px; }
+  main { display:grid; grid-template-columns: 1.2fr .8fr; gap: 0; }
+  section { padding: 22px 28px; border-bottom: 1px solid var(--line); }
+  h2 { margin:0 0 10px; font-size: 13px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); }
+  ol { margin:0; padding-left: 18px; }
+  table { width:100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align:left; padding: 7px 8px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--mute); font-weight: 500; }
+  code { font-family: ui-monospace, monospace; color: var(--go); font-size: 12px; }
+  .aside { border-left: 1px solid var(--line); }
+  .path { font-family: ui-monospace, monospace; font-size:12px; color:var(--mute); }
+  .ok { color: var(--go); }
+  @media (max-width: 800px) { main { grid-template-columns: 1fr; } .aside { border-left:0; } }
+  @media print { body { background:#fff; color:#111; } header span, h2, code { color:#6a5420; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <span>OPERATOR ARTIFACT</span>
+    <strong>RAZEN × TMNOne</strong>
+  </div>
+  <div class="path">api.tmn.one → proxy.dev.php</div>
+</header>
+<main>
+  <div>
+    <section>
+      <h2>1. เชื่อมกระเป๋า — setData</h2>
+      <table>
+        <tr><th>tmnone_keyid</th><td>Key ID จากระบบ TMNOne</td></tr>
+        <tr><th>wallet_msisdn</th><td>เบอร์วอลเล็ต</td></tr>
+        <tr><th>wallet_login_token</th><td>L-… จากขั้นเพิ่มเบอร์</td></tr>
+        <tr><th>wallet_tmn_id</th><td>tmn.… จากขั้นเพิ่มเบอร์</td></tr>
+        <tr><th>device_id</th><td>เว้นว่าง = SHA-256 ของเบอร์</td></tr>
+      </table>
+      <p>จากนั้น <code>loginWithPin6(pin)</code> สำเร็จเมื่อ <code>accessToken && !accessToken.error</code></p>
+    </section>
+    <section>
+      <h2>2. ลำดับทางการ</h2>
+      <ol>
+        <li>new TMNOne()</li>
+        <li>enableDebugging()</li>
+        <li>setData(key, msisdn, login_token, tmn_id)</li>
+        <li>setProxy(ip) — ไม่บังคับ ถ้าคีย์ล็อก IP เครื่องตัวเอง</li>
+        <li>loginWithPin6(pin)</li>
+        <li>getBalance() — ยอดบนจอต้องมาจากตัวนี้เท่านั้น</li>
+        <li>fetchTransactionHistory(start inclusive, end exclusive, limit ≤ 50)</li>
+        <li>fetchTransactionInfo(report_id)</li>
+      </ol>
+    </section>
+    <section>
+      <h2>3. สั่งจ่าย</h2>
+      <table>
+        <tr><th>transferP2P</th><td>เบอร์วอลเล็ต, จำนวน, ข้อความ</td></tr>
+        <tr><th>transferQRPromptpay</th><td>เบอร์หรือบัตร, จำนวน</td></tr>
+        <tr><th>transferBankAC</th><td>รหัสธนาคาร, เลขบัญชี, จำนวน, PIN</td></tr>
+        <tr><th>generateVoucher</th><td>จำนวน, ข้อความซอง</td></tr>
+      </table>
+      <p>ธนาคาร: SCB BBL BAY KBANK KTB TTB CIMB LHBANK UOB KKP GSB BAAC GHB ISBT TISCO TCRB</p>
+    </section>
+  </div>
+  <div class="aside">
+    <section>
+      <h2>IP</h2>
+      <p>วอลเล็ตเห็น IP ของ <code>api.tmn.one</code> ไม่ใช่เซิร์ฟเวอร์โต๊ะ</p>
+      <p>ถ้าคีย์ล็อก IP: <code>setProxy(host:port, user, pass)</code></p>
+    </section>
+    <section>
+      <h2>Face ID</h2>
+      <p>โดนเมื่อวอลเล็ตตอบ <code>*-428 method=face</code></p>
+      <p>POST webhook <code>{"wallet_msisdn":"…"}</code> แล้วรอสแกนในแอป</p>
+      <p>หมดเวลา → Liveness Check Timeout</p>
+    </section>
+    <section>
+      <h2>อย่าปนเอกสาร</h2>
+      <table>
+        <tr><th>Open API</th><td>แจ้งเงินเข้า — โอนออกไม่ได้</td></tr>
+        <tr><th>Merchant</th><td>ลูกค้าจ่ายร้าน</td></tr>
+        <tr><th class="ok">TMNOne</th><td class="ok">โต๊ะถือวอลเล็ต โอนได้</td></tr>
+      </table>
+    </section>
+  </div>
+</main>
+</body>
+</html>`;
+}
