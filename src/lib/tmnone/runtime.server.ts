@@ -1,4 +1,5 @@
 import TMNOne from "./TMNOne.js";
+import { histLimit, pinLoginFailed } from "./apidoc";
 import { configureTmn, runOfficialExample } from "./bootstrap";
 import { safeErrMessage, verdictOf } from "./errors";
 import type { TmnCreds, TmnOp, TmnRequest, TmnWire } from "./types";
@@ -19,13 +20,9 @@ async function session(creds: TmnCreds) {
     faceauth_webhook_url: creds.faceWebhook?.trim() || "",
     faceauth_wait_timeout: creds.faceWait,
   });
-  const token = await tmn.loginWithPin6(creds.pin);
-  if (token && typeof token === "object" && "error" in token) {
-    throw new Error(token.error || "เข้าสู่ระบบไม่สำเร็จ");
-  }
-  if (!token) throw new Error("เข้าสู่ระบบไม่สำเร็จ");
-  const v = verdictOf(typeof token === "string" ? { code: "MAS-200" } : token);
-  if (v.kind !== "ok") throw new Error(v.error);
+  const accessToken = await tmn.loginWithPin6(creds.pin);
+  const fail = pinLoginFailed(accessToken);
+  if (fail) throw new Error(fail);
   return tmn;
 }
 
@@ -41,8 +38,8 @@ async function dispatch(tmn: InstanceType<typeof TMNOne>, op: TmnOp, payload: Re
       return tmn.fetchTransactionHistory(
         String(payload.start || ""),
         String(payload.end || ""),
-        Number(payload.limit || 10),
-        Number(payload.page || 1),
+        histLimit(payload.limit),
+        Math.max(1, Number(payload.page || 1)),
       );
     case "txinfo":
       return tmn.fetchTransactionInfo(String(payload.reportId || ""));

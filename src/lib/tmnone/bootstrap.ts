@@ -1,4 +1,5 @@
 import TMNOne from "./TMNOne.js";
+import { pinLoginFailed } from "./apidoc.ts";
 
 /** Official JS sample from https://www.tmn.one/apidoc.html */
 export type OfficialTmn = {
@@ -62,7 +63,9 @@ export async function runOfficialExample(
   const instance = new TMNOne();
   configureTmn(instance, _TMN);
 
-  const login = await instance.loginWithPin6(_TMN.pin);
+  const accessToken = await instance.loginWithPin6(_TMN.pin);
+  const fail = pinLoginFailed(accessToken);
+  if (fail) throw new Error(fail);
   const balance = await instance.getBalance();
   const start = range?.start || ymd(-30);
   const end = range?.end || ymd(1);
@@ -70,5 +73,5 @@ export async function runOfficialExample(
   const reportId = range?.reportId || firstReportId(transactions);
   const transaction = reportId ? await instance.fetchTransactionInfo(reportId) : null;
 
-  return { login, balance, transactions, transaction, start, end, reportId };
+  return { login: accessToken, balance, transactions, transaction, start, end, reportId };
 }

@@ -71,11 +71,19 @@ async function callTool(name: string, args: Record<string, unknown>) {
     case "tmn_fees":
       return tmnInvoke("getWalletFee", [str(args.channel) || "p2p"], ctx);
     case "tmn_history": {
-      const end = str(args.end) || new Date().toISOString().slice(0, 10);
+      const end = str(args.end) || new Date(Date.now() + 864e5).toISOString().slice(0, 10);
       const start =
         str(args.start) || new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
-      return tmnInvoke("fetchTransactionHistory", [start, end, num(args.limit, 20), 1], ctx);
+      return tmnInvoke("fetchTransactionHistory", [start, end, num(args.limit, 10), 1], ctx);
     }
+    case "tmn_txinfo":
+      return tmnInvoke("fetchTransactionInfo", [str(args.report_id)], ctx);
+    case "tmn_vouchers":
+      return tmnInvoke("fetchVoucherHistory", [], ctx);
+    case "tmn_p2p_status":
+      return tmnInvoke("getTransferP2PStatus", [str(args.draft_id)], ctx);
+    case "tmn_amity":
+      return tmnInvoke("getAmityToken", [], ctx);
     case "tmn_payment_code":
       return tmnInvoke("getPaymentCode", [], ctx);
     case "tmn_qr":

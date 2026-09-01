@@ -1,4 +1,5 @@
 import { tmnAction } from "@/lib/tmnone/actions";
+import { histLimit } from "@/lib/tmnone/apidoc";
 import { credsOf } from "@/lib/tmnone/creds";
 import type { TmnOp } from "@/lib/tmnone/types";
 import type { Settings, TmnCredentials, TmnMode } from "@/lib/razen/types";
@@ -42,7 +43,7 @@ function payloadOf(method: string, params: unknown[]) {
       return {
         start: String(params[0] ?? ""),
         end: String(params[1] ?? ""),
-        limit: Number(params[2] ?? 20),
+        limit: histLimit(params[2]),
         page: Number(params[3] ?? 1),
       };
     case "fetchTransactionInfo":

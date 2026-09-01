@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { formatDateTime } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
-import { TMN_METHODS } from "@/lib/tmn/client";
+import { FACE_WEBHOOK_BODY, PUBLIC_FUNCTIONS } from "@/lib/tmnone/apidoc";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/tools")({ component: ToolsPage });
@@ -219,8 +219,9 @@ export function ToolsPage() {
               onChange={(e) => setWebhook(e.target.value)}
             />
             <p className="text-[11px] leading-relaxed text-subtle">
-              VerifyFace เกิดเมื่อเข้าสู่ระบบจากเบอร์อื่นภายใต้เลขบัตรเดียวกัน หรือโอนเกิน 50,000 บาท/ครั้ง
-              หรือ 200,000 บาท/วัน — ระบบ POST ไป URL นี้แล้วรอ faceauth_wait_timeout วินาที
+              POST ทันทีเมื่อต้องสแกนหน้า:{" "}
+              <code className="font-mono text-cyan">{JSON.stringify(FACE_WEBHOOK_BODY)}</code>
+              {" "}แล้วรอ faceauth_wait_timeout วินาที (ค่าเริ่ม 180)
             </p>
           </div>
           <div className="space-y-1">
@@ -359,16 +360,16 @@ export function ToolsPage() {
 
       <section className="rounded-2xl bg-surface p-5 panel-glow">
         <h2 className="mb-2 font-mono text-xs tracking-widest text-cyan uppercase">Public functions</h2>
-        <ul className="grid grid-cols-1 gap-1 font-mono text-[11px] text-muted sm:grid-cols-2">
-          {TMN_METHODS.map((m) => (
-            <li key={m}>{m}()</li>
+        <ul className="grid grid-cols-1 gap-1.5 font-mono text-[11px] text-muted">
+          {PUBLIC_FUNCTIONS.map((m) => (
+            <li key={m.name}>
+              <span className="text-cyan">{m.name}</span>
+              ({m.args}) — {m.note}
+            </li>
           ))}
         </ul>
         <p className="mt-3 text-[11px] leading-relaxed text-subtle">
-          LIVE ตามตัวอย่าง JS บน tmn.one:
-          new TMNOne() → enableDebugging() → setData(...) → loginWithPin6(pin)
-          → getBalance() → fetchTransactionHistory() → fetchTransactionInfo(report_id)
-          PIN ใช้ตอน login เท่านั้น ไม่ถามตอนโอน
+          loginWithPin6: สำเร็จเมื่อ accessToken && !accessToken.error · PIN ใช้ตอน login เท่านั้น
         </p>
       </section>
     </div>

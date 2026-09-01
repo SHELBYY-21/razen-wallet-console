@@ -96,7 +96,8 @@ export const MCP_TOOLS: McpTool[] = [
   },
   {
     name: "tmn_history",
-    description: "fetchTransactionHistory — ประวัติรายการ",
+    description:
+      "fetchTransactionHistory(start inclusive YYYY-MM-DD, end exclusive, limit≤50, page)",
     inputSchema: {
       type: "object",
       properties: {
@@ -106,6 +107,34 @@ export const MCP_TOOLS: McpTool[] = [
       },
       required: [],
     },
+  },
+  {
+    name: "tmn_txinfo",
+    description: "fetchTransactionInfo(report_id)",
+    inputSchema: {
+      type: "object",
+      properties: { report_id: { type: "string" } },
+      required: ["report_id"],
+    },
+  },
+  {
+    name: "tmn_vouchers",
+    description: "fetchVoucherHistory()",
+    inputSchema: { type: "object", properties: {}, required: [] },
+  },
+  {
+    name: "tmn_p2p_status",
+    description: "getTransferP2PStatus(draft_transaction_id)",
+    inputSchema: {
+      type: "object",
+      properties: { draft_id: { type: "string" } },
+      required: ["draft_id"],
+    },
+  },
+  {
+    name: "tmn_amity",
+    description: "getAmityToken() — chat token for tmn.one/amity.html",
+    inputSchema: { type: "object", properties: {}, required: [] },
   },
   {
     name: "tmn_payment_code",
