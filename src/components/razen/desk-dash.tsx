@@ -69,7 +69,7 @@ export function DeskDash() {
           <div>
             <p className="kicker">{hello}</p>
             <p className="mt-3 text-sm text-muted">ยอดพร้อมโอน</p>
-            <p className="mt-1 font-display text-5xl leading-none tabular-nums text-brand sm:text-6xl">
+            <p className="mt-1 text-4xl font-semibold leading-none tracking-tight tabular-nums text-brand sm:text-5xl">
               {synced ? baht(balance) : "—"}
             </p>
             <p className="mt-3 text-xs text-subtle">
@@ -80,7 +80,7 @@ export function DeskDash() {
             <Link
               to="/transfer"
               search={{ method: "p2p" }}
-              className="inline-flex min-h-11 items-center rounded-md bg-brand px-5 text-sm font-medium text-brand-fg transition-opacity duration-200 hover:opacity-90"
+              className="inline-flex min-h-11 items-center rounded-md bg-cyan px-5 text-sm font-semibold text-bg transition-opacity duration-200 hover:opacity-90"
             >
               โอนเลย
             </Link>
@@ -119,8 +119,7 @@ export function DeskDash() {
         <section className="panel p-5">
           <div className="mb-4 flex items-end justify-between">
             <div>
-              <p className="kicker">Flow</p>
-              <h2 className="mt-1 text-lg font-semibold">กระแส 7 วัน</h2>
+              <h2 className="text-base font-semibold">กระแส 7 วัน</h2>
             </div>
             <p className="text-xs text-muted">
               เข้า {baht(stats.incoming)} · ออก {baht(stats.outgoing)}
@@ -134,8 +133,7 @@ export function DeskDash() {
       <section className="panel p-5">
         <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="kicker">Ledger</p>
-            <h2 className="mt-1 text-lg font-semibold">รายการล่าสุด</h2>
+            <h2 className="text-base font-semibold">รายการล่าสุด</h2>
           </div>
           <label className="flex min-h-11 w-full items-center gap-2 rounded-md px-3 shadow-[var(--shadow-border)] sm:w-80">
             <Search className="size-4 text-subtle" aria-hidden />
@@ -169,7 +167,7 @@ function Stat({ k, v, tone, hint }: { k: string; v: string; tone?: "pos"; hint?:
   return (
     <div className="stat-cell">
       <p className="text-[11px] tracking-wide text-subtle">{k}</p>
-      <p className={cn("mt-1 font-display text-2xl tabular-nums", tone === "pos" && "text-in")}>{v}</p>
+      <p className={cn("mt-1 text-xl font-semibold tabular-nums", tone === "pos" && "text-in")}>{v}</p>
       {hint ? <p className="mt-1 text-[10px] text-subtle">{hint}</p> : null}
     </div>
   );
@@ -196,7 +194,7 @@ function TxRow({ tx, onOpen }: { tx: Transaction; onOpen: () => void }) {
           </p>
         </div>
         <span className={cn("hidden text-[11px] sm:inline", st.cls)}>{st.label}</span>
-        <p className={cn("font-display text-lg tabular-nums", inn ? "text-in" : "text-brand")}>
+        <p className={cn("text-base font-semibold tabular-nums", inn ? "text-in" : "text-brand")}>
           {inn ? "+" : "−"}
           {baht(inn ? tx.amount : tx.amount + tx.fee)}
         </p>
@@ -223,8 +221,7 @@ function MonthGrid() {
 
   return (
     <section className="panel p-5">
-      <p className="kicker">Calendar</p>
-      <h2 className="mt-1 mb-3 text-lg font-semibold">
+      <h2 className="mt-1 mb-3 text-base font-semibold">
         {now.toLocaleDateString("th-TH", { month: "long", year: "numeric" })}
       </h2>
       <div className="grid grid-cols-7 gap-1 text-center text-[10px] text-subtle">

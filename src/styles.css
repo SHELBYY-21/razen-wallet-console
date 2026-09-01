@@ -3,7 +3,8 @@
 @theme {
   --font-sans: "IBM Plex Sans Thai", "IBM Plex Sans", ui-sans-serif, system-ui,
     sans-serif;
-  --font-display: "Newsreader", "Iowan Old Style", Palatino, "Noto Serif Thai", serif;
+  --font-display: "IBM Plex Sans Thai", "IBM Plex Sans", ui-sans-serif, system-ui,
+    sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --color-bg: #070b0a;
@@ -24,11 +25,11 @@
   --color-danger: #ef5b5b;
   --color-info: #3dffc8;
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 22px;
-  --radius-2xl: 28px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
 
   --shadow-border: inset 0 1px 0 rgb(255 255 255 / 0.1),
     0 0 0 1px rgb(198 161 91 / 0.16);
@@ -142,8 +143,7 @@
   }
   .kicker {
     font-size: 0.6875rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
+    letter-spacing: 0.18em;
     color: var(--color-brand);
   }
   .stat-strip {
@@ -193,9 +193,11 @@
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    gap: 0;
-    border: 1px solid rgb(198 161 91 / 0.28);
-    background: #101814;
+    gap: 8px;
+    padding: 10px;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-border);
+    border-radius: var(--radius-lg);
   }
 
   .dense-cell {
@@ -203,66 +205,64 @@
     flex-direction: column;
     justify-content: center;
     min-width: 0;
-    padding: 4px 8px;
-    border-right: 1px solid #3c3c3c;
-    font-family: var(--font-mono);
-    font-size: 12px;
-  }
-  .dense-cell:last-child {
-    border-right: 0;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    background: var(--color-elevated);
+    font-size: 13px;
   }
   .dense-cell .k {
-    color: #8aa0b8;
+    color: var(--color-subtle);
     font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
   .dense-cell .v {
     font-variant-numeric: tabular-nums;
-    color: #e8eef8;
+    color: var(--color-fg);
   }
   .dense-cell .v.pos {
-    color: #3ecf7a;
+    color: var(--color-in);
   }
   .dense-cell .v.neg {
-    color: #f7931e;
+    color: var(--color-brand);
   }
 
   .dense-btn {
-    background: transparent;
-    color: #ccc;
-    border: 1px solid #3c3c3c;
+    background: var(--color-cyan);
+    color: #04110c;
+    border: 0;
     min-height: 44px;
-    padding: 8px 12px;
-    border-radius: 2px;
-    font-size: 11px;
-    font-family: var(--font-mono);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
   }
   .dense-btn:hover {
-    background: #3c3c3c;
-    color: #fff;
+    opacity: 0.9;
+    color: #04110c;
+  }
+  .dense-btn:disabled {
+    opacity: 0.45;
   }
 
   .data-table-wrap {
     overflow: auto;
-    border: 1px solid #3c3c3c;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-border);
+    background: var(--color-surface);
   }
 
   .data-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 13px;
   }
   .data-table th,
   .data-table td {
-    padding: 4px 8px;
-    border: 1px solid #3c3c3c;
+    padding: 12px 14px;
     text-align: right;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
+    border-bottom: 1px solid rgb(198 161 91 / 0.12);
   }
   .data-table th.left,
   .data-table td.left {
@@ -270,18 +270,14 @@
     white-space: normal;
   }
   .data-table th {
-    background: #1c2430;
-    color: #8aa0b8;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-  .data-table tr:nth-child(even) {
-    background: #101814;
+    color: var(--color-subtle);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    background: transparent;
   }
   .data-table tbody tr:hover {
-    background: #1a2a22;
+    background: var(--color-elevated);
     color: var(--color-fg);
   }
   .data-table tr.click {

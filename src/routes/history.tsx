@@ -53,7 +53,7 @@ function HistoryPage() {
     <div className="space-y-2">
       <div className="dense-toolbar">
         <label className="dense-cell" style={{ flex: "1 1 120px" }}>
-          <span className="k">START</span>
+          <span className="k">ตั้งแต่</span>
           <input
             type="date"
             value={start}
@@ -62,7 +62,7 @@ function HistoryPage() {
           />
         </label>
         <label className="dense-cell" style={{ flex: "1 1 120px" }}>
-          <span className="k">END exclusive+1</span>
+          <span className="k">ถึง</span>
           <input
             type="date"
             value={end}
@@ -71,17 +71,17 @@ function HistoryPage() {
           />
         </label>
         <label className="dense-cell" style={{ flex: "2 1 160px" }}>
-          <span className="k">FIND</span>
+          <span className="k">ค้นหา</span>
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="name / umk"
+            placeholder="ชื่อ / เบอร์ / อ้างอิง"
             className="v bg-transparent outline-none"
           />
         </label>
         <div className="dense-cell" style={{ flex: "0 0 auto" }}>
           <button type="button" className="dense-btn" disabled={busy} onClick={() => void search()}>
-            {busy ? "…" : mode === "live" ? "PULL" : "FILTER"}
+            {busy ? "กำลังดึง…" : mode === "live" ? "ดึงประวัติ" : "กรอง"}
           </button>
         </div>
       </div>

@@ -142,7 +142,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <p className="kicker">{heading.kicker}</p>
             <h1 className="text-xl font-semibold leading-none tracking-tight">{heading.title}</h1>
           </div>
-          <div className="ml-auto font-mono text-[11px] tabular-nums text-subtle">{clock}</div>
+          <div className="ml-auto flex items-center gap-3">
+            <span className="hidden items-center gap-1.5 rounded-full bg-elevated px-2.5 py-1 text-[11px] font-medium text-cyan sm:inline-flex">
+              <i className="size-1.5 rounded-full bg-cyan" />
+              {mode === "live" ? "LIVE" : "SIM"}
+            </span>
+            <div className="font-mono text-[11px] tabular-nums text-subtle">{clock}</div>
+          </div>
         </header>
         <div className="razen-hud-line" aria-hidden />
         <main id="main" className="razen-enter min-h-[calc(100dvh-56px)] w-full px-4 py-5 pb-20 md:px-8 md:py-7 md:pb-8">

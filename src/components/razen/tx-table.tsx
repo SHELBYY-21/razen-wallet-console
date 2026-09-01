@@ -3,17 +3,17 @@ import type { Transaction } from "@/lib/razen/types";
 import { cn } from "@/lib/utils";
 
 const METHOD: Record<Transaction["method"], string> = {
-  p2p: "P2P",
-  promptpay: "PP",
-  bank: "BANK",
-  gift: "GIFT",
+  p2p: "วอลเล็ต",
+  promptpay: "พร้อมเพย์",
+  bank: "ธนาคาร",
+  gift: "ซอง",
 };
 
 const STATUS: Record<Transaction["status"], string> = {
-  pending: "PEND",
-  processing: "PROC",
-  completed: "OK",
-  failed: "FAIL",
+  pending: "รอส่ง",
+  processing: "กำลังส่ง",
+  completed: "สำเร็จ",
+  failed: "ไม่ผ่าน",
 };
 
 export function TxTable({
@@ -41,7 +41,7 @@ export function TxTable({
           {rows.length === 0 ? (
             <tr>
               <td colSpan={7} className="left muted">
-                ไม่มีแถว
+                ไม่มีรายการ
               </td>
             </tr>
           ) : (
