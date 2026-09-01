@@ -259,7 +259,7 @@ export const useRazen = create<RazenState>()(
           }
           out.push({
             day,
-            label: new Date(day).toLocaleDateString("th-TH", { weekday: "short" }),
+            label: new Date(day).toLocaleDateString("th-TH", { weekday: "short", day: "numeric" }),
             inn,
             out: outAmt,
           });

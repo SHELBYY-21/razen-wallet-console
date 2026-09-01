@@ -68,10 +68,19 @@ export function DeskDash() {
       </div>
 
       <div className="grid gap-3 lg:grid-cols-[1.4fr_0.8fr]">
-        <section className="rounded-2xl border border-line bg-surface p-3">
-          <div className="mb-1 flex items-center justify-between">
-            <h2 className="text-sm font-medium">กระแส 7 วัน</h2>
-            <span className="font-mono text-[10px] text-subtle">จากประวัติวอลเล็ต</span>
+        <section className="rounded-2xl border border-line bg-surface p-3 sm:p-4">
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+            <h2 className="font-display text-base">กระแส 7 วัน</h2>
+            <div className="flex items-center gap-3 font-mono text-[11px]">
+              <span className="inline-flex items-center gap-1 text-cyan">
+                <i className="inline-block size-2 rounded-full bg-cyan" />
+                เข้า {baht(stats.incoming)}
+              </span>
+              <span className="inline-flex items-center gap-1 text-brand">
+                <i className="inline-block size-2 rounded-full bg-brand" />
+                ออก {baht(stats.outgoing)}
+              </span>
+            </div>
           </div>
           <FlowChart data={series} />
         </section>
