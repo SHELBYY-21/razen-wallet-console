@@ -15,6 +15,7 @@ import { Route as GiftsRouteImport } from './routes/gifts'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TransferRouteImport } from './routes/transfer'
+import { Route as ApiMcpRouteImport } from './routes/api/mcp'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +47,11 @@ const TransferRoute = TransferRouteImport.update({
   path: '/transfer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMcpRoute = ApiMcpRouteImport.update({
+  id: '/api/mcp',
+  path: '/api/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof HistoryRoute
   '/tools': typeof ToolsRoute
   '/transfer': typeof TransferRoute
+  '/api/mcp': typeof ApiMcpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/history': typeof HistoryRoute
   '/tools': typeof ToolsRoute
   '/transfer': typeof TransferRoute
+  '/api/mcp': typeof ApiMcpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +79,27 @@ export interface FileRoutesById {
   '/history': typeof HistoryRoute
   '/tools': typeof ToolsRoute
   '/transfer': typeof TransferRoute
+  '/api/mcp': typeof ApiMcpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/accounts' | '/gifts' | '/history' | '/tools' | '/transfer'
+  fullPaths:
+    | '/'
+    | '/accounts'
+    | '/gifts'
+    | '/history'
+    | '/tools'
+    | '/transfer'
+    | '/api/mcp'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/accounts' | '/gifts' | '/history' | '/tools' | '/transfer'
+  to:
+    | '/'
+    | '/accounts'
+    | '/gifts'
+    | '/history'
+    | '/tools'
+    | '/transfer'
+    | '/api/mcp'
   id:
     | '__root__'
     | '/'
@@ -85,6 +108,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/tools'
     | '/transfer'
+    | '/api/mcp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +118,7 @@ export interface RootRouteChildren {
   HistoryRoute: typeof HistoryRoute
   ToolsRoute: typeof ToolsRoute
   TransferRoute: typeof TransferRoute
+  ApiMcpRoute: typeof ApiMcpRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -140,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransferRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/mcp': {
+      id: '/api/mcp'
+      path: '/api/mcp'
+      fullPath: '/api/mcp'
+      preLoaderRoute: typeof ApiMcpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -150,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistoryRoute: HistoryRoute,
   ToolsRoute: ToolsRoute,
   TransferRoute: TransferRoute,
+  ApiMcpRoute: ApiMcpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

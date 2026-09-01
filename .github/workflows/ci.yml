@@ -62,8 +62,7 @@ jobs:
       - name: Deploy
         run: |
           if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
-            echo "Skip deploy — add repo secrets VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID"
-            echo "Create a token at https://vercel.com/account/tokens"
+            echo "Skip Actions deploy (no secrets). Production is razen-wallet-console.vercel.app"
             exit 0
           fi
           npx vercel pull --yes --environment=production --token="$VERCEL_TOKEN"

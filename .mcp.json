@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "razen": {
+      "url": "https://razen-wallet-console.vercel.app/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ${RAZEN_MCP_TOKEN}"
+      }
+    }
+  }
+}
