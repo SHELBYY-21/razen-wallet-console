@@ -6,7 +6,22 @@ export type McpTool = {
     properties: Record<string, { type: string; description?: string }>;
     required?: string[];
   };
+  annotations?: {
+    readOnlyHint?: boolean;
+    destructiveHint?: boolean;
+    idempotentHint?: boolean;
+    openWorldHint?: boolean;
+  };
 };
+
+export const MCP_INSTRUCTIONS = `RAZEN TMNOne operator MCP.
+Default mode is SIM unless TMN_MODE=live and TMN_KEY_ID / TMN_MSISDN / TMN_LOGIN_TOKEN / TMN_ID / TMN_PIN are set.
+Wallet PIN is used only inside loginWithPin6 — never prompt the operator for PIN on each transfer.
+Workflow: tmn_bootstrap (setData→login→balance→history→txinfo) then tmn_recipient before tmn_transfer_p2p / promptpay / bank.
+History: start inclusive YYYY-MM-DD, end exclusive, limit ≤ 50.
+Face webhook POSTs {"wallet_msisdn":"..."} then waits faceauth_wait_timeout (default 180).
+Memory: razen_memory_remember / recall / forget (semantic facts, episodic events, procedural how-tos).
+Artifacts: razen_artifact_receipt returns a self-contained HTML slip.`;
 
 export const MCP_TOOLS: McpTool[] = [
   {
@@ -154,5 +169,59 @@ export const MCP_TOOLS: McpTool[] = [
     name: "razen_status",
     description: "สถานะคอนโซลและโหมด TMN",
     inputSchema: { type: "object", properties: {}, required: [] },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
+  },
+  {
+    name: "razen_memory_remember",
+    description: "Store agent memory. kind=semantic|episodic|procedural",
+    inputSchema: {
+      type: "object",
+      properties: {
+        kind: { type: "string", description: "semantic | episodic | procedural" },
+        key: { type: "string" },
+        value: { type: "string" },
+      },
+      required: ["kind", "key", "value"],
+    },
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false },
+  },
+  {
+    name: "razen_memory_recall",
+    description: "Retrieve agent memory by keyword and optional kind",
+    inputSchema: {
+      type: "object",
+      properties: {
+        q: { type: "string" },
+        kind: { type: "string" },
+      },
+      required: [],
+    },
+    annotations: { readOnlyHint: true, idempotentHint: true },
+  },
+  {
+    name: "razen_memory_forget",
+    description: "Delete a memory by id or key",
+    inputSchema: {
+      type: "object",
+      properties: { id: { type: "string" } },
+      required: ["id"],
+    },
+    annotations: { destructiveHint: true },
+  },
+  {
+    name: "razen_artifact_receipt",
+    description: "Build a self-contained HTML transfer receipt artifact",
+    inputSchema: {
+      type: "object",
+      properties: {
+        ref: { type: "string" },
+        amount: { type: "string" },
+        counterpart: { type: "string" },
+        method: { type: "string" },
+        note: { type: "string" },
+      },
+      required: ["ref", "amount", "counterpart"],
+    },
+    annotations: { readOnlyHint: true, idempotentHint: true },
   },
 ];

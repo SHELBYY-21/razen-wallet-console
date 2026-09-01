@@ -15,6 +15,7 @@ import { Route as GiftsRouteImport } from './routes/gifts'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TransferRouteImport } from './routes/transfer'
+import { Route as ApiArtifactRouteImport } from './routes/api/artifact'
 import { Route as ApiMcpRouteImport } from './routes/api/mcp'
 import { Route as ApiShipRouteImport } from './routes/api/ship'
 
@@ -48,6 +49,11 @@ const TransferRoute = TransferRouteImport.update({
   path: '/transfer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiArtifactRoute = ApiArtifactRouteImport.update({
+  id: '/api/artifact',
+  path: '/api/artifact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMcpRoute = ApiMcpRouteImport.update({
   id: '/api/mcp',
   path: '/api/mcp',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof HistoryRoute
   '/tools': typeof ToolsRoute
   '/transfer': typeof TransferRoute
+  '/api/artifact': typeof ApiArtifactRoute
   '/api/mcp': typeof ApiMcpRoute
   '/api/ship': typeof ApiShipRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/history': typeof HistoryRoute
   '/tools': typeof ToolsRoute
   '/transfer': typeof TransferRoute
+  '/api/artifact': typeof ApiArtifactRoute
   '/api/mcp': typeof ApiMcpRoute
   '/api/ship': typeof ApiShipRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/history': typeof HistoryRoute
   '/tools': typeof ToolsRoute
   '/transfer': typeof TransferRoute
+  '/api/artifact': typeof ApiArtifactRoute
   '/api/mcp': typeof ApiMcpRoute
   '/api/ship': typeof ApiShipRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/tools'
     | '/transfer'
+    | '/api/artifact'
     | '/api/mcp'
     | '/api/ship'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/tools'
     | '/transfer'
+    | '/api/artifact'
     | '/api/mcp'
     | '/api/ship'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/tools'
     | '/transfer'
+    | '/api/artifact'
     | '/api/mcp'
     | '/api/ship'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   HistoryRoute: typeof HistoryRoute
   ToolsRoute: typeof ToolsRoute
   TransferRoute: typeof TransferRoute
+  ApiArtifactRoute: typeof ApiArtifactRoute
   ApiMcpRoute: typeof ApiMcpRoute
   ApiShipRoute: typeof ApiShipRoute
 }
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransferRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/artifact': {
+      id: '/api/artifact'
+      path: '/api/artifact'
+      fullPath: '/api/artifact'
+      preLoaderRoute: typeof ApiArtifactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/mcp': {
       id: '/api/mcp'
       path: '/api/mcp'
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistoryRoute: HistoryRoute,
   ToolsRoute: ToolsRoute,
   TransferRoute: TransferRoute,
+  ApiArtifactRoute: ApiArtifactRoute,
   ApiMcpRoute: ApiMcpRoute,
   ApiShipRoute: ApiShipRoute,
 }

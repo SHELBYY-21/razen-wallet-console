@@ -40,7 +40,9 @@ POST /api/mcp
   "params": { "name":"tmn_recipient", "arguments": { "msisdn":"0812345678" } } }
 ```
 
-Tools: `tmn_login` `tmn_balance` `tmn_recipient` `tmn_transfer_p2p` `tmn_transfer_promptpay` `tmn_transfer_bank` `tmn_voucher` `tmn_fees` `tmn_history` `tmn_payment_code` `tmn_qr` `razen_status`.
+Tools: `tmn_login` `tmn_bootstrap` `tmn_balance` `tmn_recipient` `tmn_transfer_p2p` `tmn_transfer_promptpay` `tmn_transfer_bank` `tmn_voucher` `tmn_fees` `tmn_history` `tmn_txinfo` `tmn_vouchers` `tmn_p2p_status` `tmn_amity` `tmn_payment_code` `tmn_qr` `razen_status` `razen_memory_remember` `razen_memory_recall` `razen_memory_forget` `razen_artifact_receipt`.
+
+`initialize` returns `instructions` (MCP_INSTRUCTIONS). Memory is semantic/episodic/procedural JSON at `RAZEN_MEMORY_PATH` or `/tmp/razen-memory.json`. Receipt artifact is self-contained HTML.
 
 Client config: `.mcp.json` (token via env interpolation).
 

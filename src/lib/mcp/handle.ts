@@ -1,6 +1,8 @@
 import { tmnInvoke } from "@/lib/tmn/client";
 import type { TmnCredentials, TmnMode } from "@/lib/razen/types";
-import { MCP_TOOLS } from "./catalog";
+import { receiptHtml } from "@/lib/artifact/receipt";
+import { forget, recall, remember, type MemoryKind } from "@/lib/memory/store";
+import { MCP_INSTRUCTIONS, MCP_TOOLS } from "./catalog";
 
 export { authorize } from "./auth";
 
@@ -88,6 +90,37 @@ async function callTool(name: string, args: Record<string, unknown>) {
       return tmnInvoke("getPaymentCode", [], ctx);
     case "tmn_qr":
       return tmnInvoke("fetchQRDetail", [str(args.raw)], ctx);
+    case "razen_memory_remember": {
+      const kind = str(args.kind) as MemoryKind;
+      if (!["semantic", "episodic", "procedural"].includes(kind)) {
+        return { ok: false as const, error: "kind must be semantic|episodic|procedural" };
+      }
+      const item = await remember(kind, str(args.key), str(args.value));
+      return { ok: true as const, data: item };
+    }
+    case "razen_memory_recall": {
+      const k = str(args.kind);
+      const kind = (["semantic", "episodic", "procedural"] as const).includes(k as MemoryKind)
+        ? (k as MemoryKind)
+        : undefined;
+      return { ok: true as const, data: await recall(str(args.q), kind) };
+    }
+    case "razen_memory_forget":
+      return { ok: true as const, data: { deleted: await forget(str(args.id)) } };
+    case "razen_artifact_receipt":
+      return {
+        ok: true as const,
+        data: {
+          html: receiptHtml({
+            ref: str(args.ref),
+            amount: str(args.amount),
+            counterpart: str(args.counterpart),
+            method: str(args.method) || "P2P",
+            at: new Date().toISOString(),
+            note: str(args.note),
+          }),
+        },
+      };
     default:
       return { ok: false as const, error: `unknown tool ${name}` };
   }
@@ -105,7 +138,8 @@ export async function handleMcp(body: JsonRpc) {
       result: {
         protocolVersion: "2024-11-05",
         capabilities: { tools: {} },
-        serverInfo: { name: "razen-tmn", version: "1.0.0" },
+        serverInfo: { name: "razen-tmn", version: "1.1.0" },
+        instructions: MCP_INSTRUCTIONS,
       },
     };
   }
