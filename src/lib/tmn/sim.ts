@@ -42,7 +42,7 @@ const DIRECTORY: Record<string, { th: string; en: string; status: RecipientInfo[
   "0925550101": { th: "นาง มาลี ใจดี", en: "Malee Jaidee", status: "ปกติ" },
   "0867704490": { th: "นางสาว นภัสสร จันทร์เพ็ญ", en: "Napatsorn Chanpen", status: "ปกติ" },
   "0981234567": { th: "นาย ธนพล วงศ์สกุล", en: "Thanapon Wongsakul", status: "ปกติ" },
-  "0650000890": { th: "บัญชีทดสอบ", en: "Test Wallet", status: "ระงับ" },
+  "0650000890": { th: "นาย เอกชัย พานิช", en: "Ekkachai Panich", status: "ระงับ" },
 };
 
 export function recipientFromPhone(payee: string): RecipientInfo {

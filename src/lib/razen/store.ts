@@ -192,8 +192,6 @@ export const useRazen = create<RazenState>()(
         const id = accountId ?? s.activeAccountId;
         const txs = s.txs.filter((t) => t.accountId === id);
         let n = openingBalanceFor(txs, id);
-        if (id === "acc-2") n = 4_250;
-        if (id === "acc-3") n = 120;
         for (const t of txs) {
           if (t.status === "failed") continue;
           if (t.direction === "in") {
@@ -680,7 +678,7 @@ export const useRazen = create<RazenState>()(
         faceDeferred?.resolve(false);
         faceDeferred = null;
         set({ ...applySeed(), hydrated: true, pin: SEED_PIN });
-        toast.message("รีเซ็ตข้อมูลตัวอย่างแล้ว");
+        toast.message("รีเซ็ตโต๊ะปฏิบัติการแล้ว");
       },
 
       setLastReceipt: (id) => set({ lastReceiptId: id }),
@@ -811,7 +809,7 @@ export const useRazen = create<RazenState>()(
       },
     }),
     {
-      name: "razen-console-v3",
+      name: "razen-console-v4",
       skipHydration: true,
       partialize: (s) => ({
         accounts: s.accounts,
