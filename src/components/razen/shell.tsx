@@ -17,10 +17,10 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/", label: "ภาพรวม", short: "ภาพรวม", icon: Home },
-  { to: "/transfer", label: "โอน", short: "โอน", icon: Send },
+  { to: "/transfer", label: "โอนเงิน", short: "โอน", icon: Send },
   { to: "/history", label: "ประวัติ", short: "ประวัติ", icon: Clock3 },
   { to: "/accounts", label: "กระเป๋า", short: "กระเป๋า", icon: Wallet },
-  { to: "/gifts", label: "ซอง", short: "ซอง", icon: Gift },
+  { to: "/gifts", label: "ซองอั่งเปา", short: "ซอง", icon: Gift },
   { to: "/tools", label: "ตั้งค่า", short: "ตั้งค่า", icon: Settings2 },
 ] as const;
 
@@ -93,6 +93,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <p className="font-display text-xl">Crown Tether</p>
           <p className="text-xs text-muted">โต๊ะโอน TrueMoney</p>
         </div>
+        <p className="px-5 pt-1 text-[10px] tracking-[0.18em] text-subtle">เมนู</p>
         <nav className="flex flex-1 flex-col gap-1 px-2 py-2">
           {NAV.map((item) => {
             const active =
