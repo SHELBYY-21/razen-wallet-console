@@ -219,10 +219,39 @@ export function ToolsPage() {
               onChange={(e) => setWebhook(e.target.value)}
             />
             <p className="text-[11px] leading-relaxed text-subtle">
-              POST ทันทีเมื่อต้องสแกนหน้า:{" "}
-              <code className="font-mono text-cyan">{JSON.stringify(FACE_WEBHOOK_BODY)}</code>
-              {" "}แล้วรอ faceauth_wait_timeout วินาที (ค่าเริ่ม 180)
+              POST ทันทีเมื่อต้องสแกนหน้า แล้วรอ faceauth_wait_timeout วินาที (ค่าเริ่ม 180)
             </p>
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs text-muted">แจ้งเตือนบนเบราว์เซอร์</Label>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant={settings.notifPush ? "default" : "secondary"}
+                onClick={async () => {
+                  if (!settings.notifPush && "Notification" in window) {
+                    const p = await Notification.requestPermission();
+                    if (p !== "granted") {
+                      toast.error("เบราว์เซอร์ยังไม่อนุญาตการแจ้งเตือน");
+                      return;
+                    }
+                  }
+                  setSettings({ notifPush: !settings.notifPush });
+                  toast.message(settings.notifPush ? "ปิดแจ้งเตือนบนเบราว์เซอร์" : "เปิดแจ้งเตือนบนเบราว์เซอร์แล้ว");
+                }}
+              >
+                {settings.notifPush ? "เปิดอยู่" : "เปิดการแจ้งเตือน"}
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  useRazen.getState().pushNotice("ทดสอบแจ้งเตือน", "โต๊ะ RAZEN พร้อมแจ้งเงินเข้าและโอนสำเร็จ", "info");
+                }}
+              >
+                ส่งทดสอบ
+              </Button>
+            </div>
           </div>
           <div className="space-y-1">
             <Label className="text-xs text-muted">faceauth_wait_timeout (วินาที)</Label>
@@ -356,6 +385,16 @@ export function ToolsPage() {
         <button type="button" className="mt-3 text-xs text-muted" onClick={markRead}>
           แจ้งเตือน {unread} ยังไม่อ่าน — ทำเครื่องหมายว่าอ่านแล้ว
         </button>
+        {notices.length > 0 && (
+          <ul className="mt-3 max-h-48 space-y-2 overflow-auto text-sm">
+            {notices.slice(0, 8).map((n) => (
+              <li key={n.id} className="rounded-md bg-elevated px-3 py-2">
+                <p className="font-medium">{n.title}</p>
+                <p className="text-xs text-muted">{n.body}</p>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section className="rounded-2xl bg-surface p-5 panel-glow">

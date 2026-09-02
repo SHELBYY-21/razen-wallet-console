@@ -11,6 +11,7 @@ import {
 import { Toaster } from "sonner";
 import { RazenWordmark } from "@/components/razen/logo";
 import { BrandMark } from "@/components/razen/brand-mark";
+import { NoticeBell } from "@/components/razen/notice-bell";
 import { ReceiptSheet } from "@/components/razen/receipt-sheet";
 import { SyncOverlay } from "@/components/razen/sync-overlay";
 import { useRazen } from "@/lib/razen/store";
@@ -142,7 +143,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <p className="kicker">{heading.kicker}</p>
             <h1 className="text-xl font-semibold leading-none tracking-tight">{heading.title}</h1>
           </div>
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-1 sm:gap-3">
+            <NoticeBell />
             <span className="hidden items-center gap-1.5 rounded-full bg-elevated px-2.5 py-1 text-[11px] font-medium text-cyan sm:inline-flex">
               <i className="size-1.5 rounded-full bg-cyan" />
               {mode === "live" ? "LIVE" : "SIM"}

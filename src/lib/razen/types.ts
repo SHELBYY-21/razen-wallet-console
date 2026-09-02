@@ -71,12 +71,15 @@ export type Envelope = {
   voucherLink?: string;
 };
 
+export type NoticeKind = "in" | "out" | "fail" | "face" | "quota" | "info";
+
 export type Notice = {
   id: string;
   title: string;
   body: string;
   at: number;
   read: boolean;
+  kind?: NoticeKind;
 };
 
 export type Settings = {
