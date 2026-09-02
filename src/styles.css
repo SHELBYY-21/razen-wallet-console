@@ -133,9 +133,10 @@
 @layer utilities {
   .atmosphere {
     background:
-      radial-gradient(70% 40% at 100% 0%, rgb(201 168 76 / 0.08), transparent 58%),
-      radial-gradient(50% 50% at 0% 100%, rgb(45 212 191 / 0.06), transparent 55%),
-      var(--color-bg);
+      radial-gradient(55% 42% at 8% 0%, rgb(45 212 191 / 0.28), transparent 55%),
+      radial-gradient(48% 38% at 96% 4%, rgb(201 168 76 / 0.24), transparent 52%),
+      radial-gradient(42% 48% at 78% 100%, rgb(16 185 129 / 0.16), transparent 55%),
+      linear-gradient(180deg, #0d1730 0%, #0a1020 58%, #071018 100%);
   }
   .atmosphere::after {
     content: "";
@@ -146,15 +147,29 @@
   }
 
   .panel {
-    background: var(--color-surface);
-    box-shadow: var(--shadow-border);
+    isolation: isolate;
+    overflow: hidden;
+    background: rgb(17 24 39 / 0.55);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgb(255 255 255 / 0.18);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.14),
+      0 12px 40px rgb(0 4 16 / 0.32);
     border-radius: var(--radius-lg);
   }
   .panel-hero {
+    isolation: isolate;
+    overflow: hidden;
     background:
-      linear-gradient(165deg, rgb(201 168 76 / 0.12), transparent 42%),
-      var(--color-surface);
-    box-shadow: var(--shadow-border);
+      linear-gradient(165deg, rgb(201 168 76 / 0.16), transparent 46%),
+      rgb(17 24 39 / 0.55);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      0 16px 48px rgb(0 4 16 / 0.36);
     border-radius: var(--radius-xl);
   }
   .kicker {
@@ -177,18 +192,29 @@
     }
   }
   .stat-cell {
-    background: var(--color-surface);
+    background: rgb(17 24 39 / 0.42);
     padding: 1rem 1.1rem;
   }
 
-  .glass {
-    background: rgb(14 22 18 / 0.72);
-    box-shadow: var(--shadow-glass);
+  .glass,
+  .panel-glow {
+    isolation: isolate;
+    overflow: hidden;
+    background: rgb(17 24 39 / 0.5);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgb(255 255 255 / 0.16);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.12),
+      0 12px 40px rgb(0 4 16 / 0.3);
   }
 
   .glass-frost {
-    background: rgb(7 11 10 / 0.78);
-    box-shadow: var(--shadow-glass);
+    background: rgb(10 16 32 / 0.58);
+    backdrop-filter: blur(18px) saturate(1.25);
+    -webkit-backdrop-filter: blur(18px) saturate(1.25);
+    border-color: rgb(255 255 255 / 0.14);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1);
   }
 
   .glass-hero {
@@ -200,19 +226,18 @@
       0 18px 40px rgb(201 168 76 / 0.16);
   }
 
-  .panel-glow {
-    background: rgb(14 22 18 / 0.72);
-    box-shadow: var(--shadow-glass);
-  }
-
   .dense-toolbar {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
     gap: 8px;
     padding: 10px;
-    background: var(--color-surface);
-    box-shadow: var(--shadow-border);
+    isolation: isolate;
+    overflow: hidden;
+    background: rgb(17 24 39 / 0.55);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgb(255 255 255 / 0.16);
     border-radius: var(--radius-lg);
   }
 
@@ -244,7 +269,7 @@
 
   .dense-btn {
     background: var(--color-cyan);
-    color: #04110c;
+    color: #0a1020;
     border: 0;
     min-height: 44px;
     padding: 8px 16px;
@@ -254,7 +279,7 @@
   }
   .dense-btn:hover {
     opacity: 0.9;
-    color: #04110c;
+    color: #0a1020;
   }
   .dense-btn:disabled {
     opacity: 0.45;
@@ -262,9 +287,12 @@
 
   .data-table-wrap {
     overflow: auto;
+    isolation: isolate;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-border);
-    background: var(--color-surface);
+    background: rgb(17 24 39 / 0.55);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgb(255 255 255 / 0.16);
   }
 
   .data-table {
@@ -375,9 +403,19 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .glass-frost {
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-reduced-motion: reduce) {
+  .panel,
+  .panel-hero,
+  .glass,
+  .glass-frost,
+  .panel-glow,
+  .dense-toolbar,
+  .data-table-wrap,
+  .stat-cell {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: rgb(7 11 10 / 0.94);
+    background: #111827;
   }
 }

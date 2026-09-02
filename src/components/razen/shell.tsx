@@ -92,7 +92,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       </a>
       <div className="atmosphere pointer-events-none fixed inset-0 z-0" aria-hidden />
       <aside
-        className="fixed inset-y-0 left-0 z-[var(--z-nav)] hidden w-56 flex-col border-r border-line bg-surface/80 md:flex"
+        className="glass-frost fixed inset-y-0 left-0 z-[var(--z-nav)] hidden w-56 flex-col border-r md:flex"
         aria-label="เมนูหลัก"
       >
         <div className="px-5 pt-7 pb-5">
@@ -134,7 +134,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="relative z-10 md:pl-56">
-        <header className="sticky top-0 z-[var(--z-header)] flex items-center gap-3 border-b border-line bg-bg/80 px-4 py-3 backdrop-blur-sm md:px-8">
+        <header className="glass-frost sticky top-0 z-[var(--z-header)] flex items-center gap-3 border-b px-4 py-3 md:px-8">
           <div className="md:hidden">
             <RazenWordmark compact />
           </div>

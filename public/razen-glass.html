@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>RAZEN · Glass desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:#0a1020; --fg:#f8fafc; --mute:#a8b4c4; --gold:#c9a84c; --teal:#2dd4bf; --in:#10b981;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; min-height:100%; color:var(--fg); font: 16px/1.5 Anuphan, sans-serif; background:#0a1020; }
+  .mesh {
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(55% 42% at 8% 0%, rgb(45 212 191 / .32), transparent 55%),
+      radial-gradient(48% 38% at 96% 4%, rgb(201 168 76 / .26), transparent 52%),
+      radial-gradient(42% 48% at 78% 100%, rgb(16 185 129 / .18), transparent 55%),
+      linear-gradient(180deg, #0d1730, #0a1020 58%, #071018);
+  }
+  .desk { position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:28px 20px 48px; }
+  .glass {
+    background: rgb(17 24 39 / .55);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgb(255 255 255 / .18);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .14), 0 12px 40px rgb(0 4 16 / .32);
+    border-radius: 14px;
+  }
+  header { display:flex; justify-content:space-between; align-items:end; padding:22px 24px; margin-bottom:16px; }
+  header strong { font-family: Sora, Anuphan, sans-serif; font-size:28px; letter-spacing:-.03em; }
+  header span { color:var(--gold); letter-spacing:.18em; font-size:11px; }
+  .grid { display:grid; grid-template-columns: 1.4fr .8fr; gap:14px; }
+  @media (max-width: 760px) { .grid { grid-template-columns:1fr; } }
+  .hero { padding:24px; }
+  .hero .k { font-size:11px; letter-spacing:.16em; color:var(--gold); }
+  .hero b { display:block; margin-top:8px; font-family:Sora,sans-serif; font-size:44px; font-weight:600; color:var(--gold); letter-spacing:-.03em; }
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:18px; }
+  .stats div { padding:12px; border-radius:10px; background:rgb(255 255 255 / .04); border:1px solid rgb(255 255 255 / .08); }
+  .stats small { display:block; color:var(--mute); font-size:11px; }
+  .side { padding:20px 22px; }
+  .side h2 { margin:0 0 10px; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); }
+  ol { margin:0; padding-left:18px; color:var(--mute); }
+  .pill { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:4px 10px; background:rgb(45 212 191 / .12); color:var(--teal); font-size:11px; }
+  .pill i { width:6px; height:6px; border-radius:50%; background:var(--teal); }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass { backdrop-filter:none; background:#111827; }
+  }
+</style>
+</head>
+<body>
+  <div class="mesh" aria-hidden="true"></div>
+  <main class="desk">
+    <header class="glass">
+      <div>
+        <span>RAZEN · CROWN TETHER</span>
+        <strong>โต๊ะโอน TrueMoney</strong>
+      </div>
+      <p class="pill"><i></i> LIVE glass</p>
+    </header>
+    <div class="grid">
+      <section class="glass hero">
+        <p class="k">ยอดวอลเล็ต · getBalance</p>
+        <b>฿ —</b>
+        <p style="color:var(--mute);margin:8px 0 0">ตัวเลขจริงอยู่ที่คอนโซลสด ไม่ใส่ยอดสมมติในไฟล์นี้</p>
+        <div class="stats">
+          <div><small>เข้าวันนี้</small> ทีล</div>
+          <div><small>ออกวันนี้</small> ทอง</div>
+          <div><small>คิวรอ</small> สเลท</div>
+        </div>
+      </section>
+      <aside class="glass side">
+        <h2>กระจกฝ้า</h2>
+        <ol>
+          <li>พื้นกรมท่ามีแสงทอง / ทีล</li>
+          <li>แผงโปร่ง 55% + blur 16px</li>
+          <li>ขอบขาวบาง 1px</li>
+          <li>ข้อความขาว #f8fafc</li>
+        </ol>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>
