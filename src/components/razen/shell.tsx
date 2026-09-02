@@ -11,6 +11,7 @@ import {
 import { Toaster } from "sonner";
 import { RazenWordmark } from "@/components/razen/logo";
 import { BrandMark } from "@/components/razen/brand-mark";
+import { Glyph, type GlyphTone } from "@/components/razen/glyph";
 import { NoticeBell } from "@/components/razen/notice-bell";
 import { ReceiptSheet } from "@/components/razen/receipt-sheet";
 import { SyncOverlay } from "@/components/razen/sync-overlay";
@@ -18,12 +19,12 @@ import { useRazen } from "@/lib/razen/store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/", label: "ภาพรวม", short: "ภาพรวม", icon: Home },
-  { to: "/transfer", label: "โอนเงิน", short: "โอน", icon: Send },
-  { to: "/history", label: "ประวัติ", short: "ประวัติ", icon: Clock3 },
-  { to: "/accounts", label: "กระเป๋า", short: "กระเป๋า", icon: Wallet },
-  { to: "/gifts", label: "ซองอั่งเปา", short: "ซอง", icon: Gift },
-  { to: "/tools", label: "ตั้งค่า", short: "ตั้งค่า", icon: Settings2 },
+  { to: "/", label: "ภาพรวม", short: "ภาพรวม", icon: Home, tone: "gold" },
+  { to: "/transfer", label: "โอนเงิน", short: "โอน", icon: Send, tone: "teal" },
+  { to: "/history", label: "ประวัติ", short: "ประวัติ", icon: Clock3, tone: "warn" },
+  { to: "/accounts", label: "กระเป๋า", short: "กระเป๋า", icon: Wallet, tone: "in" },
+  { to: "/gifts", label: "ซองอั่งเปา", short: "ซอง", icon: Gift, tone: "danger" },
+  { to: "/tools", label: "ตั้งค่า", short: "ตั้งค่า", icon: Settings2, tone: "muted" },
 ] as const;
 
 const TITLE: Record<string, { kicker: string; title: string }> = {
@@ -99,7 +100,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="px-5 pt-7 pb-5">
           <RazenWordmark />
         </div>
-        <nav className="flex flex-1 flex-col gap-0.5 px-3">
+        <nav className="flex flex-1 flex-col gap-1 px-3">
           {NAV.map((item) => {
             const active =
               item.to === "/"
@@ -111,13 +112,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 to={item.to}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm transition-colors duration-200",
-                  active
-                    ? "bg-brand/12 text-brand shadow-[inset_2px_0_0_0_var(--color-brand)]"
-                    : "text-muted hover:bg-elevated hover:text-fg",
+                  "flex min-h-11 items-center gap-2.5 rounded-xl px-2 text-sm transition-colors duration-200",
+                  active ? "bg-white/8 text-fg" : "text-muted hover:bg-white/5 hover:text-fg",
                 )}
               >
-                <item.icon className="size-4" />
+                <Glyph icon={item.icon} tone={item.tone as GlyphTone} size="sm" />
                 {item.label}
               </Link>
             );
@@ -139,9 +138,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="md:hidden">
             <RazenWordmark compact />
           </div>
-          <div className="hidden min-w-0 md:block">
-            <p className="kicker">{heading.kicker}</p>
-            <h1 className="text-xl font-semibold leading-none tracking-tight">{heading.title}</h1>
+          <div className="hidden min-w-0 items-center gap-3 md:flex">
+            <Glyph
+              icon={(NAV.find((n) => n.to === pathname) ?? NAV[0]).icon}
+              tone={(NAV.find((n) => n.to === pathname) ?? NAV[0]).tone}
+            />
+            <div>
+              <p className="kicker">{heading.kicker}</p>
+              <h1 className="text-xl font-semibold leading-none tracking-tight">{heading.title}</h1>
+            </div>
           </div>
           <div className="ml-auto flex items-center gap-1 sm:gap-3">
             <NoticeBell />
@@ -171,11 +176,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 to={item.to}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 text-xs transition-colors duration-200",
-                  active ? "text-brand" : "text-muted",
+                  "flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 text-[11px] transition-colors duration-200",
+                  active ? "text-fg" : "text-muted",
                 )}
               >
-                <item.icon className="size-5" />
+                <Glyph icon={item.icon} tone={active ? item.tone : "muted"} size="sm" />
                 {item.short}
               </Link>
             );

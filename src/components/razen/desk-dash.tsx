@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Search } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Clock3, Landmark, QrCode, Search, Send, Wallet } from "lucide-react";
 import { FlowChart } from "@/components/razen/flow-chart";
 import { BrandMark } from "@/components/razen/brand-mark";
+import { Glyph } from "@/components/razen/glyph";
 import { baht } from "@/lib/razen/format";
 import { bankByCode } from "@/lib/razen/banks";
 import { useRazen } from "@/lib/razen/store";
@@ -80,27 +81,31 @@ export function DeskDash() {
             <Link
               to="/transfer"
               search={{ method: "p2p" }}
-              className="inline-flex min-h-11 items-center justify-center rounded-md bg-cyan px-5 text-sm font-semibold text-bg transition-opacity duration-200 hover:opacity-90"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-cyan px-5 text-sm font-semibold text-bg transition-opacity duration-200 hover:opacity-90"
             >
+              <Send className="size-4" strokeWidth={1.75} />
               โอนเลย
             </Link>
             <Link
               to="/transfer"
               search={{ method: "promptpay" }}
-              className="inline-flex min-h-11 items-center justify-center rounded-md px-5 text-sm text-fg shadow-[var(--shadow-border)] transition-[box-shadow] duration-200 hover:shadow-[var(--shadow-border-hover)]"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 text-sm text-fg shadow-[var(--shadow-border)] transition-[box-shadow] duration-200 hover:shadow-[var(--shadow-border-hover)]"
             >
+              <QrCode className="size-4" strokeWidth={1.75} />
               สแกน QR
             </Link>
             {!synced ? (
-              <Link to="/tools" className="inline-flex min-h-11 items-center justify-center text-sm text-muted">
+              <Link to="/tools" className="inline-flex min-h-11 items-center justify-center gap-2 text-sm text-muted">
+                <Wallet className="size-4" strokeWidth={1.75} />
                 เชื่อมกระเป๋า
               </Link>
             ) : (
               <Link
                 to="/transfer"
                 search={{ method: "bank" }}
-                className="inline-flex min-h-11 items-center justify-center text-sm text-muted"
+                className="inline-flex min-h-11 items-center justify-center gap-2 text-sm text-muted"
               >
+                <Landmark className="size-4" strokeWidth={1.75} />
                 โอนบัญชีธนาคาร
               </Link>
             )}
@@ -122,13 +127,16 @@ export function DeskDash() {
       <div className="grid gap-3 sm:grid-cols-3">
         <Stat k="รับเข้า" v={baht(stats.incoming)} tone="pos" />
         <Stat k="จ่ายออก" v={baht(stats.outgoing)} />
-        <Stat k="ค้างส่ง" v={String(stats.pending)} />
+        <Stat k="ค้างส่ง" v={String(stats.pending)} pending />
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(20rem,1fr)]">
         <section className="panel p-5">
-          <div className="mb-3 flex items-end justify-between gap-3">
-            <h2 className="text-base font-semibold">กระแส 7 วัน</h2>
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Glyph icon={ArrowDownLeft} tone="teal" size="sm" />
+              <h2 className="text-base font-semibold">กระแส 7 วัน</h2>
+            </div>
             <p className="text-xs text-muted">
               เข้า {baht(stats.incoming)} · ออก {baht(stats.outgoing)}
             </p>
@@ -138,7 +146,10 @@ export function DeskDash() {
 
         <section className="panel flex flex-col p-5">
           <div className="mb-3 flex items-center justify-between gap-2">
-            <h2 className="text-base font-semibold">ล่าสุด</h2>
+            <div className="flex items-center gap-2">
+              <Glyph icon={Clock3} tone="gold" size="sm" />
+              <h2 className="text-base font-semibold">ล่าสุด</h2>
+            </div>
             <Link to="/history" className="text-xs text-cyan">
               ทั้งหมด
             </Link>
@@ -166,11 +177,16 @@ export function DeskDash() {
   );
 }
 
-function Stat({ k, v, tone }: { k: string; v: string; tone?: "pos" }) {
+function Stat({ k, v, tone, pending }: { k: string; v: string; tone?: "pos"; pending?: boolean }) {
+  const icon = tone === "pos" ? ArrowDownLeft : pending ? Clock3 : ArrowUpRight;
+  const gTone = tone === "pos" ? "in" : pending ? "warn" : "gold";
   return (
-    <div className="panel px-4 py-4">
-      <p className="text-[11px] tracking-wide text-subtle">{k}</p>
-      <p className={cn("mt-1 font-display text-xl font-semibold tabular-nums", tone === "pos" && "text-in")}>{v}</p>
+    <div className="panel flex items-center gap-3 px-4 py-4">
+      <Glyph icon={icon} tone={gTone} />
+      <div className="min-w-0">
+        <p className="text-[11px] tracking-wide text-subtle">{k}</p>
+        <p className={cn("mt-0.5 font-display text-xl font-semibold tabular-nums", tone === "pos" && "text-in")}>{v}</p>
+      </div>
     </div>
   );
 }

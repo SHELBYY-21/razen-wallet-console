@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { Plus, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Glyph } from "@/components/razen/glyph";
 import { baht, formatPhone } from "@/lib/razen/format";
 import { useRazen, type ConnectInput } from "@/lib/razen/store";
 import { cn } from "@/lib/utils";
@@ -52,7 +54,9 @@ function AccountsPage() {
           <p className="text-xs font-medium tracking-wide text-cyan">บัญชี</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">จัดการบัญชี Wallet</h1>
         </div>
-        <Button onClick={() => setOpen(true)}>+ เพิ่มบัญชี</Button>
+        <Button onClick={() => setOpen(true)}>
+          <Plus className="size-4" strokeWidth={1.75} /> เพิ่มบัญชี
+        </Button>
       </header>
 
       <div className="space-y-2">
@@ -66,9 +70,7 @@ function AccountsPage() {
               active === a.id && "shadow-[0_0_0_1px_var(--color-cyan)]",
             )}
           >
-            <span className="flex size-11 items-center justify-center rounded-lg bg-elevated text-lg font-semibold text-brand">
-              {a.nickname.charAt(0)}
-            </span>
+            <Glyph icon={Wallet} tone={active === a.id ? "teal" : "muted"} />
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-medium">{a.nickname}</span>
               <span className="block text-xs text-muted">

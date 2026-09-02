@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { RefreshCw, Search } from "lucide-react";
 import { toast } from "sonner";
 import { TxTable } from "@/components/razen/tx-table";
 import { useRazen } from "@/lib/razen/store";
@@ -71,7 +72,9 @@ function HistoryPage() {
           />
         </label>
         <label className="dense-cell" style={{ flex: "2 1 160px" }}>
-          <span className="k">ค้นหา</span>
+          <span className="k inline-flex items-center gap-1">
+            <Search className="size-3" /> ค้นหา
+          </span>
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -80,7 +83,8 @@ function HistoryPage() {
           />
         </label>
         <div className="dense-cell" style={{ flex: "0 0 auto" }}>
-          <button type="button" className="dense-btn" disabled={busy} onClick={() => void search()}>
+          <button type="button" className="dense-btn inline-flex items-center gap-2" disabled={busy} onClick={() => void search()}>
+            <RefreshCw className={busy ? "size-3.5 animate-spin" : "size-3.5"} />
             {busy ? "กำลังดึง…" : mode === "live" ? "ดึงประวัติ" : "กรอง"}
           </button>
         </div>

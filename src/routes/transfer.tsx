@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Wallet } from "lucide-react";
 import { TransferForm } from "@/components/razen/transfer-form";
 import { BrandMark } from "@/components/razen/brand-mark";
+import { Glyph } from "@/components/razen/glyph";
 import { baht } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
 import type { TransferMethod } from "@/lib/razen/types";
@@ -26,10 +28,13 @@ function TransferPage() {
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
-      <div className="panel-hero flex items-end justify-between gap-4 px-5 py-5">
-        <div>
-          <p className="kicker">จ่ายออก</p>
-          <p className="mt-2 text-sm text-muted">ยอดใช้ได้</p>
+      <div className="panel-hero flex items-center justify-between gap-4 px-5 py-5">
+        <div className="flex items-center gap-3">
+          <Glyph icon={Wallet} tone="gold" />
+          <div>
+            <p className="kicker">จ่ายออก</p>
+            <p className="mt-1 text-sm text-muted">ยอดใช้ได้</p>
+          </div>
         </div>
         <p className="font-display text-2xl font-semibold tabular-nums text-brand">{baht(balance)}</p>
       </div>

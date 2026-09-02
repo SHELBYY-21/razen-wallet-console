@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { Settings2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Glyph } from "@/components/razen/glyph";
 import { formatDateTime } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
 import { FACE_WEBHOOK_BODY, PUBLIC_FUNCTIONS } from "@/lib/tmnone/apidoc";
@@ -112,7 +114,9 @@ export function ToolsPage() {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <header>
+      <header className="flex items-start gap-3">
+        <Glyph icon={Settings2} tone="muted" size="lg" />
+        <div>
         <p className="text-xs font-medium tracking-wide text-cyan">เครื่องมือ</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">ตั้งค่า API และเครื่องมือระบบ</h1>
         <p className="mt-1 text-sm text-muted">
@@ -127,6 +131,7 @@ export function ToolsPage() {
           </a>{" "}
           — setData + loginWithPin6
         </p>
+        </div>
       </header>
 
       <section className="rounded-2xl bg-surface p-5 panel-glow">
