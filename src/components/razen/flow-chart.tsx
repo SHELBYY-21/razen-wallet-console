@@ -99,7 +99,7 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
             fill={`url(#in-${gid})`}
             strokeWidth={2.5}
             dot={false}
-            activeDot={{ r: 5, fill: "var(--color-cyan)", stroke: "#06090c", strokeWidth: 2 }}
+            activeDot={{ r: 5, fill: "var(--color-cyan)", stroke: "#0a1020", strokeWidth: 2 }}
           />
           <Area
             type="natural"
@@ -109,7 +109,7 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
             fill={`url(#out-${gid})`}
             strokeWidth={2.5}
             dot={false}
-            activeDot={{ r: 5, fill: "var(--color-brand)", stroke: "#06090c", strokeWidth: 2 }}
+            activeDot={{ r: 5, fill: "var(--color-brand)", stroke: "#0a1020", strokeWidth: 2 }}
           />
         </AreaChart>
       </ResponsiveContainer>

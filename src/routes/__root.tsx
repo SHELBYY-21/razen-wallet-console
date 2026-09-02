@@ -16,7 +16,7 @@ export const Route = createRootRoute({
         name: "description",
         content: "RAZEN × TMNOne — คอนโซลโอน P2P พร้อมเพย์ ธนาคาร และซองอั่งเปา",
       },
-      { name: "theme-color", content: "#06090c" },
+      { name: "theme-color", content: "#0a1020" },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },

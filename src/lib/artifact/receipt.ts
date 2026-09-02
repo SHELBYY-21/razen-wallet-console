@@ -15,14 +15,14 @@ export function receiptHtml(input: {
 <title>RAZEN ${escapeHtml(input.ref)}</title>
 <style>
   :root { color-scheme: dark; }
-  body { margin:0; min-height:100vh; background:#06090c; color:#eef3f2;
+  body { margin:0; min-height:100vh; background:#0a1020; color:#f8fafc;
     font-family: Anuphan, ui-sans-serif, system-ui, sans-serif; }
   .card { max-width: 420px; margin: 8vh auto; padding: 28px 26px;
-    background: #0c1216; border: 1px solid rgba(216,181,110,.28); }
+    background: #111827; border: 1px solid rgba(148,163,184,.2); }
   .kicker { font-family: ui-monospace, monospace; letter-spacing:.18em;
-    font-size:11px; color:#4ae8c4; }
+    font-size:11px; color:#2dd4bf; }
   h1 { font-size: 22px; font-weight: 600; margin: 8px 0 18px; }
-  .amt { font-variant-numeric: tabular-nums; font-size: 34px; color:#d8b56e; }
+  .amt { font-variant-numeric: tabular-nums; font-size: 34px; color:#c9a84c; }
   dl { display:grid; grid-template-columns: 110px 1fr; gap: 8px 12px; font-size:14px; }
   dt { color:#8aa0b8; } dd { margin:0; }
   .note { margin-top:16px; font-size:13px; color:#8aa0b8; }

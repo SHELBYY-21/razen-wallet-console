@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="RAZEN">
-  <rect width="32" height="32" rx="6" fill="#d8b56e"/>
-  <path fill="#12100a" d="M8 20.5 10.2 12l2.8 4.4L16 9.5l3 6.9 2.8-4.4 2.2 8.5H8Z"/>
-  <path fill="#12100a" d="M9 22.2h14v1.6H9z"/>
+  <rect width="32" height="32" rx="6" fill="#c9a84c"/>
+  <path fill="#0a1020" d="M8 20.5 10.2 12l2.8 4.4L16 9.5l3 6.9 2.8-4.4 2.2 8.5H8Z"/>
+  <path fill="#0a1020" d="M9 22.2h14v1.6H9z"/>
 </svg>

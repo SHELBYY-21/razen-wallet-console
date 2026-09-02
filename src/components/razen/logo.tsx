@@ -5,16 +5,16 @@ export function RazenMark({ className }: { className?: string }) {
     <svg viewBox="0 0 32 32" className={cn("size-8", className)} aria-hidden="true">
       <defs>
         <linearGradient id="rz-mark" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#f0d9a4" />
-          <stop offset="1" stopColor="#d8b56e" />
+          <stop offset="0" stopColor="#e8d48a" />
+          <stop offset="1" stopColor="#c9a84c" />
         </linearGradient>
       </defs>
       <rect width="32" height="32" rx="6" fill="url(#rz-mark)" />
       <path
         d="M8 20.5 10.2 12l2.8 4.4L16 9.5l3 6.9 2.8-4.4 2.2 8.5H8Z"
-        fill="#12100a"
+        fill="#0a1020"
       />
-      <path d="M9 22.2h14v1.6H9z" fill="#12100a" />
+      <path d="M9 22.2h14v1.6H9z" fill="#0a1020" />
     </svg>
   );
 }

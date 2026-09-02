@@ -8,9 +8,9 @@ export function deskHtml() {
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sora:wght@600&display=swap" rel="stylesheet"/>
 <style>
-  :root { color-scheme: dark; --ink:#eef3f2; --mute:#9aa8a6; --line:#1a242c; --gold:#d8b56e; --go:#34d399; }
+  :root { color-scheme: dark; --ink:#f8fafc; --mute:#a8b4c4; --line:#243044; --gold:#c9a84c; --go:#10b981; }
   * { box-sizing: border-box; }
-  body { margin:0; background:#06090c; color:var(--ink); font: 15px/1.5 Anuphan, sans-serif; }
+  body { margin:0; background:#0a1020; color:var(--ink); font: 15px/1.5 Anuphan, sans-serif; }
   header { padding: 28px 28px 18px; border-bottom: 1px solid var(--line); display:flex; justify-content:space-between; gap:16px; align-items:end; }
   header strong { font-family: Sora, Anuphan, sans-serif; font-size: 28px; font-weight: 600; }
   header span { color: var(--gold); letter-spacing:.18em; font-size:11px; }

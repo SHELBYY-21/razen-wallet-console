@@ -18,7 +18,7 @@ describe("razen motion spec", () => {
     assert.match(css, /cubic-bezier\(0\.16, 1, 0\.3, 1\)/);
     assert.match(css, /cubic-bezier\(0\.4, 0, 1, 1\)/);
     assert.match(css, /prefers-reduced-motion: reduce/);
-    assert.match(css, /--color-brand: #d8b56e;/);
-    assert.match(css, /--color-bg: #06090c;/);
+    assert.match(css, /--color-brand: #c9a84c;/);
+    assert.match(css, /--color-bg: #0a1020;/);
   });
 });
