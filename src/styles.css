@@ -11,7 +11,7 @@
   --color-panel: #1a242c;
   --color-fg: #eef3f2;
   --color-muted: #9aa8a6;
-  --color-subtle: #6e7c7a;
+  --color-subtle: #8b9694;
   --color-line: rgb(216 181 110 / 0.22);
   --color-brand: #d8b56e;
   --color-brand-fg: #12100a;
@@ -47,6 +47,12 @@
   --ease-hud: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --z-base: 0;
+  --z-header: 20;
+  --z-nav: 30;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-toast: 60;
 }
 
 @layer base {
@@ -61,7 +67,7 @@
     background: var(--color-bg);
     color: var(--color-fg);
     min-height: 100%;
-    font-size: 14px;
+    font-size: 16px;
   }
   h1,
   h2,
@@ -102,7 +108,7 @@
   position: absolute;
   left: -999px;
   top: 8px;
-  z-index: 80;
+  z-index: var(--z-toast);
   border-radius: 999px;
   background: var(--color-brand);
   color: var(--color-brand-fg);
@@ -110,6 +116,18 @@
 }
 .skip-link:focus {
   left: 12px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @layer utilities {

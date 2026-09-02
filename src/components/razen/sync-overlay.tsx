@@ -51,7 +51,7 @@ export function SyncOverlay() {
   return (
     <div
       className={cn(
-        "pointer-events-none fixed right-2 z-40 bottom-20 md:right-6 md:bottom-6",
+        "pointer-events-none fixed right-2 z-[var(--z-overlay)] bottom-20 md:right-6 md:bottom-6",
         exiting ? "razen-exit" : "razen-enter",
       )}
       aria-hidden

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useId } from "react";
 import { BANKS, HOME_BANK, bankByCode, bankFee } from "@/lib/razen/banks";
 import {
   baht,
@@ -16,7 +16,6 @@ import { BrandMark } from "@/components/razen/brand-mark";
 import { PromptPayScan } from "@/components/razen/promptpay-scan";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift"> }) {
@@ -277,7 +276,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
       </Button>
 
       {rec && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-bg/55 p-3 backdrop-blur-sm sm:items-center">
+        <div className="fixed inset-0 z-[var(--z-modal)] flex items-end justify-center bg-bg/55 p-3 backdrop-blur-sm sm:items-center">
           <div
             className="glass-frost w-full max-w-md rounded-2xl p-5"
             role="dialog"
@@ -301,7 +300,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
               <Row k="สถานะผู้รับ" v={rec.status} ok={rec.status === "ปกติ"} />
             </dl>
             <div className="mt-5 flex flex-col gap-2">
-              <Button disabled={busy} onClick={() => void confirm()}>
+              <Button disabled={busy} aria-busy={busy} onClick={() => void confirm()}>
                 โอนเงิน
               </Button>
               <Button variant="secondary" onClick={() => setRec(null)}>
@@ -316,9 +315,12 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  const id = useId();
   return (
-    <div className="space-y-1.5">
-      <Label className="text-xs text-muted">{label}</Label>
+    <div className="space-y-1.5" role="group" aria-labelledby={id}>
+      <p id={id} className="text-xs font-medium text-muted">
+        {label}
+      </p>
       {children}
     </div>
   );

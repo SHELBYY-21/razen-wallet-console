@@ -106,7 +106,7 @@ export function PromptPayScan({ onHit }: Props) {
         สแกน QR
       </Button>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-bg/70 p-3 sm:items-center">
+        <div className="fixed inset-0 z-[var(--z-modal)] flex items-end justify-center bg-bg/70 p-3 sm:items-center">
           <div className="w-full max-w-md rounded-2xl border border-line bg-surface p-4" role="dialog" aria-modal="true" aria-labelledby="scan-title">
             <div className="mb-3 flex items-center justify-between">
               <p id="scan-title" className="flex items-center gap-2 text-sm font-medium">

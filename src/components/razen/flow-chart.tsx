@@ -16,9 +16,33 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
   const gid = useId().replace(/:/g, "");
   const empty = data.every((d) => d.inn === 0 && d.out === 0);
   const max = Math.max(1, ...data.flatMap((d) => [d.inn, d.out]));
+  const inSum = data.reduce((n, d) => n + d.inn, 0);
+  const outSum = data.reduce((n, d) => n + d.out, 0);
+  const summary = empty
+    ? "ยังไม่มีรายการใน 7 วันนี้"
+    : `รับเข้า ${baht(inSum)} จ่ายออก ${baht(outSum)} ใน 7 วัน`;
 
   return (
-    <div className="relative h-64 w-full sm:h-72">
+    <div className="relative h-64 w-full sm:h-72" role="img" aria-label={summary}>
+      <table className="sr-only">
+        <caption>กระแส 7 วัน</caption>
+        <thead>
+          <tr>
+            <th>วัน</th>
+            <th>เข้า</th>
+            <th>ออก</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((d) => (
+            <tr key={d.day}>
+              <td>{d.label}</td>
+              <td>{baht(d.inn)}</td>
+              <td>{baht(d.out)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data} margin={{ top: 12, right: 8, left: 4, bottom: 0 }}>
           <defs>
@@ -55,11 +79,11 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
           <Tooltip
             cursor={{ stroke: "var(--color-cyan)", strokeOpacity: 0.35 }}
             contentStyle={{
-              background: "#0e1612",
-              border: "1px solid rgba(198,161,91,.35)",
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-line)",
               borderRadius: 10,
               fontSize: 12,
-              color: "#eef3f2",
+              color: "var(--color-fg)",
             }}
             formatter={(value, name) => [
               baht(Number(value ?? 0)),
