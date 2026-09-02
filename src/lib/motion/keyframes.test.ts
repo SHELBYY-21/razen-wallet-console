@@ -20,7 +20,7 @@ describe("razen motion spec", () => {
     assert.match(css, /prefers-reduced-motion: reduce/);
     assert.match(css, /--color-brand: #c9a84c;/);
     assert.match(css, /--color-bg: #0a1020;/);
-    assert.match(css, /backdrop-filter: blur\(16px\)/);
+    assert.match(css, /backdrop-filter: blur\(20px\)/);
     assert.match(css, /prefers-reduced-transparency: reduce/);
   });
 });

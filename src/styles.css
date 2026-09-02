@@ -133,10 +133,11 @@
 @layer utilities {
   .atmosphere {
     background:
-      radial-gradient(55% 42% at 8% 0%, rgb(45 212 191 / 0.28), transparent 55%),
-      radial-gradient(48% 38% at 96% 4%, rgb(201 168 76 / 0.24), transparent 52%),
-      radial-gradient(42% 48% at 78% 100%, rgb(16 185 129 / 0.16), transparent 55%),
-      linear-gradient(180deg, #0d1730 0%, #0a1020 58%, #071018 100%);
+      radial-gradient(42% 36% at 12% 8%, rgb(45 212 191 / 0.42), transparent 58%),
+      radial-gradient(38% 32% at 92% 6%, rgb(201 168 76 / 0.38), transparent 55%),
+      radial-gradient(44% 40% at 78% 92%, rgb(16 185 129 / 0.28), transparent 60%),
+      radial-gradient(30% 28% at 8% 78%, rgb(56 189 248 / 0.16), transparent 55%),
+      linear-gradient(180deg, #10203a 0%, #0a1020 52%, #070d18 100%);
   }
   .atmosphere::after {
     content: "";
@@ -149,26 +150,26 @@
   .panel {
     isolation: isolate;
     overflow: hidden;
-    background: rgb(17 24 39 / 0.55);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border: 1px solid rgb(255 255 255 / 0.18);
+    background: rgb(15 23 42 / 0.42);
+    backdrop-filter: blur(20px) saturate(1.45);
+    -webkit-backdrop-filter: blur(20px) saturate(1.45);
+    border: 1px solid rgb(255 255 255 / 0.28);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.14),
-      0 12px 40px rgb(0 4 16 / 0.32);
+      inset 0 1px 0 rgb(255 255 255 / 0.22),
+      0 8px 32px rgb(0 4 16 / 0.28);
     border-radius: var(--radius-lg);
   }
   .panel-hero {
     isolation: isolate;
     overflow: hidden;
     background:
-      linear-gradient(165deg, rgb(201 168 76 / 0.16), transparent 46%),
-      rgb(17 24 39 / 0.55);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border: 1px solid rgb(255 255 255 / 0.2);
+      linear-gradient(165deg, rgb(255 255 255 / 0.1), transparent 42%),
+      rgb(15 23 42 / 0.4);
+    backdrop-filter: blur(22px) saturate(1.5);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    border: 1px solid rgb(255 255 255 / 0.32);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      inset 0 1px 0 rgb(255 255 255 / 0.26),
       0 16px 48px rgb(0 4 16 / 0.36);
     border-radius: var(--radius-xl);
   }
@@ -192,7 +193,7 @@
     }
   }
   .stat-cell {
-    background: rgb(17 24 39 / 0.42);
+    background: rgb(15 23 42 / 0.38);
     padding: 1rem 1.1rem;
   }
 
@@ -200,21 +201,21 @@
   .panel-glow {
     isolation: isolate;
     overflow: hidden;
-    background: rgb(17 24 39 / 0.5);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border: 1px solid rgb(255 255 255 / 0.16);
+    background: rgb(15 23 42 / 0.4);
+    backdrop-filter: blur(20px) saturate(1.45);
+    -webkit-backdrop-filter: blur(20px) saturate(1.45);
+    border: 1px solid rgb(255 255 255 / 0.26);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.12),
-      0 12px 40px rgb(0 4 16 / 0.3);
+      inset 0 1px 0 rgb(255 255 255 / 0.2),
+      0 8px 32px rgb(0 4 16 / 0.28);
   }
 
   .glass-frost {
-    background: rgb(10 16 32 / 0.58);
-    backdrop-filter: blur(18px) saturate(1.25);
-    -webkit-backdrop-filter: blur(18px) saturate(1.25);
-    border-color: rgb(255 255 255 / 0.14);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1);
+    background: rgb(10 16 32 / 0.48);
+    backdrop-filter: blur(22px) saturate(1.5);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    border-color: rgb(255 255 255 / 0.22);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18);
   }
 
   .glass-hero {
@@ -234,10 +235,10 @@
     padding: 10px;
     isolation: isolate;
     overflow: hidden;
-    background: rgb(17 24 39 / 0.55);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border: 1px solid rgb(255 255 255 / 0.16);
+    background: rgb(15 23 42 / 0.42);
+    backdrop-filter: blur(20px) saturate(1.45);
+    -webkit-backdrop-filter: blur(20px) saturate(1.45);
+    border: 1px solid rgb(255 255 255 / 0.26);
     border-radius: var(--radius-lg);
   }
 
@@ -289,10 +290,10 @@
     overflow: auto;
     isolation: isolate;
     border-radius: var(--radius-lg);
-    background: rgb(17 24 39 / 0.55);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border: 1px solid rgb(255 255 255 / 0.16);
+    background: rgb(15 23 42 / 0.42);
+    backdrop-filter: blur(20px) saturate(1.45);
+    -webkit-backdrop-filter: blur(20px) saturate(1.45);
+    border: 1px solid rgb(255 255 255 / 0.26);
   }
 
   .data-table {
@@ -405,7 +406,7 @@
   }
 }
 
-@media (prefers-reduced-transparency: reduce), (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-transparency: reduce) {
   .panel,
   .panel-hero,
   .glass,

@@ -276,7 +276,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
       </Button>
 
       {rec && (
-        <div className="fixed inset-0 z-[var(--z-modal)] flex items-end justify-center bg-bg/55 p-3 backdrop-blur-sm sm:items-center">
+        <div className="fixed inset-0 z-[var(--z-modal)] flex items-end justify-center bg-bg/40 p-3 backdrop-blur-md sm:items-center">
           <div
             className="glass-frost w-full max-w-md rounded-2xl p-5"
             role="dialog"
