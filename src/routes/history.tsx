@@ -50,7 +50,7 @@ function HistoryPage() {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="mx-auto max-w-6xl space-y-4">
       <div className="dense-toolbar">
         <label className="dense-cell" style={{ flex: "1 1 120px" }}>
           <span className="k">ตั้งแต่</span>

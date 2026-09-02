@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { FlowChart } from "@/components/razen/flow-chart";
 import { BrandMark } from "@/components/razen/brand-mark";
-import { baht, formatDateTime } from "@/lib/razen/format";
+import { baht } from "@/lib/razen/format";
 import { bankByCode } from "@/lib/razen/banks";
 import { useRazen } from "@/lib/razen/store";
 import type { Transaction } from "@/lib/razen/types";
@@ -56,119 +56,121 @@ export function DeskDash() {
           t.counterpartMeta.toLowerCase().includes(needle)
         );
       })
-      .slice(0, 8);
+      .slice(0, 6);
   }, [txs, activeId, q]);
 
   const hour = new Date().getHours();
   const hello = hour < 12 ? "สวัสดีตอนเช้า" : hour < 18 ? "สวัสดีตอนบ่าย" : "สวัสดีตอนเย็น";
 
   return (
-    <div className="mx-auto max-w-6xl space-y-5">
-      <section className="panel-hero px-5 py-6 sm:px-8 sm:py-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div>
+    <div className="mx-auto max-w-6xl space-y-4">
+      <section className="panel-hero px-5 py-6 sm:px-8 sm:py-7">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
             <p className="kicker">{hello}</p>
-            <p className="mt-3 text-sm text-muted">ยอดพร้อมโอน</p>
-            <p className="mt-1 font-display text-4xl font-semibold leading-none tracking-tight tabular-nums text-brand sm:text-5xl">
+            <p className="mt-4 text-sm text-muted">ยอดพร้อมโอน</p>
+            <p className="mt-1 font-display text-4xl font-semibold leading-none tracking-tight tabular-nums text-brand sm:text-[3.25rem]">
               {synced ? baht(balance) : "—"}
             </p>
             <p className="mt-3 text-xs text-subtle">
               {synced ? "ซิงก์จาก TrueMoney · getBalance" : "เชื่อมกระเป๋าก่อนโอน"}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex w-full flex-col gap-2 sm:w-52">
             <Link
               to="/transfer"
               search={{ method: "p2p" }}
-              className="inline-flex min-h-11 items-center rounded-md bg-cyan px-5 text-sm font-semibold text-bg transition-opacity duration-200 hover:opacity-90"
+              className="inline-flex min-h-11 items-center justify-center rounded-md bg-cyan px-5 text-sm font-semibold text-bg transition-opacity duration-200 hover:opacity-90"
             >
               โอนเลย
             </Link>
             <Link
               to="/transfer"
               search={{ method: "promptpay" }}
-              className="inline-flex min-h-11 items-center rounded-md px-5 text-sm text-fg shadow-[var(--shadow-border)] transition-[box-shadow] duration-200 hover:shadow-[var(--shadow-border-hover)]"
+              className="inline-flex min-h-11 items-center justify-center rounded-md px-5 text-sm text-fg shadow-[var(--shadow-border)] transition-[box-shadow] duration-200 hover:shadow-[var(--shadow-border-hover)]"
             >
               สแกน QR
             </Link>
-            <Link
-              to="/transfer"
-              search={{ method: "bank" }}
-              className="inline-flex min-h-11 items-center rounded-md px-5 text-sm text-fg shadow-[var(--shadow-border)] transition-[box-shadow] duration-200 hover:shadow-[var(--shadow-border-hover)]"
-            >
-              บัญชีธนาคาร
-            </Link>
-            <Link
-              to="/tools"
-              className="inline-flex min-h-11 items-center rounded-md px-5 text-sm text-muted"
-            >
-              {synced ? "ซิงก์ยอด" : "เชื่อมกระเป๋า"}
-            </Link>
+            {!synced ? (
+              <Link to="/tools" className="inline-flex min-h-11 items-center justify-center text-sm text-muted">
+                เชื่อมกระเป๋า
+              </Link>
+            ) : (
+              <Link
+                to="/transfer"
+                search={{ method: "bank" }}
+                className="inline-flex min-h-11 items-center justify-center text-sm text-muted"
+              >
+                โอนบัญชีธนาคาร
+              </Link>
+            )}
+          </div>
+        </div>
+        <div className="mt-7">
+          <div className="flex items-center justify-between text-xs text-subtle">
+            <span>โควต้าวันนี้</span>
+            <span className="tabular-nums">
+              เหลือ {baht(remain)} · {usedPct}%
+            </span>
+          </div>
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-elevated">
+            <div className="h-full rounded-full bg-cyan" style={{ width: `${usedPct}%` }} />
           </div>
         </div>
       </section>
 
-      <div className="stat-strip">
+      <div className="grid gap-3 sm:grid-cols-3">
         <Stat k="รับเข้า" v={baht(stats.incoming)} tone="pos" />
         <Stat k="จ่ายออก" v={baht(stats.outgoing)} />
         <Stat k="ค้างส่ง" v={String(stats.pending)} />
-        <Stat k="โควต้าวันนี้" v={`${usedPct}%`} hint={`เหลือ ${baht(remain)}`} />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(15rem,0.8fr)]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(20rem,1fr)]">
         <section className="panel p-5">
-          <div className="mb-4 flex items-end justify-between">
-            <div>
-              <h2 className="text-base font-semibold">กระแส 7 วัน</h2>
-            </div>
+          <div className="mb-3 flex items-end justify-between gap-3">
+            <h2 className="text-base font-semibold">กระแส 7 วัน</h2>
             <p className="text-xs text-muted">
               เข้า {baht(stats.incoming)} · ออก {baht(stats.outgoing)}
             </p>
           </div>
           <FlowChart data={series} />
         </section>
-        <MonthGrid />
-      </div>
 
-      <section className="panel p-5">
-        <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-base font-semibold">รายการล่าสุด</h2>
+        <section className="panel flex flex-col p-5">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h2 className="text-base font-semibold">ล่าสุด</h2>
+            <Link to="/history" className="text-xs text-cyan">
+              ทั้งหมด
+            </Link>
           </div>
-          <label className="flex min-h-11 w-full items-center gap-2 rounded-md px-3 shadow-[var(--shadow-border)] sm:w-80">
+          <label className="mb-2 flex min-h-11 items-center gap-2 rounded-md px-3 shadow-[var(--shadow-border)]">
             <Search className="size-4 text-subtle" aria-hidden />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="ค้นหาเบอร์ ชื่อ หรือเลขอ้างอิง"
+              placeholder="ค้นหา"
               aria-label="ค้นหารายการ"
               className="h-8 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-subtle md:text-sm"
             />
           </label>
-        </div>
-        <ul>
-          {recent.length === 0 ? (
-            <li className="py-10 text-center text-sm text-muted">ยังไม่มีรายการในกระเป๋านี้</li>
-          ) : (
-            recent.map((tx) => <TxRow key={tx.id} tx={tx} onOpen={() => setReceipt(tx.id)} />)
-          )}
-        </ul>
-        <div className="mt-3 text-right">
-          <Link to="/history" className="text-sm text-cyan">
-            ดูทั้งหมด
-          </Link>
-        </div>
-      </section>
+          <ul className="min-h-0 flex-1">
+            {recent.length === 0 ? (
+              <li className="py-10 text-center text-sm text-muted">ยังไม่มีรายการในกระเป๋านี้</li>
+            ) : (
+              recent.map((tx) => <TxRow key={tx.id} tx={tx} onOpen={() => setReceipt(tx.id)} />)
+            )}
+          </ul>
+        </section>
+      </div>
     </div>
   );
 }
 
-function Stat({ k, v, tone, hint }: { k: string; v: string; tone?: "pos"; hint?: string }) {
+function Stat({ k, v, tone }: { k: string; v: string; tone?: "pos" }) {
   return (
-    <div className="stat-cell">
+    <div className="panel px-4 py-4">
       <p className="text-[11px] tracking-wide text-subtle">{k}</p>
-      <p className={cn("mt-1 text-xl font-semibold tabular-nums", tone === "pos" && "text-in")}>{v}</p>
-      {hint ? <p className="mt-1 text-[10px] text-subtle">{hint}</p> : null}
+      <p className={cn("mt-1 font-display text-xl font-semibold tabular-nums", tone === "pos" && "text-in")}>{v}</p>
     </div>
   );
 }
@@ -180,68 +182,23 @@ function TxRow({ tx, onOpen }: { tx: Transaction; onOpen: () => void }) {
     tx.method === "promptpay" ? "promptpay" : tx.method === "p2p" || tx.method === "gift" ? "truemoney" : bank?.abbr ?? "KBANK";
   const inn = tx.direction === "in";
   return (
-    <li className="border-t border-line/70">
+    <li className="border-t border-white/10 first:border-t-0">
       <button
         type="button"
         onClick={onOpen}
-        className="flex min-h-11 w-full cursor-pointer items-center gap-3 py-3.5 text-left transition-colors duration-200 hover:bg-elevated/40"
+        className="flex min-h-11 w-full cursor-pointer items-center gap-3 py-3 text-left transition-colors duration-200 hover:bg-white/5"
       >
-        <BrandMark id={mark} alt="" className="size-9 rounded-md bg-white p-0.5" />
+        <BrandMark id={mark} alt="" className="size-8 rounded-md bg-white p-0.5" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm">{tx.counterpart}</p>
-          <p className="text-[11px] text-subtle">
-            {METHOD[tx.method]} · {formatDateTime(tx.createdAt)}
-          </p>
+          <p className="text-[11px] text-subtle">{METHOD[tx.method]}</p>
         </div>
-        <span className={cn("hidden text-[11px] sm:inline", st.cls)}>{st.label}</span>
-        <p className={cn("text-base font-semibold tabular-nums", inn ? "text-in" : "text-brand")}>
+        <span className={cn("hidden text-[11px] lg:inline", st.cls)}>{st.label}</span>
+        <p className={cn("text-sm font-semibold tabular-nums", inn ? "text-in" : "text-brand")}>
           {inn ? "+" : "−"}
           {baht(inn ? tx.amount : tx.amount + tx.fee)}
         </p>
       </button>
     </li>
-  );
-}
-
-function MonthGrid() {
-  const txs = useRazen((s) => s.txs);
-  const activeId = useRazen((s) => s.activeAccountId);
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = now.getMonth();
-  const days = new Date(y, m + 1, 0).getDate();
-  const pad = new Date(y, m, 1).getDay();
-  const hits = new Set(
-    txs
-      .filter((t) => t.accountId === activeId)
-      .map((t) => new Date(t.createdAt).toDateString()),
-  );
-  const cells = [...Array(pad).fill(null), ...Array.from({ length: days }, (_, i) => i + 1)];
-  const names = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"];
-
-  return (
-    <section className="panel p-5">
-      <h2 className="mt-1 mb-3 text-base font-semibold">
-        {now.toLocaleDateString("th-TH", { month: "long", year: "numeric" })}
-      </h2>
-      <div className="grid grid-cols-7 gap-1 text-center text-[10px] text-subtle">
-        {names.map((n) => (
-          <div key={n}>{n}</div>
-        ))}
-        {cells.map((d, i) => {
-          if (!d) return <div key={`e${i}`} />;
-          const mark = hits.has(new Date(y, m, d).toDateString());
-          const today = d === now.getDate();
-          return (
-            <div
-              key={d}
-              className={`rounded py-1 ${today ? "bg-brand text-brand-fg" : mark ? "text-cyan" : "text-muted"}`}
-            >
-              {d}
-            </div>
-          );
-        })}
-      </div>
-    </section>
   );
 }

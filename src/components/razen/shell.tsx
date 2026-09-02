@@ -151,7 +151,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
         <div className="razen-hud-line" aria-hidden />
-        <main id="main" className="razen-enter min-h-[calc(100dvh-56px)] w-full px-4 py-5 pb-20 md:px-8 md:py-7 md:pb-8">
+        <main id="main" className="razen-enter min-h-[calc(100dvh-56px)] w-full px-4 py-5 pb-24 md:px-8 md:py-6 md:pb-8">
           {mounted ? children : <SkeletonDash />}
         </main>
       </div>
