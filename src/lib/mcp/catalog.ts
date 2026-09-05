@@ -20,7 +20,7 @@ Wallet PIN is used only inside loginWithPin6 — never prompt the operator for P
 Workflow: tmn_bootstrap (setData→login→balance→history→txinfo) then tmn_recipient before tmn_transfer_p2p / promptpay / bank.
 History: start inclusive YYYY-MM-DD, end exclusive, limit ≤ 50.
 Face webhook POSTs {"wallet_msisdn":"..."} then waits faceauth_wait_timeout (default 180).
-Memory: razen_memory_remember / recall / forget (semantic facts, episodic events, procedural how-tos).
+Memory: razen_memory_remember / recall / forget — CoALA kinds semantic (facts), episodic (events), procedural (how-tos). Recall always filters by wallet accountId; procedural skills stay shared. Ranked by keyword + recency + frequency; stale low-importance episodes decay.
 Artifacts: razen_artifact_receipt returns a self-contained HTML slip.`;
 
 export const MCP_TOOLS: McpTool[] = [
@@ -173,13 +173,15 @@ export const MCP_TOOLS: McpTool[] = [
   },
   {
     name: "razen_memory_remember",
-    description: "Store agent memory. kind=semantic|episodic|procedural",
+    description: "Store agent memory. kind=semantic|episodic|procedural. Semantic keys upsert per wallet.",
     inputSchema: {
       type: "object",
       properties: {
         kind: { type: "string", description: "semantic | episodic | procedural" },
         key: { type: "string" },
         value: { type: "string" },
+        accountId: { type: "string", description: "Wallet id / msisdn — required for isolation" },
+        importance: { type: "string", description: "0-1, procedural defaults to 1" },
       },
       required: ["kind", "key", "value"],
     },
@@ -187,12 +189,14 @@ export const MCP_TOOLS: McpTool[] = [
   },
   {
     name: "razen_memory_recall",
-    description: "Retrieve agent memory by keyword and optional kind",
+    description: "Retrieve agent memory. Filters by accountId; ranks recency; top_k default 8.",
     inputSchema: {
       type: "object",
       properties: {
         q: { type: "string" },
         kind: { type: "string" },
+        accountId: { type: "string" },
+        limit: { type: "string", description: "max 20, default 8" },
       },
       required: [],
     },

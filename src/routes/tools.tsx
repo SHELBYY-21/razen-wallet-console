@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Glyph } from "@/components/razen/glyph";
+import { MemoryPanel } from "@/components/razen/memory-panel";
 import { formatDateTime } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
 import { FACE_WEBHOOK_BODY, PUBLIC_FUNCTIONS } from "@/lib/tmnone/apidoc";
@@ -358,6 +359,8 @@ export function ToolsPage() {
           </dl>
         )}
       </section>
+
+      <MemoryPanel />
 
       <section className="rounded-2xl bg-surface p-5 panel-glow">
         <h2 className="mb-1 text-sm font-medium">ข้อมูล & การจำลอง</h2>

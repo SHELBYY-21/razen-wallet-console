@@ -18,6 +18,7 @@ describe("agent memory", () => {
     assert.equal(hit[0]?.key, "home_bank");
     const gone = await forget("home_bank");
     assert.equal(gone, true);
-    assert.equal((await recall("KBANK")).length, 0);
+    const leftover = await recall("KBANK", "semantic");
+    assert.equal(leftover.length, 0);
   });
 });

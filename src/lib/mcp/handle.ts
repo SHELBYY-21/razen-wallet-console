@@ -105,7 +105,13 @@ async function callTool(name: string, args: Record<string, unknown>) {
       if (!["semantic", "episodic", "procedural"].includes(kind)) {
         return { ok: false as const, error: "kind must be semantic|episodic|procedural" };
       }
-      const item = await remember(kind, str(args.key), str(args.value));
+      const item = await remember({
+        kind,
+        key: str(args.key),
+        value: str(args.value),
+        accountId: str(args.accountId) || ctx.credentials.msisdn || "desk",
+        importance: args.importance == null ? undefined : num(args.importance, 0.5),
+      });
       return { ok: true as const, data: item };
     }
     case "razen_memory_recall": {
@@ -113,7 +119,14 @@ async function callTool(name: string, args: Record<string, unknown>) {
       const kind = (["semantic", "episodic", "procedural"] as const).includes(k as MemoryKind)
         ? (k as MemoryKind)
         : undefined;
-      return { ok: true as const, data: await recall(str(args.q), kind) };
+      return {
+        ok: true as const,
+        data: await recall(str(args.q), {
+          kind,
+          accountId: str(args.accountId) || ctx.credentials.msisdn || "desk",
+          limit: args.limit == null ? 8 : num(args.limit, 8),
+        }),
+      };
     }
     case "razen_memory_forget":
       return { ok: true as const, data: { deleted: await forget(str(args.id)) } };

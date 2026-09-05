@@ -6,6 +6,7 @@ import { isThaiMobile, maskPhone } from "./format";
 import { buildSeed, SEED_PIN } from "./seed";
 import { browserNotify, makeNotice, prependNotices } from "./notice";
 import { tmnConfigured } from "@/lib/tmnone/creds";
+import { rememberLocal } from "@/lib/memory/client";
 import { mapHistory, parseBalance } from "@/lib/tmnone/parse";
 import type {
   Account,
@@ -359,6 +360,13 @@ export const useRazen = create<RazenState>()(
           `กำลังโอน ${amount.toLocaleString("th-TH")} บาท ไปยัง ${tx.counterpart}`,
           "out",
         );
+        rememberLocal(
+          "episodic",
+          `out:${tx.method}:${tx.ref}`,
+          `${amount} THB → ${tx.counterpart}`,
+          s.activeAccountId,
+        );
+        rememberLocal("semantic", "last_payee", tx.counterpart, s.activeAccountId);
         return { ok: true, tx };
       },
 
