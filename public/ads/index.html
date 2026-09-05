@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RAZEN ads · 2026-09-05</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sora:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #070b14;
+        --navy: #0a1020;
+        --gold: #c9a84c;
+        --teal: #2dd4bf;
+        --fg: #f4efe4;
+        --muted: #9aa3b5;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Anuphan, sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+        padding: 32px 20px 80px;
+      }
+      h1 { font-family: Sora, sans-serif; font-size: 22px; margin: 0 0 8px; }
+      .sub { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+      .grid {
+        display: grid;
+        gap: 28px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        max-width: 1100px;
+      }
+      .card { max-width: 420px; }
+      .label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
+      .ad {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(80% 60% at 80% 0%, rgba(45, 212, 191, 0.18), transparent 55%),
+          radial-gradient(70% 50% at 10% 100%, rgba(201, 168, 76, 0.16), transparent 50%),
+          var(--navy);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .sq { aspect-ratio: 1 / 1; }
+      .p45 { aspect-ratio: 4 / 5; }
+      .st { aspect-ratio: 9 / 16; max-width: 280px; }
+      .wd { aspect-ratio: 16 / 9; max-width: 100%; }
+      .glass {
+        position: absolute;
+        inset: 14% 10% auto;
+        padding: 22px 22px 18px;
+        border-radius: 18px;
+        background: rgba(10, 16, 32, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(18px);
+      }
+      .kicker { font-size: 11px; letter-spacing: 0.18em; color: var(--teal); }
+      .amt {
+        font-family: Sora, sans-serif;
+        font-size: clamp(28px, 7vw, 42px);
+        color: var(--gold);
+        margin: 8px 0 4px;
+        letter-spacing: -0.03em;
+      }
+      .live {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 10px;
+        color: var(--teal);
+      }
+      .live i { width: 6px; height: 6px; border-radius: 99px; background: var(--teal); }
+      .mark {
+        position: absolute;
+        left: 16px;
+        bottom: 14px;
+        font-family: Sora, sans-serif;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+      }
+      .hook {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 16px;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.35;
+        max-width: 16ch;
+      }
+      .cta {
+        position: absolute;
+        right: 16px;
+        bottom: 14px;
+        font-size: 11px;
+        color: var(--navy);
+        background: var(--teal);
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-weight: 700;
+      }
+      .qr {
+        position: absolute;
+        right: 18px;
+        top: 42%;
+        width: 72px;
+        height: 72px;
+        background:
+          repeating-linear-gradient(90deg, #111 0 4px, transparent 4px 8px),
+          repeating-linear-gradient(#111 0 4px, #eee 4px 8px);
+        border: 3px solid var(--teal);
+        border-radius: 8px;
+        box-shadow: 0 0 24px rgba(45, 212, 191, 0.35);
+      }
+      table { width: 100%; max-width: 1100px; border-collapse: collapse; margin-top: 48px; font-size: 13px; }
+      th, td { border-bottom: 1px solid rgba(255,255,255,.08); padding: 10px 8px; text-align: left; vertical-align: top; }
+      th { color: var(--muted); font-weight: 500; }
+      a { color: var(--teal); }
+    </style>
+  </head>
+  <body>
+    <h1>RAZEN creative review</h1>
+    <p class="sub">
+      ชุด 2026-09-05 · พิจารณา · ไม่มีสถิติปลอม · ยิงไป
+      <a href="https://razen-wallet-console.vercel.app">razen-wallet-console.vercel.app</a>
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <p class="label">A · Meta 1:1 · Pain</p>
+        <div class="ad sq">
+          <p class="hook">เลิกสลับแอป<br />ตอนโอน</p>
+          <div class="glass">
+            <p class="kicker">ยอดพร้อมโอน</p>
+            <p class="amt">฿12,680</p>
+            <p class="live"><i></i> LIVE · getBalance</p>
+          </div>
+          <span class="mark">RAZEN</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="label">B · Meta 4:5 · Outcome</p>
+        <div class="ad p45">
+          <p class="hook">สแกน QR<br />แล้วโอนเลย</p>
+          <div class="qr" aria-hidden="true"></div>
+          <div class="glass" style="inset: auto 10% 18%">
+            <p class="kicker">P2P · พร้อมเพย์ · ธนาคาร</p>
+            <p class="amt" style="font-size: 28px">โต๊ะเดียว</p>
+          </div>
+          <span class="mark">RAZEN</span>
+          <span class="cta">โอนเลย</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="label">C · Stories 9:16 · Mechanism</p>
+        <div class="ad st">
+          <p class="hook" style="top: 12%">ยอดนี้มาจาก<br />getBalance</p>
+          <div class="glass" style="inset: 38% 10% auto">
+            <p class="kicker">วอลเล็ตที่เชื่อม</p>
+            <p class="amt">สด</p>
+            <p class="live"><i></i> ไม่ใช่เดโม</p>
+          </div>
+          <span class="mark">RAZEN</span>
+          <span class="cta">เปิดโต๊ะ</span>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column: 1 / -1; max-width: 920px">
+        <p class="label">D · X / LinkedIn 16:9 · Identity</p>
+        <div class="ad wd">
+          <p class="hook" style="max-width: 22ch">โต๊ะโอนของร้านแลก</p>
+          <div class="glass" style="inset: 18% 8% auto 38%">
+            <p class="kicker">RAZEN TRANSFER CONSOLE</p>
+            <p class="amt" style="font-size: 36px">฿12,680</p>
+            <p class="live"><i></i> TrueMoney · โต๊ะปฏิบัติการ</p>
+          </div>
+          <span class="mark">RAZEN</span>
+          <span class="cta">เปิดโต๊ะ</span>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ชุด</th>
+          <th>Headline</th>
+          <th>Primary</th>
+          <th>CTA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A Pain</td>
+          <td>โต๊ะเดียวจบทุกโอน</td>
+          <td>เลิกสลับแอปตอนโอน TrueMoney — เปิดโต๊ะเดียว โอน P2P พร้อมเพย์ ธนาคาร</td>
+          <td>เปิดโต๊ะ</td>
+        </tr>
+        <tr>
+          <td>B Outcome</td>
+          <td>สแกนแล้วโอนเลย</td>
+          <td>สแกน QR พร้อมเพย์ โอน P2P หรือบัญชีธนาคารจากจอเดียวกัน ไม่ต้องเปิดแอปอื่น</td>
+          <td>โอนเลย</td>
+        </tr>
+        <tr>
+          <td>C Mechanism</td>
+          <td>ยอดจริงจากวอลเล็ต</td>
+          <td>ยอดบนจอคือ getBalance จากวอลเล็ตที่เชื่อม ไม่ใช่ตัวเลขเดโม</td>
+          <td>เปิดโต๊ะ</td>
+        </tr>
+        <tr>
+          <td>D Identity</td>
+          <td>โต๊ะโอนของร้านแลก</td>
+          <td>ร้านแลกใช้โต๊ะนี้โอนออกทั้งวัน — สแกน QR แล้วส่งได้เลย</td>
+          <td>เปิดโต๊ะ</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
