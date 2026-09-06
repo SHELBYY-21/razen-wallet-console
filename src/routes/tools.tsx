@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Settings2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Glyph } from "@/components/razen/glyph";
 import { MemoryPanel } from "@/components/razen/memory-panel";
 import { formatDateTime } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
@@ -115,27 +113,20 @@ export function ToolsPage() {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <header className="flex items-start gap-3">
-        <Glyph icon={Settings2} tone="muted" size="lg" />
-        <div>
-        <p className="text-xs font-medium tracking-wide text-cyan">เครื่องมือ</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">ตั้งค่า API และเครื่องมือระบบ</h1>
-        <p className="mt-1 text-sm text-muted">
-          ตามเอกสาร{" "}
-          <a
-            className="text-brand underline"
-            href="https://www.tmn.one/apidoc.html"
-            target="_blank"
-            rel="noreferrer"
-          >
-            tmn.one/apidoc
-          </a>{" "}
-          — setData + loginWithPin6
-        </p>
-        </div>
+      <header className="text-sm text-muted">
+        ตามเอกสาร{" "}
+        <a
+          className="text-brand underline"
+          href="https://www.tmn.one/apidoc.html"
+          target="_blank"
+          rel="noreferrer"
+        >
+          tmn.one/apidoc
+        </a>{" "}
+        — setData + loginWithPin6
       </header>
 
-      <section className="rounded-2xl bg-surface p-5 panel-glow">
+      <section className="panel p-5">
         <h2 className="mb-3 text-sm font-medium">โหมดเชื่อมต่อ</h2>
         <div className="mb-4 grid grid-cols-2 gap-2">
           <button
@@ -286,7 +277,7 @@ export function ToolsPage() {
         </div>
       </section>
 
-      <section className="rounded-2xl bg-surface p-5 panel-glow">
+      <section className="panel p-5">
         <h2 className="mb-1 text-sm font-medium">getWalletFee</h2>
         <p className="mb-3 text-xs text-muted">ค่าธรรมเนียมรายช่องทาง</p>
         <Button variant="secondary" className="mb-3" onClick={() => void loadFees()}>
@@ -305,7 +296,7 @@ export function ToolsPage() {
         </div>
       </section>
 
-      <section className="rounded-2xl bg-surface p-5 panel-glow">
+      <section className="panel p-5">
         <h2 className="mb-1 text-sm font-medium">getPaymentCode</h2>
         <p className="mb-3 text-xs text-muted">QR จ่ายที่เซเว่น / ร้านค้า</p>
         <Button variant="secondary" onClick={() => void makePaymentCode()}>
@@ -321,7 +312,7 @@ export function ToolsPage() {
         )}
       </section>
 
-      <section className="rounded-2xl bg-surface p-5 panel-glow">
+      <section className="panel p-5">
         <h2 className="mb-1 text-sm font-medium">fetchQRDetail</h2>
         <p className="mb-3 text-xs text-muted">วาง raw data จาก QR บนสลิป</p>
         <Textarea
@@ -362,7 +353,7 @@ export function ToolsPage() {
 
       <MemoryPanel />
 
-      <section className="rounded-2xl bg-surface p-5 panel-glow">
+      <section className="panel p-5">
         <h2 className="mb-1 text-sm font-medium">ข้อมูล & การจำลอง</h2>
         <p className="mb-3 text-xs text-muted">
           ส่งออกรายการหรือจำลองสถานการณ์ · PIN กระเป๋าใช้ตอน LIVE อัตโนมัติ (ไม่ถามตอนโอน)
@@ -405,7 +396,7 @@ export function ToolsPage() {
         )}
       </section>
 
-      <section className="rounded-2xl bg-surface p-5 panel-glow">
+      <section className="panel p-5">
         <h2 className="mb-2 font-mono text-xs tracking-widest text-cyan uppercase">Public functions</h2>
         <ul className="grid grid-cols-1 gap-1.5 font-mono text-[11px] text-muted">
           {PUBLIC_FUNCTIONS.map((m) => (

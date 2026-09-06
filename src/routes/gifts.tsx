@@ -4,7 +4,6 @@ import { Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Glyph } from "@/components/razen/glyph";
 import { baht } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
 import { cn } from "@/lib/utils";
@@ -51,16 +50,11 @@ function GiftsPage() {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <header className="flex items-start gap-3">
-        <Glyph icon={Gift} tone="danger" size="lg" />
-        <div>
-        <p className="text-xs font-medium tracking-wide text-cyan">ซองอั่งเปา</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">สร้างซองอั่งเปาแจกเงิน</h1>
-        <p className="mt-1 text-sm text-muted">generateVoucher · ยอดใช้ได้ {baht(getBalance())}</p>
-        </div>
+      <header className="flex items-center justify-between gap-3">
+        <p className="text-sm text-muted">generateVoucher · ยอดใช้ได้ {baht(getBalance())}</p>
       </header>
 
-      <div className="rounded-2xl bg-surface p-5 panel-glow">
+      <div className="panel p-5">
         <div className="relative mx-auto mb-5 h-36 w-full max-w-[220px] overflow-hidden rounded-xl bg-gradient-to-b from-danger/80 to-brand">
           <div className="absolute inset-x-6 top-0 h-10 rounded-b-[40%] bg-danger/90" />
           <div className="absolute inset-0 flex items-center justify-center text-fg">

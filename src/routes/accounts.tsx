@@ -49,11 +49,7 @@ function AccountsPage() {
 
   return (
     <div className="space-y-6">
-      <header className="flex items-end justify-between gap-3">
-        <div>
-          <p className="text-xs font-medium tracking-wide text-cyan">บัญชี</p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight">จัดการบัญชี Wallet</h1>
-        </div>
+      <header className="flex items-end justify-end gap-3">
         <Button onClick={() => setOpen(true)}>
           <Plus className="size-4" strokeWidth={1.75} /> เพิ่มบัญชี
         </Button>

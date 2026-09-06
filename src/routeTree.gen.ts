@@ -17,7 +17,12 @@ import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TransferRouteImport } from './routes/transfer'
 import { Route as ApiArtifactRouteImport } from './routes/api/artifact'
 import { Route as ApiMcpRouteImport } from './routes/api/mcp'
+import { Route as ApiMemoryRouteImport } from './routes/api/memory'
 import { Route as ApiShipRouteImport } from './routes/api/ship'
+import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
+import { Route as ApiV1OpenapiRouteImport } from './routes/api/v1/openapi'
+import { Route as ApiV1TransactionsRouteImport } from './routes/api/v1/transactions'
+import { Route as ApiV1WalletRouteImport } from './routes/api/v1/wallet'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -59,9 +64,34 @@ const ApiMcpRoute = ApiMcpRouteImport.update({
   path: '/api/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMemoryRoute = ApiMemoryRouteImport.update({
+  id: '/api/memory',
+  path: '/api/memory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiShipRoute = ApiShipRouteImport.update({
   id: '/api/ship',
   path: '/api/ship',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
+  id: '/api/v1/health',
+  path: '/api/v1/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1OpenapiRoute = ApiV1OpenapiRouteImport.update({
+  id: '/api/v1/openapi',
+  path: '/api/v1/openapi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1TransactionsRoute = ApiV1TransactionsRouteImport.update({
+  id: '/api/v1/transactions',
+  path: '/api/v1/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1WalletRoute = ApiV1WalletRouteImport.update({
+  id: '/api/v1/wallet',
+  path: '/api/v1/wallet',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -74,7 +104,12 @@ export interface FileRoutesByFullPath {
   '/transfer': typeof TransferRoute
   '/api/artifact': typeof ApiArtifactRoute
   '/api/mcp': typeof ApiMcpRoute
+  '/api/memory': typeof ApiMemoryRoute
   '/api/ship': typeof ApiShipRoute
+  '/api/v1/health': typeof ApiV1HealthRoute
+  '/api/v1/openapi': typeof ApiV1OpenapiRoute
+  '/api/v1/transactions': typeof ApiV1TransactionsRoute
+  '/api/v1/wallet': typeof ApiV1WalletRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,7 +120,12 @@ export interface FileRoutesByTo {
   '/transfer': typeof TransferRoute
   '/api/artifact': typeof ApiArtifactRoute
   '/api/mcp': typeof ApiMcpRoute
+  '/api/memory': typeof ApiMemoryRoute
   '/api/ship': typeof ApiShipRoute
+  '/api/v1/health': typeof ApiV1HealthRoute
+  '/api/v1/openapi': typeof ApiV1OpenapiRoute
+  '/api/v1/transactions': typeof ApiV1TransactionsRoute
+  '/api/v1/wallet': typeof ApiV1WalletRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,7 +137,12 @@ export interface FileRoutesById {
   '/transfer': typeof TransferRoute
   '/api/artifact': typeof ApiArtifactRoute
   '/api/mcp': typeof ApiMcpRoute
+  '/api/memory': typeof ApiMemoryRoute
   '/api/ship': typeof ApiShipRoute
+  '/api/v1/health': typeof ApiV1HealthRoute
+  '/api/v1/openapi': typeof ApiV1OpenapiRoute
+  '/api/v1/transactions': typeof ApiV1TransactionsRoute
+  '/api/v1/wallet': typeof ApiV1WalletRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,7 +155,12 @@ export interface FileRouteTypes {
     | '/transfer'
     | '/api/artifact'
     | '/api/mcp'
+    | '/api/memory'
     | '/api/ship'
+    | '/api/v1/health'
+    | '/api/v1/openapi'
+    | '/api/v1/transactions'
+    | '/api/v1/wallet'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -121,7 +171,12 @@ export interface FileRouteTypes {
     | '/transfer'
     | '/api/artifact'
     | '/api/mcp'
+    | '/api/memory'
     | '/api/ship'
+    | '/api/v1/health'
+    | '/api/v1/openapi'
+    | '/api/v1/transactions'
+    | '/api/v1/wallet'
   id:
     | '__root__'
     | '/'
@@ -132,7 +187,12 @@ export interface FileRouteTypes {
     | '/transfer'
     | '/api/artifact'
     | '/api/mcp'
+    | '/api/memory'
     | '/api/ship'
+    | '/api/v1/health'
+    | '/api/v1/openapi'
+    | '/api/v1/transactions'
+    | '/api/v1/wallet'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,7 +204,12 @@ export interface RootRouteChildren {
   TransferRoute: typeof TransferRoute
   ApiArtifactRoute: typeof ApiArtifactRoute
   ApiMcpRoute: typeof ApiMcpRoute
+  ApiMemoryRoute: typeof ApiMemoryRoute
   ApiShipRoute: typeof ApiShipRoute
+  ApiV1HealthRoute: typeof ApiV1HealthRoute
+  ApiV1OpenapiRoute: typeof ApiV1OpenapiRoute
+  ApiV1TransactionsRoute: typeof ApiV1TransactionsRoute
+  ApiV1WalletRoute: typeof ApiV1WalletRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -205,11 +270,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiMcpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/memory': {
+      id: '/api/memory'
+      path: '/api/memory'
+      fullPath: '/api/memory'
+      preLoaderRoute: typeof ApiMemoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/ship': {
       id: '/api/ship'
       path: '/api/ship'
       fullPath: '/api/ship'
       preLoaderRoute: typeof ApiShipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/health': {
+      id: '/api/v1/health'
+      path: '/api/v1/health'
+      fullPath: '/api/v1/health'
+      preLoaderRoute: typeof ApiV1HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/openapi': {
+      id: '/api/v1/openapi'
+      path: '/api/v1/openapi'
+      fullPath: '/api/v1/openapi'
+      preLoaderRoute: typeof ApiV1OpenapiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/transactions': {
+      id: '/api/v1/transactions'
+      path: '/api/v1/transactions'
+      fullPath: '/api/v1/transactions'
+      preLoaderRoute: typeof ApiV1TransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/wallet': {
+      id: '/api/v1/wallet'
+      path: '/api/v1/wallet'
+      fullPath: '/api/v1/wallet'
+      preLoaderRoute: typeof ApiV1WalletRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -224,7 +324,12 @@ const rootRouteChildren: RootRouteChildren = {
   TransferRoute: TransferRoute,
   ApiArtifactRoute: ApiArtifactRoute,
   ApiMcpRoute: ApiMcpRoute,
+  ApiMemoryRoute: ApiMemoryRoute,
   ApiShipRoute: ApiShipRoute,
+  ApiV1HealthRoute: ApiV1HealthRoute,
+  ApiV1OpenapiRoute: ApiV1OpenapiRoute,
+  ApiV1TransactionsRoute: ApiV1TransactionsRoute,
+  ApiV1WalletRoute: ApiV1WalletRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
