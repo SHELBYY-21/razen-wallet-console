@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowDownLeft, ArrowUpRight, Clock3, Landmark, QrCode, Search, Send, Wallet } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Clock3, Gift, Landmark, QrCode, Search, Send } from "lucide-react";
 import { FlowChart } from "@/components/razen/flow-chart";
 import { BrandMark } from "@/components/razen/brand-mark";
 import { Glyph } from "@/components/razen/glyph";
@@ -65,64 +65,40 @@ export function DeskDash() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-4">
-      <section className="panel-hero px-5 py-6 sm:px-8 sm:py-7">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0">
-            <p className="kicker">{hello}</p>
-            <p className="mt-4 text-sm text-muted">ยอดพร้อมโอน</p>
-            <p className="mt-1 font-display text-4xl font-semibold leading-none tracking-tight tabular-nums text-brand sm:text-[3.25rem]">
-              {synced ? baht(balance) : "—"}
-            </p>
-            <p className="mt-3 text-xs text-subtle">
-              {synced ? "ซิงก์จาก TrueMoney · getBalance" : "เชื่อมกระเป๋าก่อนโอน"}
-            </p>
+      <section className="tmn-card px-5 py-6 sm:px-7 sm:py-7">
+        <div className="flex items-center gap-3">
+          <BrandMark id="truemoney" alt="TrueMoney" className="size-10 rounded-full bg-white p-0.5" />
+          <div className="min-w-0 flex-1">
+            <p className="text-xs tracking-[0.16em] uppercase text-white/70">TrueMoney Wallet</p>
+            <p className="truncate text-sm font-medium">{acc?.nickname || "ยังไม่เชื่อม"}</p>
           </div>
-          <div className="flex w-full flex-col gap-2 sm:w-52">
-            <Link
-              to="/transfer"
-              search={{ method: "p2p" }}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-cyan px-5 text-sm font-semibold text-bg transition-opacity duration-200 hover:opacity-90"
-            >
-              <Send className="size-4" strokeWidth={1.75} />
-              โอนเลย
-            </Link>
-            <Link
-              to="/transfer"
-              search={{ method: "promptpay" }}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 text-sm text-fg shadow-[var(--shadow-border)] transition-[box-shadow] duration-200 hover:shadow-[var(--shadow-border-hover)]"
-            >
-              <QrCode className="size-4" strokeWidth={1.75} />
-              สแกน QR
-            </Link>
-            {!synced ? (
-              <Link to="/tools" className="inline-flex min-h-11 items-center justify-center gap-2 text-sm text-muted">
-                <Wallet className="size-4" strokeWidth={1.75} />
-                เชื่อมกระเป๋า
-              </Link>
-            ) : (
-              <Link
-                to="/transfer"
-                search={{ method: "bank" }}
-                className="inline-flex min-h-11 items-center justify-center gap-2 text-sm text-muted"
-              >
-                <Landmark className="size-4" strokeWidth={1.75} />
-                โอนบัญชีธนาคาร
-              </Link>
-            )}
-          </div>
+          <span className="rounded-full bg-black/20 px-2.5 py-1 text-[11px] font-medium">
+            {synced ? "ซิงก์แล้ว" : "รอเชื่อม"}
+          </span>
         </div>
-        <div className="mt-7">
-          <div className="flex items-center justify-between text-xs text-subtle">
+        <p className="mt-6 text-sm text-white/75">{hello} · ยอดพร้อมโอน</p>
+        <p className="mt-1 font-display text-4xl font-semibold leading-none tracking-tight tabular-nums sm:text-5xl">
+          {synced ? baht(balance) : "—"}
+        </p>
+        <div className="mt-5">
+          <div className="flex items-center justify-between text-xs text-white/70">
             <span>โควต้าวันนี้</span>
             <span className="tabular-nums">
               เหลือ {baht(remain)} · {usedPct}%
             </span>
           </div>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-elevated">
-            <div className="h-full rounded-full bg-cyan" style={{ width: `${usedPct}%` }} />
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/20">
+            <div className="h-full rounded-full bg-white" style={{ width: `${usedPct}%` }} />
           </div>
         </div>
       </section>
+
+      <div className="grid grid-cols-4 gap-2">
+        <DashAction to="/transfer" search={{ method: "p2p" }} icon={Send} label="โอน" primary />
+        <DashAction to="/transfer" search={{ method: "promptpay" }} icon={QrCode} label="สแกน" />
+        <DashAction to="/transfer" search={{ method: "bank" }} icon={Landmark} label="ธนาคาร" />
+        <DashAction to="/gifts" icon={Gift} label="ซอง" />
+      </div>
 
       <div className="grid gap-3 sm:grid-cols-3">
         <Stat k="รับเข้า" v={baht(stats.incoming)} tone="pos" />
@@ -174,6 +150,34 @@ export function DeskDash() {
         </section>
       </div>
     </div>
+  );
+}
+
+function DashAction({
+  to,
+  search,
+  icon: Icon,
+  label,
+  primary,
+}: {
+  to: "/transfer" | "/gifts" | "/tools";
+  search?: { method: "p2p" | "promptpay" | "bank" };
+  icon: typeof Send;
+  label: string;
+  primary?: boolean;
+}) {
+  return (
+    <Link
+      to={to}
+      search={search}
+      className={cn(
+        "flex min-h-16 flex-col items-center justify-center gap-1 rounded-lg text-xs font-medium transition-opacity duration-150 hover:opacity-90",
+        primary ? "bg-brand text-brand-fg" : "panel text-muted",
+      )}
+    >
+      <Icon className="size-5" strokeWidth={1.75} />
+      {label}
+    </Link>
   );
 }
 
