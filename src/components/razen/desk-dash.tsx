@@ -119,6 +119,18 @@ export function DeskDash() {
         <DashAction to="/tools" icon={Settings2} label="ตั้งค่า" />
       </motion.div>
 
+      <motion.nav
+        className="overflow-hidden rounded-lg shadow-[var(--shadow-border)]"
+        aria-label="ราง TMNOne"
+        variants={fadeUp}
+      >
+        <div className="grid grid-cols-3 divide-x divide-brand/25">
+          <RailCell to="/transfer" search={{ method: "p2p" }} kicker="P2P" title="โอนวอลเล็ต" method="transferP2P" />
+          <RailCell to="/transfer" search={{ method: "promptpay" }} kicker="QR" title="พร้อมเพย์" method="transferQRPromptpay" />
+          <RailCell to="/transfer" search={{ method: "bank" }} kicker="BANK" title="ธนาคาร" method="transferBankAC" />
+        </div>
+      </motion.nav>
+
       <motion.div className="grid grid-cols-3 gap-2" variants={fadeUp}>
         <Stat k="รับเข้า" v={baht(stats.incoming)} tone="pos" />
         <Stat k="จ่ายออก" v={baht(stats.outgoing)} />
@@ -173,6 +185,32 @@ export function DeskDash() {
         </section>
       </motion.div>
     </motion.div>
+  );
+}
+
+function RailCell({
+  to,
+  search,
+  kicker,
+  title,
+  method,
+}: {
+  to: "/transfer";
+  search: { method: "p2p" | "promptpay" | "bank" };
+  kicker: string;
+  title: string;
+  method: string;
+}) {
+  return (
+    <Link
+      to={to}
+      search={search}
+      className="min-h-12 bg-surface px-2 py-2 transition-colors hover:bg-brand/8 sm:px-3 sm:py-2.5"
+    >
+      <p className="kicker">{kicker}</p>
+      <p className="mt-0.5 text-xs font-medium sm:text-sm">{title}</p>
+      <p className="mt-0.5 truncate font-mono text-[10px] text-muted">{method}</p>
+    </Link>
   );
 }
 
