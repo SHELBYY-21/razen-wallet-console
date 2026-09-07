@@ -38,7 +38,7 @@
       radial-gradient(50% 50% at 50% 42%, transparent 0%, rgba(5,5,5,.55) 70%, #050505 100%),
       linear-gradient(180deg, rgba(5,5,5,.5), transparent 18%, transparent 82%, #050505);
   }
-  #spark { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  #spark { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
   .shell { position: relative; z-index: 2; width: min(1280px, calc(100% - 24px)); margin: 0 auto; padding: 12px 0 28px; }
   header.top {
     display: flex; align-items: center; gap: 12px; min-height: 52px; margin-bottom: 12px;
@@ -278,30 +278,146 @@
     jobs.textContent = String(n);
   }, 2800);
 
-  (function particles() {
-    var c = document.getElementById("spark");
-    if (!c || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    var x = c.getContext("2d");
-    var dots = [];
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll(".globe").forEach(function (v) { try { v.pause(); } catch (e) {} });
+  }
+
+  (function webglParticles() {
+    var canvas = document.getElementById("spark");
+    if (!canvas || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var gl = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false, antialias: false });
+    if (!gl) return;
+
+    function compile(type, src) {
+      var s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.warn(gl.getShaderInfoLog(s));
+        return null;
+      }
+      return s;
+    }
+
+    var vs = compile(gl.VERTEX_SHADER, `#version 300 es
+      layout(location=0) in vec4 a0;
+      layout(location=1) in vec4 a1;
+      uniform float uTime;
+      uniform vec2 uRes;
+      uniform vec2 uMouse;
+      out float vA;
+      out float vK;
+      void main() {
+        float t = uTime * a0.w + a1.x;
+        vec3 p;
+        if (a1.z < 0.5) {
+          p.x = fract(a0.x + 0.02 * sin(t * 0.35)) * 2.0 - 1.0;
+          p.y = fract(a0.y + t * 0.035) * 2.0 - 1.0;
+          p.z = a0.z;
+        } else if (a1.z < 1.5) {
+          float lon = t * 0.18 + a0.x * 6.283185;
+          float lat = (a0.y - 0.5) * 2.6;
+          float r = 0.46 + 0.04 * sin(t + a0.x);
+          p = vec3(cos(lat) * sin(lon), sin(lat) * 0.72, cos(lat) * cos(lon)) * r;
+          p.x += 0.04;
+        } else {
+          p.x = fract(a0.x + t * 0.11) * 2.0 - 1.0;
+          p.y = mix(-0.2, 0.85, a0.y) + 0.08 * sin(t * 1.6 + a0.x * 8.0);
+          p.z = 0.2;
+        }
+        p.xy += uMouse * (0.06 + 0.08 * a0.z);
+        float persp = 1.0 / (1.15 - p.z * 0.35);
+        gl_Position = vec4(p.xy * persp, 0.0, 1.0);
+        gl_PointSize = a1.y * min(uRes.y, 900.0) * (0.22 + 0.28 * persp);
+        vA = mix(0.22, 0.85, a1.y);
+        vK = a1.z;
+      }`);
+    var fs = compile(gl.FRAGMENT_SHADER, `#version 300 es
+      precision highp float;
+      in float vA;
+      in float vK;
+      out vec4 frag;
+      void main() {
+        vec2 uv = gl_PointCoord * 2.0 - 1.0;
+        float d = dot(uv, uv);
+        if (d > 1.0) discard;
+        float core = exp(-d * 4.2);
+        float halo = exp(-d * 1.4) * 0.35;
+        vec3 gold = vec3(0.96, 0.82, 0.38);
+        vec3 hot = vec3(1.0, 0.94, 0.72);
+        vec3 teal = vec3(0.24, 0.88, 0.72);
+        vec3 c = mix(gold, hot, core);
+        c = mix(c, teal, smoothstep(1.35, 1.8, vK) * 0.35);
+        float a = (core + halo) * vA;
+        frag = vec4(c * a, a);
+      }`);
+    if (!vs || !fs) return;
+    var prog = gl.createProgram();
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    gl.useProgram(prog);
+
+    var COUNT = window.innerWidth < 700 ? 2800 : 7000;
+    var a0 = new Float32Array(COUNT * 4);
+    var a1 = new Float32Array(COUNT * 4);
+    for (var i = 0; i < COUNT; i++) {
+      var kind = i % 11 === 0 ? 2 : i % 3 === 0 ? 1 : 0;
+      a0[i * 4] = Math.random();
+      a0[i * 4 + 1] = Math.random();
+      a0[i * 4 + 2] = Math.random();
+      a0[i * 4 + 3] = 0.25 + Math.random() * 0.9;
+      a1[i * 4] = Math.random() * 6.28;
+      a1[i * 4 + 1] = kind === 2 ? 0.018 : kind === 1 ? 0.012 : 0.007 + Math.random() * 0.01;
+      a1[i * 4 + 2] = kind;
+      a1[i * 4 + 3] = Math.random();
+    }
+    var b0 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, b0);
+    gl.bufferData(gl.ARRAY_BUFFER, a0, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 4, gl.FLOAT, false, 0, 0);
+    var b1 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, b1);
+    gl.bufferData(gl.ARRAY_BUFFER, a1, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(1);
+    gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 0, 0);
+
+    var uTime = gl.getUniformLocation(prog, "uTime");
+    var uRes = gl.getUniformLocation(prog, "uRes");
+    var uMouse = gl.getUniformLocation(prog, "uMouse");
+    var mouse = [0, 0];
+    var target = [0, 0];
+    addEventListener("pointermove", function (e) {
+      target[0] = (e.clientX / innerWidth) * 2 - 1;
+      target[1] = -((e.clientY / innerHeight) * 2 - 1);
+    }, { passive: true });
+
     function resize() {
-      c.width = innerWidth; c.height = innerHeight;
-      dots = Array.from({ length: 70 }, function () {
-        return { x: Math.random() * c.width, y: Math.random() * c.height, r: Math.random() * 1.4 + .3, s: Math.random() * .4 + .15 };
-      });
+      var dpr = Math.min(devicePixelRatio || 1, 2);
+      canvas.width = innerWidth * dpr;
+      canvas.height = innerHeight * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform2f(uRes, canvas.width, canvas.height);
     }
-    resize();
     addEventListener("resize", resize);
-    function loop() {
-      x.clearRect(0, 0, c.width, c.height);
-      x.fillStyle = "rgba(243,224,160,.55)";
-      dots.forEach(function (d) {
-        d.y -= d.s; d.x += Math.sin(d.y / 40) * .2;
-        if (d.y < 0) { d.y = c.height; d.x = Math.random() * c.width; }
-        x.beginPath(); x.arc(d.x, d.y, d.r, 0, 6.28); x.fill();
-      });
-      requestAnimationFrame(loop);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE);
+    gl.disable(gl.DEPTH_TEST);
+    resize();
+    var t0 = performance.now();
+    function frame(now) {
+      mouse[0] += (target[0] - mouse[0]) * 0.04;
+      mouse[1] += (target[1] - mouse[1]) * 0.04;
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform1f(uTime, (now - t0) / 1000);
+      gl.uniform2f(uMouse, mouse[0], mouse[1]);
+      gl.drawArrays(gl.POINTS, 0, COUNT);
+      requestAnimationFrame(frame);
     }
-    loop();
+    requestAnimationFrame(frame);
   })();
 </script>
 </body>
