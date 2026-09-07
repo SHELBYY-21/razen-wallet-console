@@ -1,8 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { DeskDash } from "@/components/razen/desk-dash";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({ component: Landing });
 
-function Home() {
-  return <DeskDash />;
+function Landing() {
+  return (
+    <iframe
+      src="/welcome.html"
+      title="RAZEN Wallet"
+      className="fixed inset-0 z-[70] h-dvh w-full border-0 bg-black"
+    />
+  );
 }

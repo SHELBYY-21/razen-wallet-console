@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountsRouteImport } from './routes/accounts'
+import { Route as DeskRouteImport } from './routes/desk'
 import { Route as GiftsRouteImport } from './routes/gifts'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ToolsRouteImport } from './routes/tools'
@@ -32,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
 const AccountsRoute = AccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeskRoute = DeskRouteImport.update({
+  id: '/desk',
+  path: '/desk',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GiftsRoute = GiftsRouteImport.update({
@@ -98,6 +104,7 @@ const ApiV1WalletRoute = ApiV1WalletRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
+  '/desk': typeof DeskRoute
   '/gifts': typeof GiftsRoute
   '/history': typeof HistoryRoute
   '/tools': typeof ToolsRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
+  '/desk': typeof DeskRoute
   '/gifts': typeof GiftsRoute
   '/history': typeof HistoryRoute
   '/tools': typeof ToolsRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
+  '/desk': typeof DeskRoute
   '/gifts': typeof GiftsRoute
   '/history': typeof HistoryRoute
   '/tools': typeof ToolsRoute
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/accounts'
+    | '/desk'
     | '/gifts'
     | '/history'
     | '/tools'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/accounts'
+    | '/desk'
     | '/gifts'
     | '/history'
     | '/tools'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/accounts'
+    | '/desk'
     | '/gifts'
     | '/history'
     | '/tools'
@@ -198,6 +210,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountsRoute: typeof AccountsRoute
+  DeskRoute: typeof DeskRoute
   GiftsRoute: typeof GiftsRoute
   HistoryRoute: typeof HistoryRoute
   ToolsRoute: typeof ToolsRoute
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: '/accounts'
       fullPath: '/accounts'
       preLoaderRoute: typeof AccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/desk': {
+      id: '/desk'
+      path: '/desk'
+      fullPath: '/desk'
+      preLoaderRoute: typeof DeskRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gifts': {
@@ -318,6 +338,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRoute,
+  DeskRoute: DeskRoute,
   GiftsRoute: GiftsRoute,
   HistoryRoute: HistoryRoute,
   ToolsRoute: ToolsRoute,

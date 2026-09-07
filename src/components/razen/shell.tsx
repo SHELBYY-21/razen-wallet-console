@@ -19,7 +19,7 @@ import { useRazen } from "@/lib/razen/store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/", label: "ภาพรวม", short: "ภาพรวม", icon: Home, tone: "gold" },
+  { to: "/desk", label: "ภาพรวม", short: "ภาพรวม", icon: Home, tone: "gold" },
   { to: "/transfer", label: "โอนเงิน", short: "โอน", icon: Send, tone: "teal" },
   { to: "/history", label: "ประวัติ", short: "ประวัติ", icon: Clock3, tone: "warn" },
   { to: "/accounts", label: "กระเป๋า", short: "กระเป๋า", icon: Wallet, tone: "in" },
@@ -28,7 +28,7 @@ const NAV = [
 ] as const;
 
 const TITLE: Record<string, { kicker: string; title: string }> = {
-  "/": { kicker: "โต๊ะวันนี้", title: "ภาพรวม" },
+  "/desk": { kicker: "โต๊ะวันนี้", title: "ภาพรวม" },
   "/transfer": { kicker: "จ่ายออก", title: "โอนเงิน" },
   "/history": { kicker: "ตรวจสอบ", title: "ประวัติ" },
   "/accounts": { kicker: "วอลเล็ต", title: "กระเป๋า" },
@@ -37,7 +37,7 @@ const TITLE: Record<string, { kicker: string; title: string }> = {
 };
 
 const MOBILE_NAV = NAV.filter((n) =>
-  ["/", "/transfer", "/history", "/gifts", "/tools"].includes(n.to),
+  ["/", "/desk", "/transfer", "/history", "/gifts", "/tools"].includes(n.to),
 );
 
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -85,7 +85,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
     };
   }, [mark, tick, syncWallet]);
 
-  const heading = TITLE[pathname] ?? TITLE["/"];
+  const heading = TITLE[pathname] ?? TITLE["/desk"];
+
+  if (pathname === "/") {
+    return <>{children}</>;
+  }
 
   return (
     <div className="relative min-h-dvh bg-bg text-fg">
@@ -103,8 +107,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <nav className="flex flex-1 flex-col gap-1 px-3">
           {NAV.map((item) => {
             const active =
-              item.to === "/"
-                ? pathname === "/"
+              item.to === "/desk"
+                ? pathname === "/desk"
                 : pathname === item.to || pathname.startsWith(item.to + "/");
             return (
               <Link
@@ -167,8 +171,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="flex items-stretch justify-around px-1 pb-[env(safe-area-inset-bottom)]">
           {MOBILE_NAV.map((item) => {
             const active =
-              item.to === "/"
-                ? pathname === "/"
+              item.to === "/desk"
+                ? pathname === "/desk"
                 : pathname === item.to || pathname.startsWith(item.to + "/");
             return (
               <Link

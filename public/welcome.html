@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>RAZEN Wallet — Your keys. Your crown.</title>
+<meta name="description" content="RAZEN multi-chain wallet. Self-custody, swaps, staking, NFTs. Connect and enter the console."/>
+<meta name="theme-color" content="#0B0C0E"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0B0C0E;
+    --bg-2: #121417;
+    --card: #16181c;
+    --line: rgba(232, 116, 60, 0.22);
+    --ink: #F6F1EA;
+    --mute: #B7A99A;
+    --copper: #E8743C;
+    --copper-2: #FFB088;
+    --ok: #3EE0B4;
+    --danger: #F43F5E;
+    --radius: 18px;
+    --max: 1120px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font: 16px/1.55 Anuphan, system-ui, sans-serif;
+    background:
+      radial-gradient(48% 40% at 8% -10%, rgba(232,116,60,.22), transparent 58%),
+      radial-gradient(40% 34% at 100% 0%, rgba(62,224,180,.1), transparent 50%),
+      linear-gradient(180deg, #141210 0%, var(--bg) 38%, #08090b 100%);
+    min-height: 100%;
+  }
+  h1,h2,h3,.display { font-family: Sora, Anuphan, sans-serif; letter-spacing: -0.04em; }
+  a { color: inherit; }
+  .wrap { width: min(var(--max), calc(100% - 32px)); margin-inline: auto; }
+  .nav {
+    position: sticky; top: 0; z-index: 40;
+    backdrop-filter: blur(18px) saturate(1.2);
+    background: rgba(11,12,14,.72);
+    border-bottom: 1px solid rgba(232,116,60,.16);
+  }
+  .nav-inner { display: flex; align-items: center; gap: 18px; min-height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: Sora, sans-serif; font-weight: 700; letter-spacing: .12em; }
+  .mark {
+    width: 28px; height: 28px; border-radius: 9px;
+    background: conic-gradient(from 210deg, #E8743C, #FFB088, #3EE0B4, #E8743C);
+    box-shadow: 0 0 0 1px rgba(232,116,60,.4);
+  }
+  .nav-links { display: none; gap: 22px; margin-left: auto; font-size: 14px; color: var(--mute); }
+  .nav-links a { text-decoration: none; }
+  .nav-links a:hover { color: var(--ink); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 0 18px; border-radius: 999px;
+    text-decoration: none; font-weight: 600; font-size: 14px; border: 0; cursor: pointer;
+  }
+  .btn-copper { background: var(--copper); color: #1a0d08; box-shadow: 0 8px 24px rgba(232,116,60,.28); }
+  .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .hero { display: grid; gap: 48px; padding: 56px 0 32px; }
+  .kicker { color: var(--copper); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; }
+  .hero h1 { font-size: clamp(40px, 8vw, 72px); line-height: 1.02; margin: 12px 0 16px; }
+  .grad {
+    background: linear-gradient(105deg, #F6F1EA 10%, var(--copper) 48%, var(--copper-2) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { color: var(--mute); max-width: 42ch; margin: 0 0 28px; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .phone-wrap { display: flex; justify-content: center; }
+  .phone {
+    width: 280px; border-radius: 36px; padding: 12px;
+    background: linear-gradient(160deg, #2a2d33, #0e1013);
+    box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(232,116,60,.25);
+  }
+  .phone-screen {
+    border-radius: 28px; overflow: hidden; min-height: 520px;
+    background: #0c0d10; padding: 18px 16px 20px;
+  }
+  .notch { width: 92px; height: 8px; border-radius: 99px; background: #1c1e22; margin: 4px auto 18px; }
+  .bal { font-family: Sora, sans-serif; font-size: 32px; margin: 4px 0 18px; }
+  .assets { display: grid; gap: 8px; margin: 16px 0 18px; }
+  .asset { display: flex; align-items: center; gap: 10px; background: #14161a; border-radius: 14px; padding: 10px 12px; }
+  .dot { width: 28px; height: 28px; border-radius: 50%; }
+  .row-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .row-btns span {
+    display: grid; place-items: center; gap: 6px; font-size: 11px; color: var(--mute);
+  }
+  .ico { width: 40px; height: 40px; border-radius: 14px; background: #1b1d22; display: grid; place-items: center; color: var(--copper); }
+  .stats {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+    background: var(--line); border-radius: var(--radius); overflow: hidden; margin: 28px 0 64px;
+  }
+  .stat { background: var(--bg-2); padding: 22px 18px; }
+  .stat b { display: block; font-family: Sora, sans-serif; font-size: 22px; color: var(--copper-2); }
+  .stat span { color: var(--mute); font-size: 12px; }
+  .sec { padding: 12px 0 72px; }
+  .sec h2 { font-size: clamp(28px, 4vw, 40px); margin: 8px 0 28px; }
+  .cards { display: grid; gap: 14px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px; min-height: 160px;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 18px; }
+  .card p { margin: 0; color: var(--mute); font-size: 14px; }
+  .chains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .chain {
+    display: flex; align-items: center; gap: 10px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 14px; padding: 12px;
+    font-size: 13px; font-weight: 600;
+  }
+  .check { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .check li { display: flex; gap: 10px; align-items: flex-start; color: var(--mute); }
+  .check i { color: var(--ok); font-style: normal; font-weight: 700; }
+  .road { display: grid; gap: 12px; }
+  .q { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; }
+  .q b { color: var(--copper); font-size: 12px; letter-spacing: .16em; }
+  .cta-band {
+    text-align: center; padding: 56px 24px; border-radius: 28px;
+    background:
+      radial-gradient(60% 80% at 50% 120%, rgba(232,116,60,.28), transparent 70%),
+      #141210;
+    border: 1px solid var(--line); margin-bottom: 48px;
+  }
+  footer { border-top: 1px solid var(--line); padding: 28px 0 48px; color: var(--mute); font-size: 13px; }
+  .foot { display: flex; flex-wrap: wrap; gap: 12px 20px; justify-content: space-between; align-items: center; }
+  .socials { display: flex; gap: 14px; }
+  .socials a { text-decoration: none; }
+  @media (min-width: 768px) {
+    .nav-links { display: flex; }
+    .hero { grid-template-columns: 1.1fr .9fr; align-items: center; padding-top: 72px; }
+    .stats { grid-template-columns: repeat(4, 1fr); }
+    .cards { grid-template-columns: repeat(3, 1fr); }
+    .chains { grid-template-columns: repeat(4, 1fr); }
+    .road { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span> RAZEN</a>
+      <nav class="nav-links" aria-label="หน้าแลนดิ้ง">
+        <a href="#features">Features</a>
+        <a href="#chains">Chains</a>
+        <a href="#security">Security</a>
+        <a href="#roadmap">Roadmap</a>
+      </nav>
+      <a class="btn btn-copper" href="/desk" target="_top" id="nav-connect" style="margin-left:auto">Connect</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="wrap hero">
+      <div>
+        <p class="kicker">Self-custody console</p>
+        <h1>Your keys.<br><span class="grad">Your crown.</span></h1>
+        <p class="lede">กระเป๋ามัลติเชน RAZEN — สลับ สเตก NFT และเข้า DApp จากโต๊ะเดียว กด Connect เพื่อเปิดคอนโซลโอนจริง</p>
+        <div class="hero-cta">
+          <a class="btn btn-copper" href="/desk" target="_top" id="hero-connect">Connect wallet</a>
+          <a class="btn btn-ghost" href="#features">ดูฟีเจอร์</a>
+        </div>
+      </div>
+      <div class="phone-wrap" aria-hidden="true">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="notch"></div>
+            <p class="kicker">RAZEN · MAIN</p>
+            <div class="bal">$48,291.20</div>
+            <p style="margin:0;color:var(--ok);font-size:13px">+2.4% วันนี้</p>
+            <div class="assets">
+              <div class="asset"><span class="dot" style="background:#627EEA"></span><div style="flex:1"><b>ETH</b><div style="color:var(--mute);font-size:12px">Ethereum</div></div><b>12.04</b></div>
+              <div class="asset"><span class="dot" style="background:#F7931A"></span><div style="flex:1"><b>BTC</b><div style="color:var(--mute);font-size:12px">Bitcoin</div></div><b>0.182</b></div>
+              <div class="asset"><span class="dot" style="background:#14F195"></span><div style="flex:1"><b>SOL</b><div style="color:var(--mute);font-size:12px">Solana</div></div><b>214.6</b></div>
+            </div>
+            <div class="row-btns">
+              <span><span class="ico">↑</span>Send</span>
+              <span><span class="ico">⇄</span>Swap</span>
+              <span><span class="ico">◆</span>Stake</span>
+              <span><span class="ico">▣</span>Scan</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="stats">
+        <div class="stat"><b>$2.4B+</b><span>TVL secured</span></div>
+        <div class="stat"><b>428K</b><span>wallets</span></div>
+        <div class="stat"><b>12</b><span>chains</span></div>
+        <div class="stat"><b>99.99%</b><span>uptime</span></div>
+      </div>
+    </section>
+
+    <section class="wrap sec" id="features">
+      <p class="kicker">Capabilities</p>
+      <h2>ทุกอย่างที่โต๊ะต้องใช้</h2>
+      <div class="cards">
+        <article class="card"><h3>Multi-chain</h3><p>ยอดและแอดเดรสรวมบน 12 เครือข่าย ไม่ต้องสลับแอป</p></article>
+        <article class="card"><h3>Swaps</h3><p>สวอปในกระเป๋า เรตชัดก่อนยืนยัน ไม่มีหน้าต่างซ้อน</p></article>
+        <article class="card"><h3>Staking</h3><p>ล็อกสินทรัพย์กินรีวอร์ดจากเครือข่ายที่รองรับ</p></article>
+        <article class="card"><h3>NFTs</h3><p>แกลเลอรีข้ามเชน ส่งและโชว์คอลเลกชันได้</p></article>
+        <article class="card"><h3>Security</h3><p>คีย์อยู่เครื่องคุณ ซีดเฟส อนุมัติรายธุรกรรม</p></article>
+        <article class="card"><h3>DApps</h3><p>เชื่อม dapp ด้วยเซสชันสั้น ตัดเมื่อปิดคอนโซล</p></article>
+      </div>
+    </section>
+
+    <section class="wrap sec" id="chains">
+      <p class="kicker">Networks</p>
+      <h2>12 เชนที่รองรับ</h2>
+      <div class="chains">
+        <div class="chain"><span class="dot" style="background:#627EEA"></span>Ethereum</div>
+        <div class="chain"><span class="dot" style="background:#F7931A"></span>Bitcoin</div>
+        <div class="chain"><span class="dot" style="background:#0098EA"></span>TON</div>
+        <div class="chain"><span class="dot" style="background:#14F195"></span>Solana</div>
+        <div class="chain"><span class="dot" style="background:#0052FF"></span>Base</div>
+        <div class="chain"><span class="dot" style="background:#28A0F0"></span>Arbitrum</div>
+        <div class="chain"><span class="dot" style="background:#FF0420"></span>Optimism</div>
+        <div class="chain"><span class="dot" style="background:#8247E5"></span>Polygon</div>
+        <div class="chain"><span class="dot" style="background:#F0B90B"></span>BNB Chain</div>
+        <div class="chain"><span class="dot" style="background:#E84142"></span>Avalanche</div>
+        <div class="chain"><span class="dot" style="background:#6FBCF0"></span>Sui</div>
+        <div class="chain"><span class="dot" style="background:#2DD8A6"></span>Aptos</div>
+      </div>
+    </section>
+
+    <section class="wrap sec" id="security">
+      <p class="kicker">Security</p>
+      <h2>คีย์ไม่เคยออกจากเครื่อง</h2>
+      <ul class="check">
+        <li><i>✓</i> Self-custody — seed phrase สร้างในเครื่อง ไม่ส่งเซิร์ฟเวอร์</li>
+        <li><i>✓</i> Transaction preview ก่อนเซ็นทุกครั้ง รวมค่าแก๊สและปลายทาง</li>
+        <li><i>✓</i> Session ตัดอัตโนมัติเมื่อปิดคอนโซล</li>
+        <li><i>✓</i> ไม่เก็บ PIN โอนบนหน้าจอ — ใช้เฉพาะตอน login กระเป๋า</li>
+      </ul>
+    </section>
+
+    <section class="wrap sec" id="roadmap">
+      <p class="kicker">2026</p>
+      <h2>โรดแมป</h2>
+      <div class="road">
+        <div class="q"><b>Q1</b><p>Console live · P2P / PromptPay / bank rails</p></div>
+        <div class="q"><b>Q2</b><p>Multi-chain watch · swap routing</p></div>
+        <div class="q"><b>Q3</b><p>Staking + NFT gallery</p></div>
+        <div class="q"><b>Q4</b><p>DApp connect · hardware key</p></div>
+      </div>
+    </section>
+
+    <section class="wrap" id="connect">
+      <div class="cta-band">
+        <p class="kicker">Ready</p>
+        <h2 style="margin-top:8px">Connect แล้วเข้าโต๊ะได้เลย</h2>
+        <p class="lede" style="margin-inline:auto">เปิดคอนโซล RAZEN — ยอดจริงจากกระเป๋าที่เชื่อม</p>
+        <a class="btn btn-copper" href="/desk" target="_top" id="band-connect">Connect</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>© 2026 RAZEN · Crown Tether</span>
+      <div class="socials">
+        <a href="https://x.com" target="_blank" rel="noreferrer">X</a>
+        <a href="https://t.me" target="_blank" rel="noreferrer">Telegram</a>
+        <a href="https://discord.com" target="_blank" rel="noreferrer">Discord</a>
+        <a href="/desk" target="_top">Console</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.querySelectorAll('a[href="/desk"]').forEach(function (el) {
+      el.addEventListener("click", function () {
+        try { localStorage.setItem("razen-mira-connect", String(Date.now())); } catch (e) {}
+      });
+    });
+  </script>
+</body>
+</html>
