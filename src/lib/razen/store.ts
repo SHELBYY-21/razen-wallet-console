@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { bankFee, bankByCode } from "./banks";
 import { isThaiMobile, maskPhone } from "./format";
 import { buildSeed, SEED_PIN } from "./seed";
-import { browserNotify, makeNotice, prependNotices } from "./notice";
+import { browserNotify, makeNotice, markOneRead, prependNotices, type NoticeLink } from "./notice";
 import { tmnConfigured } from "@/lib/tmnone/creds";
 import { rememberLocal } from "@/lib/memory/client";
 import { mapHistory, parseBalance } from "@/lib/tmnone/parse";
@@ -109,8 +109,9 @@ type RazenState = {
   addContact: (name: string, phone: string) => Contact | { error: string };
   changePin: (next: string) => void;
   tickPending: () => void;
-  pushNotice: (title: string, body: string, kind?: NoticeKind) => void;
+  pushNotice: (title: string, body: string, kind?: NoticeKind, link?: NoticeLink) => void;
   markNoticesRead: () => void;
+  markNoticeRead: (id: string) => void;
   setSettings: (patch: Partial<Settings>) => void;
   setMode: (mode: TmnMode) => void;
   resetDemo: () => void;
@@ -303,7 +304,7 @@ export const useRazen = create<RazenState>()(
           faceDeferred?.resolve(false);
           faceDeferred = { resolve };
           set({ faceOpen: true, faceSeconds: get().settings.faceauth_wait_timeout || 180 });
-          get().pushNotice("รอยืนยันใบหน้า", "มีรายการที่ต้องสแกนใบหน้าตาม webhook TMNOne", "face");
+          get().pushNotice("รอยืนยันใบหน้า", "สแกนใบหน้าให้รายการนี้", "face", { href: "/desk" });
         }),
 
       resolveFace: (ok) => {
@@ -356,10 +357,21 @@ export const useRazen = create<RazenState>()(
           lastReceiptId: tx.id,
         });
         get().pushNotice(
-          "ส่งคำสั่งโอนแล้ว",
-          `กำลังโอน ${amount.toLocaleString("th-TH")} บาท ไปยัง ${tx.counterpart}`,
+          "กำลังจ่าย",
+          `${amount.toLocaleString("th-TH")} บาท · ${tx.counterpart}`,
           "out",
+          { txId: tx.id, href: "/history" },
         );
+        const remainAfter = s.settings.dailyLimit - (spent + amount + fee);
+        const warnAt = s.settings.dailyLimit * 0.2;
+        if (s.settings.dailyLimit > 0 && s.settings.dailyLimit - spent > warnAt && remainAfter <= warnAt) {
+          get().pushNotice(
+            "ใกล้เต็มโควต้า",
+            `เหลือ ${remainAfter.toLocaleString("th-TH")} บาทวันนี้`,
+            "quota",
+            { href: "/desk" },
+          );
+        }
         rememberLocal(
           "episodic",
           `out:${tx.method}:${tx.ref}`,
@@ -629,17 +641,18 @@ export const useRazen = create<RazenState>()(
         set({ txs });
         for (const t of justDone) {
           get().pushNotice(
-            t.direction === "out" ? "โอนสำเร็จ" : "รับเงินแล้ว",
+            t.direction === "out" ? "จ่ายแล้ว" : "เงินเข้า",
             `${t.counterpart} · ${t.amount.toLocaleString("th-TH")} บาท`,
             t.direction === "out" ? "out" : "in",
+            { txId: t.id, href: "/history" },
           );
         }
         void get().refreshBalance();
       },
 
-      pushNotice: (title, body, kind = "info") => {
+      pushNotice: (title, body, kind = "info", link) => {
         const s = get();
-        const n = makeNotice(title, body, kind);
+        const n = makeNotice(title, body, kind, Date.now(), link);
         set({ notices: prependNotices(s.notices, n) });
         if (s.settings.notifPush) browserNotify(title, body);
         if (kind === "fail") toast.error(title, { description: body });
@@ -649,6 +662,10 @@ export const useRazen = create<RazenState>()(
 
       markNoticesRead: () => {
         set({ notices: get().notices.map((n) => ({ ...n, read: true })) });
+      },
+
+      markNoticeRead: (id) => {
+        set({ notices: markOneRead(get().notices, id) });
       },
 
       setSettings: (patch) => set({ settings: { ...get().settings, ...patch } }),
@@ -679,7 +696,7 @@ export const useRazen = create<RazenState>()(
           txs: [tx, ...s.txs],
           seq,
         });
-        get().pushNotice("เกิดข้อผิดพลาด", "จำลองรายการล้มเหลว — ยอดเงินไม่ถูกตัด", "fail");
+        get().pushNotice("ไม่ผ่าน", "รายการจำลอง — ยอดไม่ถูกตัด", "fail", { txId: tx.id, href: "/history" });
       },
 
       resetDemo: () => {
@@ -838,9 +855,10 @@ export const useRazen = create<RazenState>()(
             if (known.has(key)) continue;
             if (t.direction === "in" && t.status === "completed") {
               get().pushNotice(
-                "รับเงินแล้ว",
+                "เงินเข้า",
                 `${t.counterpart} · ${t.amount.toLocaleString("th-TH")} บาท`,
                 "in",
+                { txId: t.id, href: "/history" },
               );
             }
           }

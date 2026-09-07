@@ -243,7 +243,9 @@ export function ToolsPage() {
                 type="button"
                 variant="secondary"
                 onClick={() => {
-                  useRazen.getState().pushNotice("ทดสอบแจ้งเตือน", "โต๊ะ RAZEN พร้อมแจ้งเงินเข้าและโอนสำเร็จ", "info");
+                  useRazen.getState().pushNotice("ทดสอบ", "เงินเข้าและจ่ายจะขึ้นที่กระดิ่ง", "info", {
+                    href: "/desk",
+                  });
                 }}
               >
                 ส่งทดสอบ
@@ -382,7 +384,7 @@ export function ToolsPage() {
           </Button>
         </div>
         <button type="button" className="mt-3 text-xs text-muted" onClick={markRead}>
-          แจ้งเตือน {unread} ยังไม่อ่าน — ทำเครื่องหมายว่าอ่านแล้ว
+          อ่านแล้ว {unread ? `· ${unread}` : ""}
         </button>
         {notices.length > 0 && (
           <ul className="mt-3 max-h-48 space-y-2 overflow-auto text-sm">

@@ -80,6 +80,8 @@ export type Notice = {
   at: number;
   read: boolean;
   kind?: NoticeKind;
+  txId?: string;
+  href?: string;
 };
 
 export type Settings = {
