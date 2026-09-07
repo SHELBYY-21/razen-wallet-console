@@ -6,7 +6,7 @@ function Landing() {
   return (
     <iframe
       src="/welcome.html"
-      title="RAZEN Wallet"
+      title="RAZEN · โต๊ะพนักงาน"
       className="fixed inset-0 z-[70] h-dvh w-full border-0 bg-black"
     />
   );

@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>RAZEN Wallet — Your keys. Your crown.</title>
-<meta name="description" content="RAZEN multi-chain wallet. Self-custody, swaps, staking, NFTs. Connect and enter the console."/>
+<title>RAZEN · โต๊ะพนักงาน TrueMoney</title>
+<meta name="description" content="ระบบปิดสำหรับพนักงาน RAZEN × TrueMoney Wallet — โอน P2P พร้อมเพย์ ธนาคาร และแลกเปลี่ยน"/>
 <meta name="theme-color" content="#0B0C0E"/>
+<meta name="robots" content="noindex,nofollow"/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -21,7 +22,6 @@
     --copper: #E8743C;
     --copper-2: #FFB088;
     --ok: #3EE0B4;
-    --danger: #F43F5E;
     --radius: 18px;
     --max: 1120px;
   }
@@ -37,7 +37,7 @@
       linear-gradient(180deg, #141210 0%, var(--bg) 38%, #08090b 100%);
     min-height: 100%;
   }
-  h1,h2,h3,.display { font-family: Sora, Anuphan, sans-serif; letter-spacing: -0.04em; }
+  h1,h2,h3 { font-family: Sora, Anuphan, sans-serif; letter-spacing: -0.04em; }
   a { color: inherit; }
   .wrap { width: min(var(--max), calc(100% - 32px)); margin-inline: auto; }
   .nav {
@@ -51,7 +51,6 @@
   .mark {
     width: 28px; height: 28px; border-radius: 9px;
     background: conic-gradient(from 210deg, #E8743C, #FFB088, #3EE0B4, #E8743C);
-    box-shadow: 0 0 0 1px rgba(232,116,60,.4);
   }
   .nav-links { display: none; gap: 22px; margin-left: auto; font-size: 14px; color: var(--mute); }
   .nav-links a { text-decoration: none; }
@@ -65,12 +64,12 @@
   .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
   .hero { display: grid; gap: 48px; padding: 56px 0 32px; }
   .kicker { color: var(--copper); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; }
-  .hero h1 { font-size: clamp(40px, 8vw, 72px); line-height: 1.02; margin: 12px 0 16px; }
+  .hero h1 { font-size: clamp(36px, 7vw, 64px); line-height: 1.06; margin: 12px 0 16px; }
   .grad {
     background: linear-gradient(105deg, #F6F1EA 10%, var(--copper) 48%, var(--copper-2) 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .lede { color: var(--mute); max-width: 42ch; margin: 0 0 28px; }
+  .lede { color: var(--mute); max-width: 44ch; margin: 0 0 28px; }
   .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
   .phone-wrap { display: flex; justify-content: center; }
   .phone {
@@ -78,210 +77,193 @@
     background: linear-gradient(160deg, #2a2d33, #0e1013);
     box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(232,116,60,.25);
   }
-  .phone-screen {
-    border-radius: 28px; overflow: hidden; min-height: 520px;
-    background: #0c0d10; padding: 18px 16px 20px;
-  }
-  .notch { width: 92px; height: 8px; border-radius: 99px; background: #1c1e22; margin: 4px auto 18px; }
-  .bal { font-family: Sora, sans-serif; font-size: 32px; margin: 4px 0 18px; }
-  .assets { display: grid; gap: 8px; margin: 16px 0 18px; }
+  .phone-screen { border-radius: 28px; overflow: hidden; min-height: 520px; background: #0c0d10; padding: 18px 16px 20px; }
+  .notch { width: 92px; height: 8px; border-radius: 99px; background: #1c1e22; margin: 4px auto 14px; }
+  .tmn { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .tmn img { width: 28px; height: 28px; border-radius: 50%; background: #fff; }
+  .bal { font-family: Sora, sans-serif; font-size: 32px; margin: 4px 0 8px; font-variant-numeric: tabular-nums; }
+  .quote-phone { color: var(--mute); font-size: 13px; min-height: 3.2em; margin: 0 0 16px; }
+  .assets { display: grid; gap: 8px; margin: 8px 0 18px; }
   .asset { display: flex; align-items: center; gap: 10px; background: #14161a; border-radius: 14px; padding: 10px 12px; }
-  .dot { width: 28px; height: 28px; border-radius: 50%; }
+  .asset img { width: 28px; height: 28px; border-radius: 8px; object-fit: contain; background: #fff; }
   .row-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .row-btns span {
-    display: grid; place-items: center; gap: 6px; font-size: 11px; color: var(--mute);
+  .row-btns span { display: grid; place-items: center; gap: 6px; font-size: 11px; color: var(--mute); text-align: center; }
+  .ico { width: 40px; height: 40px; border-radius: 14px; background: #1b1d22; display: grid; place-items: center; color: var(--copper); font-size: 16px; }
+  .quotes {
+    display: grid; gap: 1px; background: var(--line); border-radius: var(--radius); overflow: hidden; margin: 28px 0 64px;
   }
-  .ico { width: 40px; height: 40px; border-radius: 14px; background: #1b1d22; display: grid; place-items: center; color: var(--copper); }
-  .stats {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
-    background: var(--line); border-radius: var(--radius); overflow: hidden; margin: 28px 0 64px;
-  }
-  .stat { background: var(--bg-2); padding: 22px 18px; }
-  .stat b { display: block; font-family: Sora, sans-serif; font-size: 22px; color: var(--copper-2); }
-  .stat span { color: var(--mute); font-size: 12px; }
+  .quote { background: var(--bg-2); padding: 22px 20px; }
+  .quote b { display: block; font-family: Sora, Anuphan, sans-serif; font-size: 17px; line-height: 1.35; color: var(--copper-2); font-weight: 600; }
+  .quote span { color: var(--mute); font-size: 12px; }
   .sec { padding: 12px 0 72px; }
   .sec h2 { font-size: clamp(28px, 4vw, 40px); margin: 8px 0 28px; }
   .cards { display: grid; gap: 14px; }
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 22px; min-height: 160px;
+    padding: 22px; min-height: 148px;
   }
   .card h3 { margin: 0 0 8px; font-size: 18px; }
   .card p { margin: 0; color: var(--mute); font-size: 14px; }
-  .chains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .chain {
+  .soon { display: inline-block; margin-top: 10px; font-size: 11px; letter-spacing: .12em; color: var(--copper); text-transform: uppercase; }
+  .rails { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .rail {
     display: flex; align-items: center; gap: 10px; background: var(--card);
-    border: 1px solid var(--line); border-radius: 14px; padding: 12px;
-    font-size: 13px; font-weight: 600;
+    border: 1px solid var(--line); border-radius: 14px; padding: 12px; font-size: 13px; font-weight: 600;
   }
+  .rail img { width: 28px; height: 28px; border-radius: 8px; object-fit: contain; background: #fff; }
+  .dot { width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; }
   .check { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
   .check li { display: flex; gap: 10px; align-items: flex-start; color: var(--mute); }
   .check i { color: var(--ok); font-style: normal; font-weight: 700; }
   .road { display: grid; gap: 12px; }
   .q { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; }
   .q b { color: var(--copper); font-size: 12px; letter-spacing: .16em; }
+  .q p { margin: 8px 0 0; color: var(--mute); font-size: 14px; }
   .cta-band {
     text-align: center; padding: 56px 24px; border-radius: 28px;
-    background:
-      radial-gradient(60% 80% at 50% 120%, rgba(232,116,60,.28), transparent 70%),
-      #141210;
+    background: radial-gradient(60% 80% at 50% 120%, rgba(232,116,60,.28), transparent 70%), #141210;
     border: 1px solid var(--line); margin-bottom: 48px;
   }
   footer { border-top: 1px solid var(--line); padding: 28px 0 48px; color: var(--mute); font-size: 13px; }
   .foot { display: flex; flex-wrap: wrap; gap: 12px 20px; justify-content: space-between; align-items: center; }
-  .socials { display: flex; gap: 14px; }
-  .socials a { text-decoration: none; }
   @media (min-width: 768px) {
     .nav-links { display: flex; }
-    .hero { grid-template-columns: 1.1fr .9fr; align-items: center; padding-top: 72px; }
-    .stats { grid-template-columns: repeat(4, 1fr); }
+    .hero { grid-template-columns: 1.15fr .85fr; align-items: center; padding-top: 72px; }
+    .quotes { grid-template-columns: repeat(2, 1fr); }
     .cards { grid-template-columns: repeat(3, 1fr); }
-    .chains { grid-template-columns: repeat(4, 1fr); }
+    .rails { grid-template-columns: repeat(4, 1fr); }
     .road { grid-template-columns: repeat(4, 1fr); }
   }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
   <header class="nav">
     <div class="wrap nav-inner">
       <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span> RAZEN</a>
-      <nav class="nav-links" aria-label="หน้าแลนดิ้ง">
-        <a href="#features">Features</a>
-        <a href="#chains">Chains</a>
-        <a href="#security">Security</a>
-        <a href="#roadmap">Roadmap</a>
+      <nav class="nav-links" aria-label="หน้าพนักงาน">
+        <a href="#quotes">คำคมโต๊ะ</a>
+        <a href="#rails">ช่องทางโอน</a>
+        <a href="#future">อนาคต</a>
       </nav>
-      <a class="btn btn-copper" href="/desk" target="_top" id="nav-connect" style="margin-left:auto">Connect</a>
+      <a class="btn btn-copper" href="/desk" target="_top" id="nav-connect" style="margin-left:auto">เข้าโต๊ะ</a>
     </div>
   </header>
 
   <main id="top">
     <section class="wrap hero">
       <div>
-        <p class="kicker">Self-custody console</p>
-        <h1>Your keys.<br><span class="grad">Your crown.</span></h1>
-        <p class="lede">กระเป๋ามัลติเชน RAZEN — สลับ สเตก NFT และเข้า DApp จากโต๊ะเดียว กด Connect เพื่อเปิดคอนโซลโอนจริง</p>
+        <p class="kicker">ระบบปิด · พนักงานเท่านั้น</p>
+        <h1>โต๊ะวันนี้<br><span class="grad">ยอดจริงทุกบาท</span></h1>
+        <p class="lede">RAZEN เป็นคอนโซลภายในของทีม — เชื่อม TrueMoney Wallet โอน P2P พร้อมเพย์ ธนาคาร และเตรียมช่องแลก USD / USDT</p>
         <div class="hero-cta">
-          <a class="btn btn-copper" href="/desk" target="_top" id="hero-connect">Connect wallet</a>
-          <a class="btn btn-ghost" href="#features">ดูฟีเจอร์</a>
+          <a class="btn btn-copper" href="/desk" target="_top" id="hero-connect">เข้าโต๊ะ</a>
+          <a class="btn btn-ghost" href="#quotes">อ่านคำคม</a>
         </div>
       </div>
       <div class="phone-wrap" aria-hidden="true">
         <div class="phone">
           <div class="phone-screen">
             <div class="notch"></div>
-            <p class="kicker">RAZEN · MAIN</p>
-            <div class="bal">$48,291.20</div>
-            <p style="margin:0;color:var(--ok);font-size:13px">+2.4% วันนี้</p>
+            <div class="tmn">
+              <img src="/brands/truemoney.png" alt=""/>
+              <div>
+                <p class="kicker" style="margin:0">TrueMoney Wallet</p>
+                <p style="margin:0;font-size:12px;color:var(--mute)">กระเป๋าโต๊ะ</p>
+              </div>
+            </div>
+            <div class="bal">฿12,680</div>
+            <p class="quote-phone" id="phone-quote">ยอดบนจอคือยอดจริง — ไม่เดา ไม่ปัด</p>
             <div class="assets">
-              <div class="asset"><span class="dot" style="background:#627EEA"></span><div style="flex:1"><b>ETH</b><div style="color:var(--mute);font-size:12px">Ethereum</div></div><b>12.04</b></div>
-              <div class="asset"><span class="dot" style="background:#F7931A"></span><div style="flex:1"><b>BTC</b><div style="color:var(--mute);font-size:12px">Bitcoin</div></div><b>0.182</b></div>
-              <div class="asset"><span class="dot" style="background:#14F195"></span><div style="flex:1"><b>SOL</b><div style="color:var(--mute);font-size:12px">Solana</div></div><b>214.6</b></div>
+              <div class="asset"><img src="/brands/truemoney.png" alt=""/><div style="flex:1"><b>P2P</b><div style="color:var(--mute);font-size:12px">วอลเล็ตถึงวอลเล็ต</div></div></div>
+              <div class="asset"><img src="/brands/promptpay.png" alt=""/><div style="flex:1"><b>พร้อมเพย์</b><div style="color:var(--mute);font-size:12px">สแกนแล้วโอน</div></div></div>
+              <div class="asset"><img src="/brands/SCB.png" alt=""/><div style="flex:1"><b>ธนาคารไทย</b><div style="color:var(--mute);font-size:12px">บัญชีตรง</div></div></div>
             </div>
             <div class="row-btns">
-              <span><span class="ico">↑</span>Send</span>
-              <span><span class="ico">⇄</span>Swap</span>
-              <span><span class="ico">◆</span>Stake</span>
-              <span><span class="ico">▣</span>Scan</span>
+              <span><span class="ico">↑</span>โอน</span>
+              <span><span class="ico">▣</span>สแกน</span>
+              <span><span class="ico">⌂</span>ธนาคาร</span>
+              <span><span class="ico">✉</span>ซอง</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="wrap">
-      <div class="stats">
-        <div class="stat"><b>$2.4B+</b><span>TVL secured</span></div>
-        <div class="stat"><b>428K</b><span>wallets</span></div>
-        <div class="stat"><b>12</b><span>chains</span></div>
-        <div class="stat"><b>99.99%</b><span>uptime</span></div>
+    <section class="wrap sec" id="quotes">
+      <p class="kicker">คำคมโต๊ะ</p>
+      <h2>ก่อนกดโอน จำไว้</h2>
+      <div class="quotes">
+        <figure class="quote"><b>ยอดบนจอคือยอดจริง — ไม่เดา ไม่ปัด</b><span>getBalance จาก TrueMoney เท่านั้น</span></figure>
+        <figure class="quote"><b>ไว้วางใจแลกได้ทุกวัน ถ้าไม่พลาดแม้ครั้งเดียว</b><span>ตรวจชื่อ ยอด ช่องทาง แล้วค่อยส่ง</span></figure>
+        <figure class="quote"><b>ธนบัตรใหม่ บริการเงียบ ลูกค้าจำเราได้</b><span>มาตรฐานโต๊ะ Crown Tether</span></figure>
+        <figure class="quote"><b>ระบบปิด เพราะเงินลูกค้าไม่ใช่ของโชว์</b><span>พนักงานเข้าโต๊ะ — ไม่เปิดสาธารณะ</span></figure>
       </div>
     </section>
 
-    <section class="wrap sec" id="features">
-      <p class="kicker">Capabilities</p>
-      <h2>ทุกอย่างที่โต๊ะต้องใช้</h2>
+    <section class="wrap sec" id="rails">
+      <p class="kicker">ช่องทางวันนี้</p>
+      <h2>โอนผ่าน TrueMoney Wallet</h2>
       <div class="cards">
-        <article class="card"><h3>Multi-chain</h3><p>ยอดและแอดเดรสรวมบน 12 เครือข่าย ไม่ต้องสลับแอป</p></article>
-        <article class="card"><h3>Swaps</h3><p>สวอปในกระเป๋า เรตชัดก่อนยืนยัน ไม่มีหน้าต่างซ้อน</p></article>
-        <article class="card"><h3>Staking</h3><p>ล็อกสินทรัพย์กินรีวอร์ดจากเครือข่ายที่รองรับ</p></article>
-        <article class="card"><h3>NFTs</h3><p>แกลเลอรีข้ามเชน ส่งและโชว์คอลเลกชันได้</p></article>
-        <article class="card"><h3>Security</h3><p>คีย์อยู่เครื่องคุณ ซีดเฟส อนุมัติรายธุรกรรม</p></article>
-        <article class="card"><h3>DApps</h3><p>เชื่อม dapp ด้วยเซสชันสั้น ตัดเมื่อปิดคอนโซล</p></article>
+        <article class="card"><h3>P2P วอลเล็ต</h3><p>โอนเบอร์ถึงเบอร์ เช็คชื่อผู้รับก่อนกด — PIN ใช้ตอนเข้ากระเป๋า ไม่ถามตอนโอน</p></article>
+        <article class="card"><h3>พร้อมเพย์</h3><p>สแกน QR เติมเลข ยืนยันยอด แล้ว transferQRPromptpay</p></article>
+        <article class="card"><h3>บัญชีธนาคารไทย</h3><p>โอนเข้า SCB KBANK BBL และธนาคารในลิสต์ ด้วยโลโก้จริง</p></article>
+        <article class="card"><h3>ซองอั่งเปา</h3><p>generateVoucher สำหรับแจกยอดเล็ก บนโต๊ะเดียวกัน</p></article>
+        <article class="card"><h3>แลก USD / USDT</h3><p>ช่องแลกเกรดพรีเมียม — ธนบัตรใหม่และโอนเหรียญ ต่อจากราง TrueMoney</p><span class="soon">กำลังเปิด</span></article>
+        <article class="card"><h3>เรทพิเศษ · ห้อง VIP</h3><p>ลูกค้าประจำได้เรทโต๊ะ ไม่โชว์สาธารณะ บันทึกในความจำเอเจนต์</p><span class="soon">กำลังเปิด</span></article>
       </div>
     </section>
 
-    <section class="wrap sec" id="chains">
-      <p class="kicker">Networks</p>
-      <h2>12 เชนที่รองรับ</h2>
-      <div class="chains">
-        <div class="chain"><span class="dot" style="background:#627EEA"></span>Ethereum</div>
-        <div class="chain"><span class="dot" style="background:#F7931A"></span>Bitcoin</div>
-        <div class="chain"><span class="dot" style="background:#0098EA"></span>TON</div>
-        <div class="chain"><span class="dot" style="background:#14F195"></span>Solana</div>
-        <div class="chain"><span class="dot" style="background:#0052FF"></span>Base</div>
-        <div class="chain"><span class="dot" style="background:#28A0F0"></span>Arbitrum</div>
-        <div class="chain"><span class="dot" style="background:#FF0420"></span>Optimism</div>
-        <div class="chain"><span class="dot" style="background:#8247E5"></span>Polygon</div>
-        <div class="chain"><span class="dot" style="background:#F0B90B"></span>BNB Chain</div>
-        <div class="chain"><span class="dot" style="background:#E84142"></span>Avalanche</div>
-        <div class="chain"><span class="dot" style="background:#6FBCF0"></span>Sui</div>
-        <div class="chain"><span class="dot" style="background:#2DD8A6"></span>Aptos</div>
+    <section class="wrap sec" id="future">
+      <p class="kicker">รางที่จะต่อ</p>
+      <h2>ระบบโอนและการแลกเปลี่ยน</h2>
+      <div class="rails">
+        <div class="rail"><img src="/brands/truemoney.png" alt=""/>TrueMoney</div>
+        <div class="rail"><img src="/brands/promptpay.png" alt=""/>พร้อมเพย์</div>
+        <div class="rail"><img src="/brands/SCB.png" alt=""/>ธนาคารไทย</div>
+        <div class="rail"><span class="dot" style="background:linear-gradient(135deg,#E8743C,#FFB088)"></span>USD ธนบัตร</div>
+        <div class="rail"><span class="dot" style="background:linear-gradient(135deg,#26A17B,#3EE0B4)"></span>USDT</div>
+        <div class="rail"><span class="dot" style="background:#1a1c20"></span>ซองอั่งเปา</div>
+        <div class="rail"><span class="dot" style="background:#3EE0B4"></span>ห้อง VIP</div>
+        <div class="rail"><span class="dot" style="background:#E8743C"></span>เรทโต๊ะ</div>
       </div>
-    </section>
-
-    <section class="wrap sec" id="security">
-      <p class="kicker">Security</p>
-      <h2>คีย์ไม่เคยออกจากเครื่อง</h2>
-      <ul class="check">
-        <li><i>✓</i> Self-custody — seed phrase สร้างในเครื่อง ไม่ส่งเซิร์ฟเวอร์</li>
-        <li><i>✓</i> Transaction preview ก่อนเซ็นทุกครั้ง รวมค่าแก๊สและปลายทาง</li>
-        <li><i>✓</i> Session ตัดอัตโนมัติเมื่อปิดคอนโซล</li>
-        <li><i>✓</i> ไม่เก็บ PIN โอนบนหน้าจอ — ใช้เฉพาะตอน login กระเป๋า</li>
-      </ul>
-    </section>
-
-    <section class="wrap sec" id="roadmap">
-      <p class="kicker">2026</p>
-      <h2>โรดแมป</h2>
-      <div class="road">
-        <div class="q"><b>Q1</b><p>Console live · P2P / PromptPay / bank rails</p></div>
-        <div class="q"><b>Q2</b><p>Multi-chain watch · swap routing</p></div>
-        <div class="q"><b>Q3</b><p>Staking + NFT gallery</p></div>
-        <div class="q"><b>Q4</b><p>DApp connect · hardware key</p></div>
+      <div class="road" style="margin-top:28px">
+        <div class="q"><b>Q1 · เปิดโต๊ะ</b><p>P2P · พร้อมเพย์ · ธนาคาร · ซอง บน TrueMoney</p></div>
+        <div class="q"><b>Q2 · แลกเงินสด</b><p>USD ธนบัตรใหม่ · นับยอดคู่กับวอลเล็ต</p></div>
+        <div class="q"><b>Q3 · เหรียญ</b><p>USDT เข้า–ออก · ใบเสร็จโต๊ะเดียวกัน</p></div>
+        <div class="q"><b>Q4 · VIP</b><p>เรทพิเศษ · ห้องส่วนตัว · สมาชิก</p></div>
       </div>
     </section>
 
     <section class="wrap" id="connect">
       <div class="cta-band">
-        <p class="kicker">Ready</p>
-        <h2 style="margin-top:8px">Connect แล้วเข้าโต๊ะได้เลย</h2>
-        <p class="lede" style="margin-inline:auto">เปิดคอนโซล RAZEN — ยอดจริงจากกระเป๋าที่เชื่อม</p>
-        <a class="btn btn-copper" href="/desk" target="_top" id="band-connect">Connect</a>
+        <p class="kicker">พนักงาน</p>
+        <h2 style="margin-top:8px">เข้าโต๊ะเมื่อพร้อมโอน</h2>
+        <p class="lede" style="margin-inline:auto">ยอด TrueMoney บนจอคือความจริงของวันนี้</p>
+        <a class="btn btn-copper" href="/desk" target="_top" id="band-connect">เข้าโต๊ะ</a>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="wrap foot">
-      <span>© 2026 RAZEN · Crown Tether</span>
-      <div class="socials">
-        <a href="https://x.com" target="_blank" rel="noreferrer">X</a>
-        <a href="https://t.me" target="_blank" rel="noreferrer">Telegram</a>
-        <a href="https://discord.com" target="_blank" rel="noreferrer">Discord</a>
-        <a href="/desk" target="_top">Console</a>
-      </div>
+      <span>© 2026 RAZEN · Crown Tether · ระบบปิดสำหรับพนักงาน</span>
+      <a href="/desk" target="_top">เปิดคอนโซล</a>
     </div>
   </footer>
   <script>
-    document.querySelectorAll('a[href="/desk"]').forEach(function (el) {
-      el.addEventListener("click", function () {
-        try { localStorage.setItem("razen-mira-connect", String(Date.now())); } catch (e) {}
-      });
-    });
+    var quotes = [
+      "ยอดบนจอคือยอดจริง — ไม่เดา ไม่ปัด",
+      "ไว้วางใจแลกได้ทุกวัน ถ้าไม่พลาดแม้ครั้งเดียว",
+      "ธนบัตรใหม่ บริการเงียบ ลูกค้าจำเราได้",
+      "ตรวจชื่อ ยอด ช่องทาง — แล้วค่อยส่ง"
+    ];
+    var el = document.getElementById("phone-quote");
+    var i = 0;
+    setInterval(function () {
+      i = (i + 1) % quotes.length;
+      if (el) el.textContent = quotes[i];
+    }, 4200);
   </script>
 </body>
 </html>
