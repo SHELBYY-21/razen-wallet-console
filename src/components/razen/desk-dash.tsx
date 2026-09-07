@@ -71,34 +71,33 @@ export function DeskDash() {
       animate="visible"
       variants={stagger}
     >
-      <motion.section className="tmn-card px-5 py-6 sm:px-7 sm:py-7" variants={fadeUp}>
+      <motion.section className="tmn-card px-4 py-4 sm:px-7 sm:py-7" variants={fadeUp}>
         <div className="flex items-center gap-3">
           <img
             src="/landing/hostess.webp"
             alt=""
             width={40}
             height={40}
-            className="size-10 rounded-full object-cover object-top ring-1 ring-white/40"
+            className="size-9 rounded-full object-cover object-top ring-1 ring-white/40 sm:size-10"
           />
           <div className="min-w-0 flex-1">
             <p className="text-xs opacity-80">สวัสดี</p>
             <p className="truncate text-sm font-medium">{acc?.nickname || "ยังไม่เชื่อมกระเป๋า"}</p>
           </div>
-          <BrandMark id="truemoney" alt="TrueMoney" className="size-9 rounded-full bg-white p-0.5" />
+          <BrandMark id="truemoney" alt="TrueMoney" className="size-8 rounded-full bg-white p-0.5 sm:size-9" />
         </div>
-        <p className="mt-6 text-xs tracking-[0.16em] uppercase opacity-80">TrueMoney Wallet</p>
-        <p className="mt-1 text-sm opacity-80">ยอดพร้อมโอน</p>
-        <p className="mt-1 font-sans text-4xl font-semibold leading-none tracking-tight tabular-nums sm:text-5xl">
+        <p className="mt-3 text-xs opacity-80">ยอดพร้อมโอน</p>
+        <p className="mt-0.5 font-sans text-3xl font-semibold leading-none tracking-tight tabular-nums sm:text-5xl">
           {synced ? baht(balance) : "—"}
         </p>
-        <div className="mt-5">
+        <div className="mt-3">
           <div className="flex items-center justify-between text-xs opacity-80">
             <span>โควต้าวันนี้</span>
             <span className="tabular-nums">
               เหลือ {baht(remain)} · {usedPct}%
             </span>
           </div>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/20">
+          <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-black/20">
             <motion.div
               className="h-full rounded-full bg-brand-fg"
               initial={reduce ? false : { width: 0 }}
@@ -120,14 +119,14 @@ export function DeskDash() {
         <DashAction to="/tools" icon={Settings2} label="ตั้งค่า" />
       </motion.div>
 
-      <motion.div className="grid gap-3 sm:grid-cols-3" variants={fadeUp}>
+      <motion.div className="grid grid-cols-3 gap-2" variants={fadeUp}>
         <Stat k="รับเข้า" v={baht(stats.incoming)} tone="pos" />
         <Stat k="จ่ายออก" v={baht(stats.outgoing)} />
         <Stat k="ค้างส่ง" v={String(stats.pending)} pending />
       </motion.div>
 
       <motion.div className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(20rem,1fr)]" variants={fadeUp}>
-        <section className="panel p-5">
+        <section className="panel p-3 sm:p-5">
           <div className="mb-3 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <Glyph icon={ArrowDownLeft} tone="teal" size="sm" />
@@ -140,7 +139,7 @@ export function DeskDash() {
           <FlowChart data={series} />
         </section>
 
-        <section className="panel flex flex-col p-5">
+        <section className="panel flex flex-col p-3 sm:p-5">
           <div className="mb-3 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <Glyph icon={Clock3} tone="gold" size="sm" />
@@ -196,7 +195,7 @@ function DashAction({
         to={to}
         search={search}
         className={cn(
-          "flex min-h-16 flex-col items-center justify-center gap-1 rounded-lg text-xs font-medium transition-opacity duration-150 hover:opacity-90",
+          "flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-lg text-[11px] font-medium transition-opacity duration-150 hover:opacity-90 sm:min-h-16 sm:text-xs",
           primary
             ? "bg-[linear-gradient(180deg,#f0d78a_0%,#d4af57_48%,#b8892a_100%)] text-brand-fg shadow-[var(--shadow-gold)]"
             : "panel text-muted",
@@ -213,11 +212,13 @@ function Stat({ k, v, tone, pending }: { k: string; v: string; tone?: "pos"; pen
   const icon = tone === "pos" ? ArrowDownLeft : pending ? Clock3 : ArrowUpRight;
   const gTone = tone === "pos" ? "in" : pending ? "warn" : "gold";
   return (
-    <div className="panel flex items-center gap-3 px-4 py-4">
-      <Glyph icon={icon} tone={gTone} />
+    <div className="panel flex min-w-0 items-center gap-1.5 px-2 py-2 sm:gap-3 sm:px-4 sm:py-4">
+      <span className="hidden sm:inline-flex">
+        <Glyph icon={icon} tone={gTone} />
+      </span>
       <div className="min-w-0">
-        <p className="text-[11px] tracking-wide text-subtle">{k}</p>
-        <p className={cn("mt-0.5 font-sans text-xl font-semibold tabular-nums", tone === "pos" && "text-in")}>{v}</p>
+        <p className="text-[10px] tracking-wide text-subtle sm:text-[11px]">{k}</p>
+        <p className={cn("mt-0.5 truncate font-sans text-sm font-semibold tabular-nums sm:text-xl", tone === "pos" && "text-in")}>{v}</p>
       </div>
     </div>
   );

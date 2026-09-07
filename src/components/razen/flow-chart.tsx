@@ -23,7 +23,7 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
     : `เข้า ${baht(inSum)} · ออก ${baht(outSum)}`;
 
   return (
-    <div className="relative h-64 w-full sm:h-72" role="img" aria-label={summary}>
+    <div className="relative h-40 w-full sm:h-64 md:h-72" role="img" aria-label={summary}>
       <table className="sr-only">
         <caption>กระแส 7 วัน</caption>
         <thead>
