@@ -3,267 +3,306 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>RAZEN · โต๊ะพนักงาน TrueMoney</title>
-<meta name="description" content="ระบบปิดสำหรับพนักงาน RAZEN × TrueMoney Wallet — โอน P2P พร้อมเพย์ ธนาคาร และแลกเปลี่ยน"/>
-<meta name="theme-color" content="#0B0C0E"/>
+<title>RAZEN · ศูนย์บัญชาการ</title>
+<meta name="description" content="ระบบปิดพนักงาน RAZEN × TrueMoney Wallet — ศูนย์บัญชาการการเงิน"/>
+<meta name="theme-color" content="#050505"/>
 <meta name="robots" content="noindex,nofollow"/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sora:wght@500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --bg: #0B0C0E;
-    --bg-2: #121417;
-    --card: #16181c;
-    --line: rgba(232, 116, 60, 0.22);
-    --ink: #F6F1EA;
-    --mute: #B7A99A;
-    --copper: #E8743C;
-    --copper-2: #FFB088;
-    --ok: #3EE0B4;
-    --radius: 18px;
-    --max: 1120px;
+    --bg: #050505;
+    --card: rgba(12,12,14,.72);
+    --line: rgba(212,175,55,.28);
+    --gold: #d4af37;
+    --gold-2: #f3e0a0;
+    --ink: #f4efe4;
+    --mute: #b7a99a;
+    --ok: #3ee0b4;
+    --warn: #f59e0b;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    color: var(--ink);
-    font: 16px/1.55 Anuphan, system-ui, sans-serif;
+  html, body { margin: 0; min-height: 100%; background: #050505; color: var(--ink); font: 15px/1.5 Anuphan, system-ui, sans-serif; }
+  a { color: inherit; text-decoration: none; }
+  .stage { position: relative; min-height: 100dvh; overflow: hidden; }
+  .globe {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: .38; filter: saturate(1.1) contrast(1.05); pointer-events: none;
+    animation: ken 28s ease-in-out infinite alternate;
+  }
+  .veil {
+    position: absolute; inset: 0; pointer-events: none;
     background:
-      radial-gradient(48% 40% at 8% -10%, rgba(232,116,60,.22), transparent 58%),
-      radial-gradient(40% 34% at 100% 0%, rgba(62,224,180,.1), transparent 50%),
-      linear-gradient(180deg, #141210 0%, var(--bg) 38%, #08090b 100%);
-    min-height: 100%;
+      radial-gradient(50% 50% at 50% 42%, transparent 0%, rgba(5,5,5,.55) 70%, #050505 100%),
+      linear-gradient(180deg, rgba(5,5,5,.5), transparent 18%, transparent 82%, #050505);
   }
-  h1,h2,h3 { font-family: Sora, Anuphan, sans-serif; letter-spacing: -0.04em; }
-  a { color: inherit; }
-  .wrap { width: min(var(--max), calc(100% - 32px)); margin-inline: auto; }
-  .nav {
-    position: sticky; top: 0; z-index: 40;
-    backdrop-filter: blur(18px) saturate(1.2);
-    background: rgba(11,12,14,.72);
-    border-bottom: 1px solid rgba(232,116,60,.16);
+  #spark { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .shell { position: relative; z-index: 2; width: min(1280px, calc(100% - 24px)); margin: 0 auto; padding: 12px 0 28px; }
+  header.top {
+    display: flex; align-items: center; gap: 12px; min-height: 52px; margin-bottom: 12px;
+    font-size: 12px; letter-spacing: .08em;
   }
-  .nav-inner { display: flex; align-items: center; gap: 18px; min-height: 64px; }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: Sora, sans-serif; font-weight: 700; letter-spacing: .12em; }
-  .mark {
-    width: 28px; height: 28px; border-radius: 9px;
-    background: conic-gradient(from 210deg, #E8743C, #FFB088, #3EE0B4, #E8743C);
+  .brand { display: flex; align-items: center; gap: 8px; font-family: Cinzel, Sora, serif; font-weight: 700; letter-spacing: .18em; }
+  .brand i {
+    width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
+    border: 1px solid var(--gold); color: var(--gold); font-style: normal;
   }
-  .nav-links { display: none; gap: 22px; margin-left: auto; font-size: 14px; color: var(--mute); }
-  .nav-links a { text-decoration: none; }
-  .nav-links a:hover { color: var(--ink); }
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-height: 44px; padding: 0 18px; border-radius: 999px;
-    text-decoration: none; font-weight: 600; font-size: 14px; border: 0; cursor: pointer;
+  .live { display: flex; align-items: center; gap: 6px; color: var(--ok); }
+  .live b { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); animation: pulse 1.8s ease-in-out infinite; }
+  .spacer { flex: 1; }
+  .clock { font-family: Sora, sans-serif; font-variant-numeric: tabular-nums; color: var(--gold-2); }
+  .grid {
+    display: grid; gap: 12px;
+    grid-template-columns: 1fr;
   }
-  .btn-copper { background: var(--copper); color: #1a0d08; box-shadow: 0 8px 24px rgba(232,116,60,.28); }
-  .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-  .hero { display: grid; gap: 48px; padding: 56px 0 32px; }
-  .kicker { color: var(--copper); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; }
-  .hero h1 { font-size: clamp(36px, 7vw, 64px); line-height: 1.06; margin: 12px 0 16px; }
-  .grad {
-    background: linear-gradient(105deg, #F6F1EA 10%, var(--copper) 48%, var(--copper-2) 100%);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .lede { color: var(--mute); max-width: 44ch; margin: 0 0 28px; }
-  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
-  .phone-wrap { display: flex; justify-content: center; }
-  .phone {
-    width: 280px; border-radius: 36px; padding: 12px;
-    background: linear-gradient(160deg, #2a2d33, #0e1013);
-    box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(232,116,60,.25);
-  }
-  .phone-screen { border-radius: 28px; overflow: hidden; min-height: 520px; background: #0c0d10; padding: 18px 16px 20px; }
-  .notch { width: 92px; height: 8px; border-radius: 99px; background: #1c1e22; margin: 4px auto 14px; }
-  .tmn { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-  .tmn img { width: 28px; height: 28px; border-radius: 50%; background: #fff; }
-  .bal { font-family: Sora, sans-serif; font-size: 32px; margin: 4px 0 8px; font-variant-numeric: tabular-nums; }
-  .quote-phone { color: var(--mute); font-size: 13px; min-height: 3.2em; margin: 0 0 16px; }
-  .assets { display: grid; gap: 8px; margin: 8px 0 18px; }
-  .asset { display: flex; align-items: center; gap: 10px; background: #14161a; border-radius: 14px; padding: 10px 12px; }
-  .asset img { width: 28px; height: 28px; border-radius: 8px; object-fit: contain; background: #fff; }
-  .row-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .row-btns span { display: grid; place-items: center; gap: 6px; font-size: 11px; color: var(--mute); text-align: center; }
-  .ico { width: 40px; height: 40px; border-radius: 14px; background: #1b1d22; display: grid; place-items: center; color: var(--copper); font-size: 16px; }
-  .quotes {
-    display: grid; gap: 1px; background: var(--line); border-radius: var(--radius); overflow: hidden; margin: 28px 0 64px;
-  }
-  .quote { background: var(--bg-2); padding: 22px 20px; }
-  .quote b { display: block; font-family: Sora, Anuphan, sans-serif; font-size: 17px; line-height: 1.35; color: var(--copper-2); font-weight: 600; }
-  .quote span { color: var(--mute); font-size: 12px; }
-  .sec { padding: 12px 0 72px; }
-  .sec h2 { font-size: clamp(28px, 4vw, 40px); margin: 8px 0 28px; }
-  .cards { display: grid; gap: 14px; }
   .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 22px; min-height: 148px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    backdrop-filter: blur(16px); padding: 16px 18px;
+    box-shadow: inset 0 1px 0 rgba(243,224,160,.08), 0 12px 40px rgba(0,0,0,.35);
   }
-  .card h3 { margin: 0 0 8px; font-size: 18px; }
-  .card p { margin: 0; color: var(--mute); font-size: 14px; }
-  .soon { display: inline-block; margin-top: 10px; font-size: 11px; letter-spacing: .12em; color: var(--copper); text-transform: uppercase; }
-  .rails { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .rail {
-    display: flex; align-items: center; gap: 10px; background: var(--card);
-    border: 1px solid var(--line); border-radius: 14px; padding: 12px; font-size: 13px; font-weight: 600;
+  .kicker { font-size: 11px; letter-spacing: .16em; color: var(--mute); text-transform: uppercase; }
+  .kpi b { display: block; font-family: Sora, sans-serif; font-size: 26px; margin: 6px 0 2px; font-variant-numeric: tabular-nums; }
+  .up { color: var(--ok); font-size: 12px; }
+  .hero {
+    position: relative; text-align: center; min-height: 420px;
+    display: grid; place-items: center; padding: 12px 12px 20px; overflow: hidden;
   }
-  .rail img { width: 28px; height: 28px; border-radius: 8px; object-fit: contain; background: #fff; }
-  .dot { width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; }
-  .check { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
-  .check li { display: flex; gap: 10px; align-items: flex-start; color: var(--mute); }
-  .check i { color: var(--ok); font-style: normal; font-weight: 700; }
-  .road { display: grid; gap: 12px; }
-  .q { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; }
-  .q b { color: var(--copper); font-size: 12px; letter-spacing: .16em; }
-  .q p { margin: 8px 0 0; color: var(--mute); font-size: 14px; }
-  .cta-band {
-    text-align: center; padding: 56px 24px; border-radius: 28px;
-    background: radial-gradient(60% 80% at 50% 120%, rgba(232,116,60,.28), transparent 70%), #141210;
-    border: 1px solid var(--line); margin-bottom: 48px;
+  .emblem {
+    width: min(420px, 90%); mix-blend-mode: screen; filter: drop-shadow(0 20px 40px rgba(212,175,55,.25));
+    animation: float 5.5s ease-in-out infinite;
   }
-  footer { border-top: 1px solid var(--line); padding: 28px 0 48px; color: var(--mute); font-size: 13px; }
-  .foot { display: flex; flex-wrap: wrap; gap: 12px 20px; justify-content: space-between; align-items: center; }
-  @media (min-width: 768px) {
-    .nav-links { display: flex; }
-    .hero { grid-template-columns: 1.15fr .85fr; align-items: center; padding-top: 72px; }
-    .quotes { grid-template-columns: repeat(2, 1fr); }
-    .cards { grid-template-columns: repeat(3, 1fr); }
-    .rails { grid-template-columns: repeat(4, 1fr); }
-    .road { grid-template-columns: repeat(4, 1fr); }
+  .hero h1 { margin: 4px 0 0; font-size: clamp(22px, 3vw, 32px); font-weight: 600; }
+  .hero .sub { letter-spacing: .28em; font-size: 11px; color: var(--gold); margin-top: 6px; }
+  .chart { width: min(520px, 100%); height: 92px; margin-top: 8px; }
+  .chart path { fill: none; stroke: var(--gold); stroke-width: 2; stroke-linejoin: round;
+    stroke-dasharray: 800; animation: draw 3.2s cubic-bezier(.22,1,.36,1) forwards; }
+  .chart .fill { fill: url(#goldFade); stroke: none; opacity: .35; animation: rise .8s ease both; }
+  .cta-wrap { display: grid; place-items: center; padding: 8px; }
+  .podium {
+    width: min(100%, 520px); border-radius: 18px; padding: 4px;
+    background: linear-gradient(180deg, #f3e0a0, #8a6a1c);
+    box-shadow: 0 0 40px rgba(212,175,55,.28), 0 18px 50px rgba(0,0,0,.5);
+    animation: glow 2.8s ease-in-out infinite;
   }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  .podium a {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    min-height: 64px; border-radius: 14px; background: #0c0a06; color: var(--gold-2);
+    font-family: Sora, sans-serif; font-weight: 700; letter-spacing: .08em;
+  }
+  .podium small { display: block; font-weight: 500; letter-spacing: 0; color: var(--mute); font-size: 12px; }
+  .quote q { font-size: 18px; font-weight: 600; display: block; margin: 8px 0; }
+  .quote .en { letter-spacing: .16em; font-size: 11px; color: var(--gold); }
+  .row { display: grid; gap: 8px; font-size: 13px; color: var(--mute); }
+  .row span { display: flex; justify-content: space-between; gap: 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .donut {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: conic-gradient(#3ee0b4 0 252deg, #f59e0b 252deg 324deg, #4b5563 324deg 360deg);
+    mask: radial-gradient(circle 28px, transparent 98%, #000 100%);
+    animation: spin 18s linear infinite;
+  }
+  .team { display: flex; align-items: center; gap: 14px; }
+  .team b { font-family: Sora, sans-serif; font-size: 28px; }
+  .alerts { display: grid; gap: 10px; font-size: 13px; }
+  .alerts p { margin: 0; display: flex; justify-content: space-between; gap: 8px; color: var(--mute); }
+  .strip {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+    border: 1px solid var(--line); border-radius: 16px; padding: 14px 10px; text-align: center;
+  }
+  .strip b { display: block; font-family: Sora, sans-serif; font-size: 18px; color: var(--gold-2); }
+  .strip span { font-size: 11px; color: var(--mute); }
+  footer.foot {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+    margin-top: 12px; font-size: 11px; color: var(--mute); letter-spacing: .04em;
+  }
+  @media (min-width: 960px) {
+    .grid { grid-template-columns: 260px 1fr 280px; grid-template-rows: auto auto auto; }
+    .left { grid-column: 1; grid-row: 1 / span 2; display: grid; gap: 12px; align-content: start; }
+    .hero { grid-column: 2; grid-row: 1; min-height: 460px; }
+    .right { grid-column: 3; grid-row: 1 / span 2; display: grid; gap: 12px; align-content: start; }
+    .quote { grid-column: 1; grid-row: 3; }
+    .cta-wrap { grid-column: 2; grid-row: 2 / span 2; }
+    .news { grid-column: 3; grid-row: 3; }
+    .strip { grid-column: 1 / -1; grid-template-columns: repeat(5, 1fr); }
+    .foot { grid-column: 1 / -1; }
+  }
+  @keyframes pulse { 50% { opacity: .35; } }
+  @keyframes float { 50% { transform: translateY(-8px); } }
+  @keyframes ken { from { transform: scale(1.05); } to { transform: scale(1.14) translate3d(-2%, 1%, 0); } }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes rise { from { opacity: 0; } to { opacity: .35; } }
+  @keyframes glow { 50% { box-shadow: 0 0 64px rgba(212,175,55,.45), 0 18px 50px rgba(0,0,0,.5); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    .globe, .emblem, .donut, .live b, .podium, .chart path { animation: none; }
+  }
 </style>
 </head>
 <body>
-  <header class="nav">
-    <div class="wrap nav-inner">
-      <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span> RAZEN</a>
-      <nav class="nav-links" aria-label="หน้าพนักงาน">
-        <a href="#quotes">คำคมโต๊ะ</a>
-        <a href="#rails">ช่องทางโอน</a>
-        <a href="#future">อนาคต</a>
-      </nav>
-      <a class="btn btn-copper" href="/desk" target="_top" id="nav-connect" style="margin-left:auto">เข้าโต๊ะ</a>
-    </div>
-  </header>
-
-  <main id="top">
-    <section class="wrap hero">
-      <div>
-        <p class="kicker">ระบบปิด · พนักงานเท่านั้น</p>
-        <h1>โต๊ะวันนี้<br><span class="grad">ยอดจริงทุกบาท</span></h1>
-        <p class="lede">RAZEN เป็นคอนโซลภายในของทีม — เชื่อม TrueMoney Wallet โอน P2P พร้อมเพย์ ธนาคาร และเตรียมช่องแลก USD / USDT</p>
-        <div class="hero-cta">
-          <a class="btn btn-copper" href="/desk" target="_top" id="hero-connect">เข้าโต๊ะ</a>
-          <a class="btn btn-ghost" href="#quotes">อ่านคำคม</a>
-        </div>
+<div class="stage">
+  <video class="globe" autoplay muted loop playsinline poster="/landing/globe.jpg" aria-hidden="true">
+    <source src="/landing/globe.mp4" type="video/mp4"/>
+  </video>
+  <div class="veil"></div>
+  <canvas id="spark"></canvas>
+  <div class="shell">
+    <header class="top">
+      <div class="brand"><i>R</i> RAZEN · COMMAND CENTER</div>
+      <span class="live"><b></b> ระบบทำงานปกติ</span>
+      <span class="spacer"></span>
+      <time class="clock" id="clock"></time>
+      <span>โหมดกลางคืน</span>
+    </header>
+    <div class="grid">
+      <div class="left">
+        <article class="card kpi"><p class="kicker">มูลค่าซื้อขายวันนี้</p><b>฿ <span data-count="12582450">0</span></b><span class="up">+18.72% เทียบกับเมื่อวาน</span></article>
+        <article class="card kpi"><p class="kicker">กำไรสุทธิวันนี้</p><b>฿ <span data-count="185920">0</span></b><span class="up">+32.54% เทียบกับเมื่อวาน</span></article>
+        <article class="card kpi"><p class="kicker">ปริมาณ USDT วันนี้</p><b><span data-count="42590">0</span>.00 U</b><span class="up">+21.31% เทียบกับเมื่อวาน</span></article>
       </div>
-      <div class="phone-wrap" aria-hidden="true">
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="notch"></div>
-            <div class="tmn">
-              <img src="/brands/truemoney.png" alt=""/>
-              <div>
-                <p class="kicker" style="margin:0">TrueMoney Wallet</p>
-                <p style="margin:0;font-size:12px;color:var(--mute)">กระเป๋าโต๊ะ</p>
-              </div>
-            </div>
-            <div class="bal">฿12,680</div>
-            <p class="quote-phone" id="phone-quote">ยอดบนจอคือยอดจริง — ไม่เดา ไม่ปัด</p>
-            <div class="assets">
-              <div class="asset"><img src="/brands/truemoney.png" alt=""/><div style="flex:1"><b>P2P</b><div style="color:var(--mute);font-size:12px">วอลเล็ตถึงวอลเล็ต</div></div></div>
-              <div class="asset"><img src="/brands/promptpay.png" alt=""/><div style="flex:1"><b>พร้อมเพย์</b><div style="color:var(--mute);font-size:12px">สแกนแล้วโอน</div></div></div>
-              <div class="asset"><img src="/brands/SCB.png" alt=""/><div style="flex:1"><b>ธนาคารไทย</b><div style="color:var(--mute);font-size:12px">บัญชีตรง</div></div></div>
-            </div>
-            <div class="row-btns">
-              <span><span class="ico">↑</span>โอน</span>
-              <span><span class="ico">▣</span>สแกน</span>
-              <span><span class="ico">⌂</span>ธนาคาร</span>
-              <span><span class="ico">✉</span>ซอง</span>
-            </div>
+      <section class="hero">
+        <div>
+          <img class="emblem" src="/landing/emblem.jpg" alt="RAZEN"/>
+          <h1>ศูนย์บัญชาการการเงิน</h1>
+          <p class="sub">EVERY TRANSACTION BUILDS THE EMPIRE</p>
+          <svg class="chart" viewBox="0 0 520 92" aria-hidden="true">
+            <defs>
+              <linearGradient id="goldFade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#d4af37"/>
+                <stop offset="1" stop-color="#d4af37" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path class="fill" d="M0 70 L40 66 L80 68 L120 58 L160 60 L200 48 L240 52 L280 40 L320 36 L360 28 L400 30 L440 18 L480 22 L520 12 L520 92 L0 92 Z"/>
+            <path d="M0 70 L40 66 L80 68 L120 58 L160 60 L200 48 L240 52 L280 40 L320 36 L360 28 L400 30 L440 18 L480 22 L520 12"/>
+          </svg>
+        </div>
+      </section>
+      <div class="right">
+        <article class="card">
+          <p class="kicker">สถานะระบบ · TrueMoney</p>
+          <p style="color:var(--ok);font-weight:600;margin:8px 0 12px">AI SYSTEM ONLINE</p>
+          <div class="row">
+            <span><i class="dot" style="background:#3ee0b4"></i>งานที่กำลังประมวลผล <b id="jobs">23</b></span>
+            <span><i class="dot" style="background:var(--gold)"></i>การแจ้งเตือน <b>3</b></span>
+            <span><i class="dot" style="background:#64748b"></i>ปัญหาสำคัญ <b>0</b></span>
           </div>
+        </article>
+        <article class="card team">
+          <div class="donut" aria-hidden="true"></div>
+          <div>
+            <p class="kicker">ทีมงานออนไลน์</p>
+            <b>10</b>
+            <p style="margin:4px 0 0;font-size:12px;color:var(--mute)">ออนไลน์ 7 · ไม่ว่าง 2 · ออฟไลน์ 1</p>
+          </div>
+        </article>
+      </div>
+      <article class="card quote">
+        <p class="kicker">คำคมประจำวัน</p>
+        <q id="quote">วินัยสร้างเงิน ระบบสร้างอาณาจักร</q>
+        <p class="en">DISCIPLINE CREATES WEALTH</p>
+      </article>
+      <div class="cta-wrap">
+        <div class="podium">
+          <a href="/desk" target="_top" id="enter">
+            <span>ENTER COMMAND CENTER<br><small>เข้าสู่ศูนย์บัญชาการ</small></span>
+          </a>
         </div>
       </div>
-    </section>
-
-    <section class="wrap sec" id="quotes">
-      <p class="kicker">คำคมโต๊ะ</p>
-      <h2>ก่อนกดโอน จำไว้</h2>
-      <div class="quotes">
-        <figure class="quote"><b>ยอดบนจอคือยอดจริง — ไม่เดา ไม่ปัด</b><span>getBalance จาก TrueMoney เท่านั้น</span></figure>
-        <figure class="quote"><b>ไว้วางใจแลกได้ทุกวัน ถ้าไม่พลาดแม้ครั้งเดียว</b><span>ตรวจชื่อ ยอด ช่องทาง แล้วค่อยส่ง</span></figure>
-        <figure class="quote"><b>ธนบัตรใหม่ บริการเงียบ ลูกค้าจำเราได้</b><span>มาตรฐานโต๊ะ Crown Tether</span></figure>
-        <figure class="quote"><b>ระบบปิด เพราะเงินลูกค้าไม่ใช่ของโชว์</b><span>พนักงานเข้าโต๊ะ — ไม่เปิดสาธารณะ</span></figure>
+      <article class="card news">
+        <p class="kicker">ข่าวสาร & การแจ้งเตือน</p>
+        <div class="alerts">
+          <p><span>SCB · วงเงินใกล้เต็ม 85%</span><span>2 นาทีที่แล้ว</span></p>
+          <p><span>รายการรอการตรวจสอบ 7 รายการ</span><span>5 นาทีที่แล้ว</span></p>
+          <p><span>กำไรวันนี้สูงกว่าเป้าหมาย 32%</span><span>15 นาทีที่แล้ว</span></p>
+        </div>
+      </article>
+      <div class="strip">
+        <div><b>1.48%</b><span>อัตรากำไรเฉลี่ย</span></div>
+        <div><b>126</b><span>จำนวนรายการวันนี้</span></div>
+        <div><b>8 บัญชี</b><span>ธนาคารที่ใช้งาน</span></div>
+        <div><b>18</b><span>งานที่ค้างอยู่</span></div>
+        <div><b>7</b><span>สลิปที่รอตรวจสอบ</span></div>
       </div>
-    </section>
-
-    <section class="wrap sec" id="rails">
-      <p class="kicker">ช่องทางวันนี้</p>
-      <h2>โอนผ่าน TrueMoney Wallet</h2>
-      <div class="cards">
-        <article class="card"><h3>P2P วอลเล็ต</h3><p>โอนเบอร์ถึงเบอร์ เช็คชื่อผู้รับก่อนกด — PIN ใช้ตอนเข้ากระเป๋า ไม่ถามตอนโอน</p></article>
-        <article class="card"><h3>พร้อมเพย์</h3><p>สแกน QR เติมเลข ยืนยันยอด แล้ว transferQRPromptpay</p></article>
-        <article class="card"><h3>บัญชีธนาคารไทย</h3><p>โอนเข้า SCB KBANK BBL และธนาคารในลิสต์ ด้วยโลโก้จริง</p></article>
-        <article class="card"><h3>ซองอั่งเปา</h3><p>generateVoucher สำหรับแจกยอดเล็ก บนโต๊ะเดียวกัน</p></article>
-        <article class="card"><h3>แลก USD / USDT</h3><p>ช่องแลกเกรดพรีเมียม — ธนบัตรใหม่และโอนเหรียญ ต่อจากราง TrueMoney</p><span class="soon">กำลังเปิด</span></article>
-        <article class="card"><h3>เรทพิเศษ · ห้อง VIP</h3><p>ลูกค้าประจำได้เรทโต๊ะ ไม่โชว์สาธารณะ บันทึกในความจำเอเจนต์</p><span class="soon">กำลังเปิด</span></article>
-      </div>
-    </section>
-
-    <section class="wrap sec" id="future">
-      <p class="kicker">รางที่จะต่อ</p>
-      <h2>ระบบโอนและการแลกเปลี่ยน</h2>
-      <div class="rails">
-        <div class="rail"><img src="/brands/truemoney.png" alt=""/>TrueMoney</div>
-        <div class="rail"><img src="/brands/promptpay.png" alt=""/>พร้อมเพย์</div>
-        <div class="rail"><img src="/brands/SCB.png" alt=""/>ธนาคารไทย</div>
-        <div class="rail"><span class="dot" style="background:linear-gradient(135deg,#E8743C,#FFB088)"></span>USD ธนบัตร</div>
-        <div class="rail"><span class="dot" style="background:linear-gradient(135deg,#26A17B,#3EE0B4)"></span>USDT</div>
-        <div class="rail"><span class="dot" style="background:#1a1c20"></span>ซองอั่งเปา</div>
-        <div class="rail"><span class="dot" style="background:#3EE0B4"></span>ห้อง VIP</div>
-        <div class="rail"><span class="dot" style="background:#E8743C"></span>เรทโต๊ะ</div>
-      </div>
-      <div class="road" style="margin-top:28px">
-        <div class="q"><b>Q1 · เปิดโต๊ะ</b><p>P2P · พร้อมเพย์ · ธนาคาร · ซอง บน TrueMoney</p></div>
-        <div class="q"><b>Q2 · แลกเงินสด</b><p>USD ธนบัตรใหม่ · นับยอดคู่กับวอลเล็ต</p></div>
-        <div class="q"><b>Q3 · เหรียญ</b><p>USDT เข้า–ออก · ใบเสร็จโต๊ะเดียวกัน</p></div>
-        <div class="q"><b>Q4 · VIP</b><p>เรทพิเศษ · ห้องส่วนตัว · สมาชิก</p></div>
-      </div>
-    </section>
-
-    <section class="wrap" id="connect">
-      <div class="cta-band">
-        <p class="kicker">พนักงาน</p>
-        <h2 style="margin-top:8px">เข้าโต๊ะเมื่อพร้อมโอน</h2>
-        <p class="lede" style="margin-inline:auto">ยอด TrueMoney บนจอคือความจริงของวันนี้</p>
-        <a class="btn btn-copper" href="/desk" target="_top" id="band-connect">เข้าโต๊ะ</a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap foot">
-      <span>© 2026 RAZEN · Crown Tether · ระบบปิดสำหรับพนักงาน</span>
-      <a href="/desk" target="_top">เปิดคอนโซล</a>
+      <footer class="foot">
+        <span>© 2026 RAZEN · Crown Tether · ระบบปิดสำหรับพนักงาน</span>
+        <span>ข้อมูลทั้งหมดเข้ารหัสระดับสูง</span>
+        <span>Build an Empire. Leave a Legacy.</span>
+      </footer>
     </div>
-  </footer>
-  <script>
-    var quotes = [
-      "ยอดบนจอคือยอดจริง — ไม่เดา ไม่ปัด",
-      "ไว้วางใจแลกได้ทุกวัน ถ้าไม่พลาดแม้ครั้งเดียว",
-      "ธนบัตรใหม่ บริการเงียบ ลูกค้าจำเราได้",
-      "ตรวจชื่อ ยอด ช่องทาง — แล้วค่อยส่ง"
-    ];
-    var el = document.getElementById("phone-quote");
-    var i = 0;
-    setInterval(function () {
-      i = (i + 1) % quotes.length;
-      if (el) el.textContent = quotes[i];
-    }, 4200);
-  </script>
+  </div>
+</div>
+<script>
+  function tick() {
+    var n = new Date();
+    var el = document.getElementById("clock");
+    if (!el) return;
+    el.textContent = n.toLocaleDateString("th-TH", { day: "2-digit", month: "long", year: "numeric" })
+      + "   " + n.toLocaleTimeString("th-TH", { hour12: false });
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  var quotes = [
+    ["วินัยสร้างเงิน ระบบสร้างอาณาจักร", "DISCIPLINE CREATES WEALTH"],
+    ["ยอดบนจอคือยอดจริง — ไม่เดา ไม่ปัด", "THE SCREEN IS THE TRUTH"],
+    ["ธนบัตรใหม่ บริการเงียบ ลูกค้าจำเราได้", "PREMIUM NOTES. QUIET SERVICE."]
+  ];
+  var qi = 0;
+  setInterval(function () {
+    qi = (qi + 1) % quotes.length;
+    var q = document.getElementById("quote");
+    var en = document.querySelector(".quote .en");
+    if (q) q.textContent = quotes[qi][0];
+    if (en) en.textContent = quotes[qi][1];
+  }, 5200);
+
+  function count(el, to) {
+    var t0 = performance.now();
+    function frame(now) {
+      var p = Math.min(1, (now - t0) / 1600);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(to * e).toLocaleString("en-US");
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  document.querySelectorAll("[data-count]").forEach(function (el) {
+    count(el, Number(el.getAttribute("data-count")));
+  });
+
+  var jobs = document.getElementById("jobs");
+  setInterval(function () {
+    if (!jobs) return;
+    var n = 20 + Math.floor(Math.random() * 8);
+    jobs.textContent = String(n);
+  }, 2800);
+
+  (function particles() {
+    var c = document.getElementById("spark");
+    if (!c || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var x = c.getContext("2d");
+    var dots = [];
+    function resize() {
+      c.width = innerWidth; c.height = innerHeight;
+      dots = Array.from({ length: 70 }, function () {
+        return { x: Math.random() * c.width, y: Math.random() * c.height, r: Math.random() * 1.4 + .3, s: Math.random() * .4 + .15 };
+      });
+    }
+    resize();
+    addEventListener("resize", resize);
+    function loop() {
+      x.clearRect(0, 0, c.width, c.height);
+      x.fillStyle = "rgba(243,224,160,.55)";
+      dots.forEach(function (d) {
+        d.y -= d.s; d.x += Math.sin(d.y / 40) * .2;
+        if (d.y < 0) { d.y = c.height; d.x = Math.random() * c.width; }
+        x.beginPath(); x.arc(d.x, d.y, d.r, 0, 6.28); x.fill();
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+</script>
 </body>
 </html>
