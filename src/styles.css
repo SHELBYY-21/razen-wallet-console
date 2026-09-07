@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Anuphan", "IBM Plex Sans Thai", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Anuphan", "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Cinzel", "Times New Roman", serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
