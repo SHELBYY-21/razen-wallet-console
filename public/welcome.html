@@ -3,422 +3,165 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>RAZEN · ศูนย์บัญชาการ</title>
-<meta name="description" content="ระบบปิดพนักงาน RAZEN × TrueMoney Wallet — ศูนย์บัญชาการการเงิน"/>
-<meta name="theme-color" content="#050505"/>
+<title>RAZEN · เข้าสู่ระบบ</title>
+<meta name="description" content="ระบบปิดพนักงาน RAZEN"/>
+<meta name="theme-color" content="#0b0b0d"/>
 <meta name="robots" content="noindex,nofollow"/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sora:wght@500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --bg: #050505;
-    --card: rgba(12,12,14,.72);
-    --line: rgba(212,175,55,.28);
     --gold: #d4af37;
     --gold-2: #f3e0a0;
-    --ink: #f4efe4;
+    --ink: #f6f1ea;
     --mute: #b7a99a;
-    --ok: #3ee0b4;
-    --warn: #f59e0b;
+    --bg: #0b0b0d;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; background: #050505; color: var(--ink); font: 15px/1.5 Anuphan, system-ui, sans-serif; }
-  a { color: inherit; text-decoration: none; }
-  .stage { position: relative; min-height: 100dvh; overflow: hidden; }
-  .globe {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-    opacity: .38; filter: saturate(1.1) contrast(1.05); pointer-events: none;
-    animation: ken 28s ease-in-out infinite alternate;
-  }
-  .veil {
-    position: absolute; inset: 0; pointer-events: none;
+  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font: 16px/1.5 Anuphan, system-ui, sans-serif; }
+  .stage {
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    padding: 28px 18px 40px;
     background:
-      radial-gradient(50% 50% at 50% 42%, transparent 0%, rgba(5,5,5,.55) 70%, #050505 100%),
-      linear-gradient(180deg, rgba(5,5,5,.5), transparent 18%, transparent 82%, #050505);
-  }
-  #spark { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-  .shell { position: relative; z-index: 2; width: min(1280px, calc(100% - 24px)); margin: 0 auto; padding: 12px 0 28px; }
-  header.top {
-    display: flex; align-items: center; gap: 12px; min-height: 52px; margin-bottom: 12px;
-    font-size: 12px; letter-spacing: .08em;
-  }
-  .brand { display: flex; align-items: center; gap: 8px; font-family: Cinzel, Sora, serif; font-weight: 700; letter-spacing: .18em; }
-  .brand i {
-    width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
-    border: 1px solid var(--gold); color: var(--gold); font-style: normal;
-  }
-  .live { display: flex; align-items: center; gap: 6px; color: var(--ok); }
-  .live b { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); animation: pulse 1.8s ease-in-out infinite; }
-  .spacer { flex: 1; }
-  .clock { font-family: Sora, sans-serif; font-variant-numeric: tabular-nums; color: var(--gold-2); }
-  .grid {
-    display: grid; gap: 12px;
-    grid-template-columns: 1fr;
+      radial-gradient(50% 40% at 50% 0%, rgba(212,175,55,.16), transparent 58%),
+      #0b0b0d;
   }
   .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-    backdrop-filter: blur(16px); padding: 16px 18px;
-    box-shadow: inset 0 1px 0 rgba(243,224,160,.08), 0 12px 40px rgba(0,0,0,.35);
+    width: min(420px, 100%);
+    text-align: center;
   }
-  .kicker { font-size: 11px; letter-spacing: .16em; color: var(--mute); text-transform: uppercase; }
-  .kpi b { display: block; font-family: Sora, sans-serif; font-size: 26px; margin: 6px 0 2px; font-variant-numeric: tabular-nums; }
-  .up { color: var(--ok); font-size: 12px; }
-  .hero {
-    position: relative; text-align: center; min-height: 420px;
-    display: grid; place-items: center; padding: 12px 12px 20px; overflow: hidden;
+  .brand {
+    font-family: Sora, sans-serif;
+    letter-spacing: .28em;
+    font-size: 13px;
+    color: var(--gold);
+    margin-bottom: 6px;
   }
-  .emblem {
-    width: min(420px, 90%); mix-blend-mode: screen; filter: drop-shadow(0 20px 40px rgba(212,175,55,.25));
-    animation: float 5.5s ease-in-out infinite;
+  .kicker { color: var(--mute); font-size: 13px; margin: 0 0 22px; }
+  .host {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background: #111;
+    box-shadow: 0 24px 60px rgba(0,0,0,.45), 0 0 0 1px rgba(212,175,55,.28);
   }
-  .hero h1 { margin: 4px 0 0; font-size: clamp(22px, 3vw, 32px); font-weight: 600; }
-  .hero .sub { letter-spacing: .28em; font-size: 11px; color: var(--gold); margin-top: 6px; }
-  .chart { width: min(520px, 100%); height: 92px; margin-top: 8px; }
-  .chart path { fill: none; stroke: var(--gold); stroke-width: 2; stroke-linejoin: round;
-    stroke-dasharray: 800; animation: draw 3.2s cubic-bezier(.22,1,.36,1) forwards; }
-  .chart .fill { fill: url(#goldFade); stroke: none; opacity: .35; animation: rise .8s ease both; }
-  .cta-wrap { display: grid; place-items: center; padding: 8px; }
-  .podium {
-    width: min(100%, 520px); border-radius: 18px; padding: 4px;
-    background: linear-gradient(180deg, #f3e0a0, #8a6a1c);
-    box-shadow: 0 0 40px rgba(212,175,55,.28), 0 18px 50px rgba(0,0,0,.5);
-    animation: glow 2.8s ease-in-out infinite;
+  .host video, .host img {
+    width: 100%; height: 100%; object-fit: cover; object-position: top;
+    display: block;
   }
-  .podium a {
-    display: flex; align-items: center; justify-content: center; gap: 12px;
-    min-height: 64px; border-radius: 14px; background: #0c0a06; color: var(--gold-2);
-    font-family: Sora, sans-serif; font-weight: 700; letter-spacing: .08em;
+  .bubble {
+    position: absolute; left: 14px; right: 14px; bottom: 14px;
+    background: rgba(12,10,8,.78);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(212,175,55,.35);
+    border-radius: 16px;
+    padding: 12px 14px;
+    font-size: 15px;
+    text-align: left;
   }
-  .podium small { display: block; font-weight: 500; letter-spacing: 0; color: var(--mute); font-size: 12px; }
-  .quote q { font-size: 18px; font-weight: 600; display: block; margin: 8px 0; }
-  .quote .en { letter-spacing: .16em; font-size: 11px; color: var(--gold); }
-  .row { display: grid; gap: 8px; font-size: 13px; color: var(--mute); }
-  .row span { display: flex; justify-content: space-between; gap: 8px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
-  .donut {
-    width: 88px; height: 88px; border-radius: 50%;
-    background: conic-gradient(#3ee0b4 0 252deg, #f59e0b 252deg 324deg, #4b5563 324deg 360deg);
-    mask: radial-gradient(circle 28px, transparent 98%, #000 100%);
-    animation: spin 18s linear infinite;
+  .bubble b { color: var(--gold-2); font-weight: 600; }
+  .go {
+    margin-top: 20px;
+    width: 100%; min-height: 52px;
+    border: 0; border-radius: 999px; cursor: pointer;
+    background: linear-gradient(180deg, #f3e0a0, #b8892a);
+    color: #1a1206;
+    font: 650 16px/1 Anuphan, sans-serif;
+    box-shadow: 0 10px 28px rgba(212,175,55,.28);
   }
-  .team { display: flex; align-items: center; gap: 14px; }
-  .team b { font-family: Sora, sans-serif; font-size: 28px; }
-  .alerts { display: grid; gap: 10px; font-size: 13px; }
-  .alerts p { margin: 0; display: flex; justify-content: space-between; gap: 8px; color: var(--mute); }
-  .strip {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
-    border: 1px solid var(--line); border-radius: 16px; padding: 14px 10px; text-align: center;
+  .go:active { transform: translateY(1px); }
+  .gate {
+    position: fixed; inset: 0; z-index: 20;
+    background: rgba(8,8,10,.86);
+    display: none; place-items: center; padding: 24px;
   }
-  .strip b { display: block; font-family: Sora, sans-serif; font-size: 18px; color: var(--gold-2); }
-  .strip span { font-size: 11px; color: var(--mute); }
-  footer.foot {
-    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
-    margin-top: 12px; font-size: 11px; color: var(--mute); letter-spacing: .04em;
+  .gate.on { display: grid; }
+  .gate-card { width: min(360px, 100%); text-align: center; }
+  .gate-card .host { aspect-ratio: 3 / 4; max-height: 56dvh; margin-inline: auto; }
+  .say {
+    margin: 18px 0 8px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold-2);
   }
-  @media (min-width: 960px) {
-    .grid { grid-template-columns: 260px 1fr 280px; grid-template-rows: auto auto auto; }
-    .left { grid-column: 1; grid-row: 1 / span 2; display: grid; gap: 12px; align-content: start; }
-    .hero { grid-column: 2; grid-row: 1; min-height: 460px; }
-    .right { grid-column: 3; grid-row: 1 / span 2; display: grid; gap: 12px; align-content: start; }
-    .quote { grid-column: 1; grid-row: 3; }
-    .cta-wrap { grid-column: 2; grid-row: 2 / span 2; }
-    .news { grid-column: 3; grid-row: 3; }
-    .strip { grid-column: 1 / -1; grid-template-columns: repeat(5, 1fr); }
-    .foot { grid-column: 1 / -1; }
+  .bar {
+    height: 3px; border-radius: 99px; background: #222;
+    overflow: hidden; margin-top: 16px;
   }
-  @keyframes pulse { 50% { opacity: .35; } }
-  @keyframes float { 50% { transform: translateY(-8px); } }
-  @keyframes ken { from { transform: scale(1.05); } to { transform: scale(1.14) translate3d(-2%, 1%, 0); } }
-  @keyframes draw { to { stroke-dashoffset: 0; } }
-  @keyframes rise { from { opacity: 0; } to { opacity: .35; } }
-  @keyframes glow { 50% { box-shadow: 0 0 64px rgba(212,175,55,.45), 0 18px 50px rgba(0,0,0,.5); } }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .bar i {
+    display: block; height: 100%; width: 0;
+    background: var(--gold);
+    animation: load 2.8s ease forwards;
+  }
+  @keyframes load { to { width: 100%; } }
   @media (prefers-reduced-motion: reduce) {
-    .globe, .emblem, .donut, .live b, .podium, .chart path { animation: none; }
+    .bar i { animation: none; width: 100%; }
   }
 </style>
 </head>
 <body>
-<div class="stage">
-  <video class="globe" autoplay muted loop playsinline poster="/landing/globe.jpg" aria-hidden="true">
-    <source src="/landing/globe.mp4" type="video/mp4"/>
-  </video>
-  <div class="veil"></div>
-  <canvas id="spark"></canvas>
-  <div class="shell">
-    <header class="top">
-      <div class="brand"><i>R</i> RAZEN · COMMAND CENTER</div>
-      <span class="live"><b></b> ระบบทำงานปกติ</span>
-      <span class="spacer"></span>
-      <time class="clock" id="clock"></time>
-      <span>โหมดกลางคืน</span>
-    </header>
-    <div class="grid">
-      <div class="left">
-        <article class="card kpi"><p class="kicker">มูลค่าซื้อขายวันนี้</p><b>฿ <span data-count="12582450">0</span></b><span class="up">+18.72% เทียบกับเมื่อวาน</span></article>
-        <article class="card kpi"><p class="kicker">กำไรสุทธิวันนี้</p><b>฿ <span data-count="185920">0</span></b><span class="up">+32.54% เทียบกับเมื่อวาน</span></article>
-        <article class="card kpi"><p class="kicker">ปริมาณ USDT วันนี้</p><b><span data-count="42590">0</span>.00 U</b><span class="up">+21.31% เทียบกับเมื่อวาน</span></article>
+  <main class="stage">
+    <div class="card">
+      <p class="brand">RAZEN</p>
+      <p class="kicker">ระบบปิดสำหรับพนักงาน · เข้าสู่ระบบ</p>
+      <div class="host">
+        <video autoplay muted loop playsinline poster="/landing/hostess.jpg">
+          <source src="/landing/hostess.mp4" type="video/mp4"/>
+        </video>
+        <p class="bubble">สวัสดีค่ะ<br><b>กดเข้าสู่ระบบได้เลยนะคะ</b></p>
       </div>
-      <section class="hero">
-        <div>
-          <img class="emblem" src="/landing/emblem.jpg" alt="RAZEN"/>
-          <h1>ศูนย์บัญชาการการเงิน</h1>
-          <p class="sub">EVERY TRANSACTION BUILDS THE EMPIRE</p>
-          <svg class="chart" viewBox="0 0 520 92" aria-hidden="true">
-            <defs>
-              <linearGradient id="goldFade" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#d4af37"/>
-                <stop offset="1" stop-color="#d4af37" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <path class="fill" d="M0 70 L40 66 L80 68 L120 58 L160 60 L200 48 L240 52 L280 40 L320 36 L360 28 L400 30 L440 18 L480 22 L520 12 L520 92 L0 92 Z"/>
-            <path d="M0 70 L40 66 L80 68 L120 58 L160 60 L200 48 L240 52 L280 40 L320 36 L360 28 L400 30 L440 18 L480 22 L520 12"/>
-          </svg>
-        </div>
-      </section>
-      <div class="right">
-        <article class="card">
-          <p class="kicker">สถานะระบบ · TrueMoney</p>
-          <p style="color:var(--ok);font-weight:600;margin:8px 0 12px">AI SYSTEM ONLINE</p>
-          <div class="row">
-            <span><i class="dot" style="background:#3ee0b4"></i>งานที่กำลังประมวลผล <b id="jobs">23</b></span>
-            <span><i class="dot" style="background:var(--gold)"></i>การแจ้งเตือน <b>3</b></span>
-            <span><i class="dot" style="background:#64748b"></i>ปัญหาสำคัญ <b>0</b></span>
-          </div>
-        </article>
-        <article class="card team">
-          <div class="donut" aria-hidden="true"></div>
-          <div>
-            <p class="kicker">ทีมงานออนไลน์</p>
-            <b>10</b>
-            <p style="margin:4px 0 0;font-size:12px;color:var(--mute)">ออนไลน์ 7 · ไม่ว่าง 2 · ออฟไลน์ 1</p>
-          </div>
-        </article>
+      <button class="go" id="enter" type="button">เข้าสู่ระบบ</button>
+    </div>
+  </main>
+
+  <div class="gate" id="gate" aria-live="polite">
+    <div class="gate-card">
+      <div class="host">
+        <video id="talk" muted loop playsinline poster="/landing/hostess-talk.jpg">
+          <source src="/landing/talk.mp4" type="video/mp4"/>
+        </video>
+        <p class="bubble" id="line">ยินดีต้อนรับค่ะ<br><b>รวยรวย เฮงเฮงนะคะ</b></p>
       </div>
-      <article class="card quote">
-        <p class="kicker">คำคมประจำวัน</p>
-        <q id="quote">วินัยสร้างเงิน ระบบสร้างอาณาจักร</q>
-        <p class="en">DISCIPLINE CREATES WEALTH</p>
-      </article>
-      <div class="cta-wrap">
-        <div class="podium">
-          <a href="/desk" target="_top" id="enter">
-            <span>ENTER COMMAND CENTER<br><small>เข้าสู่ศูนย์บัญชาการ</small></span>
-          </a>
-        </div>
-      </div>
-      <article class="card news">
-        <p class="kicker">ข่าวสาร & การแจ้งเตือน</p>
-        <div class="alerts">
-          <p><span>SCB · วงเงินใกล้เต็ม 85%</span><span>2 นาทีที่แล้ว</span></p>
-          <p><span>รายการรอการตรวจสอบ 7 รายการ</span><span>5 นาทีที่แล้ว</span></p>
-          <p><span>กำไรวันนี้สูงกว่าเป้าหมาย 32%</span><span>15 นาทีที่แล้ว</span></p>
-        </div>
-      </article>
-      <div class="strip">
-        <div><b>1.48%</b><span>อัตรากำไรเฉลี่ย</span></div>
-        <div><b>126</b><span>จำนวนรายการวันนี้</span></div>
-        <div><b>8 บัญชี</b><span>ธนาคารที่ใช้งาน</span></div>
-        <div><b>18</b><span>งานที่ค้างอยู่</span></div>
-        <div><b>7</b><span>สลิปที่รอตรวจสอบ</span></div>
-      </div>
-      <footer class="foot">
-        <span>© 2026 RAZEN · Crown Tether · ระบบปิดสำหรับพนักงาน</span>
-        <span>ข้อมูลทั้งหมดเข้ารหัสระดับสูง</span>
-        <span>Build an Empire. Leave a Legacy.</span>
-      </footer>
+      <p class="say">ยินดีต้อนรับค่ะ</p>
+      <p class="kicker">กำลังพาเข้าโต๊ะ…</p>
+      <div class="bar"><i></i></div>
     </div>
   </div>
-</div>
-<script>
-  function tick() {
-    var n = new Date();
-    var el = document.getElementById("clock");
-    if (!el) return;
-    el.textContent = n.toLocaleDateString("th-TH", { day: "2-digit", month: "long", year: "numeric" })
-      + "   " + n.toLocaleTimeString("th-TH", { hour12: false });
-  }
-  tick();
-  setInterval(tick, 1000);
 
-  var quotes = [
-    ["วินัยสร้างเงิน ระบบสร้างอาณาจักร", "DISCIPLINE CREATES WEALTH"],
-    ["ยอดบนจอคือยอดจริง — ไม่เดา ไม่ปัด", "THE SCREEN IS THE TRUTH"],
-    ["ธนบัตรใหม่ บริการเงียบ ลูกค้าจำเราได้", "PREMIUM NOTES. QUIET SERVICE."]
-  ];
-  var qi = 0;
-  setInterval(function () {
-    qi = (qi + 1) % quotes.length;
-    var q = document.getElementById("quote");
-    var en = document.querySelector(".quote .en");
-    if (q) q.textContent = quotes[qi][0];
-    if (en) en.textContent = quotes[qi][1];
-  }, 5200);
-
-  function count(el, to) {
-    var t0 = performance.now();
-    function frame(now) {
-      var p = Math.min(1, (now - t0) / 1600);
-      var e = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(to * e).toLocaleString("en-US");
-      if (p < 1) requestAnimationFrame(frame);
+  <script>
+    var LINE = "ยินดีต้อนรับค่ะ รวยรวย เฮงเฮงนะคะ";
+    function speak() {
+      try {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(LINE);
+        u.lang = "th-TH";
+        u.rate = 0.95;
+        var voices = window.speechSynthesis.getVoices();
+        var th = voices.find(function (v) { return v.lang && v.lang.indexOf("th") === 0; });
+        if (th) u.voice = th;
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
     }
-    requestAnimationFrame(frame);
-  }
-  document.querySelectorAll("[data-count]").forEach(function (el) {
-    count(el, Number(el.getAttribute("data-count")));
-  });
-
-  var jobs = document.getElementById("jobs");
-  setInterval(function () {
-    if (!jobs) return;
-    var n = 20 + Math.floor(Math.random() * 8);
-    jobs.textContent = String(n);
-  }, 2800);
-
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    document.querySelectorAll(".globe").forEach(function (v) { try { v.pause(); } catch (e) {} });
-  }
-
-  (function webglParticles() {
-    var canvas = document.getElementById("spark");
-    if (!canvas || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    var gl = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false, antialias: false });
-    if (!gl) return;
-
-    function compile(type, src) {
-      var s = gl.createShader(type);
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-        console.warn(gl.getShaderInfoLog(s));
-        return null;
-      }
-      return s;
+    if (window.speechSynthesis) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = function () { window.speechSynthesis.getVoices(); };
     }
-
-    var vs = compile(gl.VERTEX_SHADER, `#version 300 es
-      layout(location=0) in vec4 a0;
-      layout(location=1) in vec4 a1;
-      uniform float uTime;
-      uniform vec2 uRes;
-      uniform vec2 uMouse;
-      out float vA;
-      out float vK;
-      void main() {
-        float t = uTime * a0.w + a1.x;
-        vec3 p;
-        if (a1.z < 0.5) {
-          p.x = fract(a0.x + 0.02 * sin(t * 0.35)) * 2.0 - 1.0;
-          p.y = fract(a0.y + t * 0.035) * 2.0 - 1.0;
-          p.z = a0.z;
-        } else if (a1.z < 1.5) {
-          float lon = t * 0.18 + a0.x * 6.283185;
-          float lat = (a0.y - 0.5) * 2.6;
-          float r = 0.46 + 0.04 * sin(t + a0.x);
-          p = vec3(cos(lat) * sin(lon), sin(lat) * 0.72, cos(lat) * cos(lon)) * r;
-          p.x += 0.04;
-        } else {
-          p.x = fract(a0.x + t * 0.11) * 2.0 - 1.0;
-          p.y = mix(-0.2, 0.85, a0.y) + 0.08 * sin(t * 1.6 + a0.x * 8.0);
-          p.z = 0.2;
-        }
-        p.xy += uMouse * (0.06 + 0.08 * a0.z);
-        float persp = 1.0 / (1.15 - p.z * 0.35);
-        gl_Position = vec4(p.xy * persp, 0.0, 1.0);
-        gl_PointSize = a1.y * min(uRes.y, 900.0) * (0.22 + 0.28 * persp);
-        vA = mix(0.22, 0.85, a1.y);
-        vK = a1.z;
-      }`);
-    var fs = compile(gl.FRAGMENT_SHADER, `#version 300 es
-      precision highp float;
-      in float vA;
-      in float vK;
-      out vec4 frag;
-      void main() {
-        vec2 uv = gl_PointCoord * 2.0 - 1.0;
-        float d = dot(uv, uv);
-        if (d > 1.0) discard;
-        float core = exp(-d * 4.2);
-        float halo = exp(-d * 1.4) * 0.35;
-        vec3 gold = vec3(0.96, 0.82, 0.38);
-        vec3 hot = vec3(1.0, 0.94, 0.72);
-        vec3 teal = vec3(0.24, 0.88, 0.72);
-        vec3 c = mix(gold, hot, core);
-        c = mix(c, teal, smoothstep(1.35, 1.8, vK) * 0.35);
-        float a = (core + halo) * vA;
-        frag = vec4(c * a, a);
-      }`);
-    if (!vs || !fs) return;
-    var prog = gl.createProgram();
-    gl.attachShader(prog, vs);
-    gl.attachShader(prog, fs);
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
-    gl.useProgram(prog);
-
-    var COUNT = window.innerWidth < 700 ? 2800 : 7000;
-    var a0 = new Float32Array(COUNT * 4);
-    var a1 = new Float32Array(COUNT * 4);
-    for (var i = 0; i < COUNT; i++) {
-      var kind = i % 11 === 0 ? 2 : i % 3 === 0 ? 1 : 0;
-      a0[i * 4] = Math.random();
-      a0[i * 4 + 1] = Math.random();
-      a0[i * 4 + 2] = Math.random();
-      a0[i * 4 + 3] = 0.25 + Math.random() * 0.9;
-      a1[i * 4] = Math.random() * 6.28;
-      a1[i * 4 + 1] = kind === 2 ? 0.018 : kind === 1 ? 0.012 : 0.007 + Math.random() * 0.01;
-      a1[i * 4 + 2] = kind;
-      a1[i * 4 + 3] = Math.random();
-    }
-    var b0 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, b0);
-    gl.bufferData(gl.ARRAY_BUFFER, a0, gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(0);
-    gl.vertexAttribPointer(0, 4, gl.FLOAT, false, 0, 0);
-    var b1 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, b1);
-    gl.bufferData(gl.ARRAY_BUFFER, a1, gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(1);
-    gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 0, 0);
-
-    var uTime = gl.getUniformLocation(prog, "uTime");
-    var uRes = gl.getUniformLocation(prog, "uRes");
-    var uMouse = gl.getUniformLocation(prog, "uMouse");
-    var mouse = [0, 0];
-    var target = [0, 0];
-    addEventListener("pointermove", function (e) {
-      target[0] = (e.clientX / innerWidth) * 2 - 1;
-      target[1] = -((e.clientY / innerHeight) * 2 - 1);
-    }, { passive: true });
-
-    function resize() {
-      var dpr = Math.min(devicePixelRatio || 1, 2);
-      canvas.width = innerWidth * dpr;
-      canvas.height = innerHeight * dpr;
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(uRes, canvas.width, canvas.height);
-    }
-    addEventListener("resize", resize);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.ONE, gl.ONE);
-    gl.disable(gl.DEPTH_TEST);
-    resize();
-    var t0 = performance.now();
-    function frame(now) {
-      mouse[0] += (target[0] - mouse[0]) * 0.04;
-      mouse[1] += (target[1] - mouse[1]) * 0.04;
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform1f(uTime, (now - t0) / 1000);
-      gl.uniform2f(uMouse, mouse[0], mouse[1]);
-      gl.drawArrays(gl.POINTS, 0, COUNT);
-      requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  })();
-</script>
+    document.getElementById("enter").addEventListener("click", function () {
+      var gate = document.getElementById("gate");
+      var talk = document.getElementById("talk");
+      gate.classList.add("on");
+      try { talk.play(); } catch (e) {}
+      speak();
+      setTimeout(function () {
+        window.top.location.href = "/desk";
+      }, 2800);
+    });
+  </script>
 </body>
 </html>
