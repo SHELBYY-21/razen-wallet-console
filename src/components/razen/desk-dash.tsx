@@ -77,19 +77,19 @@ export function DeskDash() {
         <div className="flex items-center gap-3">
           <BrandMark id="truemoney" alt="TrueMoney" className="size-10 rounded-full bg-white p-0.5" />
           <div className="min-w-0 flex-1">
-            <p className="text-xs tracking-[0.16em] uppercase text-white/70">TrueMoney Wallet</p>
+            <p className="text-xs tracking-[0.16em] uppercase opacity-80">TrueMoney Wallet</p>
             <p className="truncate text-sm font-medium">{acc?.nickname || "ยังไม่เชื่อม"}</p>
           </div>
           <span className="rounded-full bg-black/20 px-2.5 py-1 text-[11px] font-medium">
             {synced ? "ซิงก์แล้ว" : "รอเชื่อม"}
           </span>
         </div>
-        <p className="mt-6 text-sm text-white/75">{hello} · ยอดพร้อมโอน</p>
+        <p className="mt-6 text-sm opacity-80">{hello} · ยอดพร้อมโอน</p>
         <p className="mt-1 font-sans text-4xl font-semibold leading-none tracking-tight tabular-nums sm:text-5xl">
           {synced ? baht(balance) : "—"}
         </p>
         <div className="mt-5">
-          <div className="flex items-center justify-between text-xs text-white/70">
+          <div className="flex items-center justify-between text-xs opacity-80">
             <span>โควต้าวันนี้</span>
             <span className="tabular-nums">
               เหลือ {baht(remain)} · {usedPct}%
@@ -97,7 +97,7 @@ export function DeskDash() {
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/20">
             <motion.div
-              className="h-full rounded-full bg-white"
+              className="h-full rounded-full bg-brand-fg"
               initial={reduce ? false : { width: 0 }}
               animate={{ width: `${usedPct}%` }}
               transition={enterEase}

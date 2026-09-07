@@ -69,13 +69,13 @@ function AccountsPage() {
             <BrandMark id="truemoney" alt="" className="size-11 rounded-full bg-white p-0.5" />
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-medium">{a.nickname}</span>
-              <span className={cn("block text-xs", active === a.id ? "text-white/70" : "text-muted")}>
+              <span className={cn("block text-xs", active === a.id ? "opacity-80" : "text-muted")}>
                 {a.masked}
               </span>
             </span>
             <span className="text-right">
               <span className="block font-sans text-lg font-semibold tabular-nums">{baht(getBalance(a.id))}</span>
-              <span className={cn("text-[11px]", a.status === "active" ? (active === a.id ? "text-white/80" : "text-in") : "text-subtle")}>
+              <span className={cn("text-[11px]", a.status === "active" ? (active === a.id ? "opacity-80" : "text-in") : "text-subtle")}>
                 {a.status === "active" ? "พร้อมใช้" : "พัก"}
               </span>
             </span>
@@ -89,7 +89,7 @@ function AccountsPage() {
               onKeyDown={(e) => e.stopPropagation()}
               className={cn(
                 "rounded-md border px-2 py-1 text-[10px]",
-                active === a.id ? "border-white/30 text-white/80" : "border-line text-muted",
+                active === a.id ? "border-brand-fg/30 text-brand-fg" : "border-line text-muted",
               )}
             >
               {a.status === "active" ? "พัก" : "เปิด"}

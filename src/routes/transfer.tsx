@@ -30,8 +30,8 @@ function TransferPage() {
         <div className="flex items-center gap-3">
           <BrandMark id="truemoney" alt="TrueMoney" className="size-10 rounded-full bg-white p-0.5" />
           <div>
-            <p className="text-xs tracking-[0.16em] uppercase text-white/70">TrueMoney Wallet</p>
-            <p className="mt-1 text-sm text-white/80">ยอดพร้อมโอน</p>
+            <p className="text-xs tracking-[0.16em] uppercase opacity-80">TrueMoney Wallet</p>
+            <p className="mt-1 text-sm opacity-80">ยอดพร้อมโอน</p>
           </div>
         </div>
         <p className="font-sans text-2xl font-semibold tabular-nums">{baht(balance)}</p>

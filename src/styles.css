@@ -11,7 +11,7 @@
   --color-panel: #151d3a;
   --color-fg: #e6eef7;
   --color-muted: #9aa8c2;
-  --color-subtle: #6b7a99;
+  --color-subtle: #7a8bb0;
   --color-line: rgb(212 175 87 / 0.16);
   --color-brand: #d4af57;
   --color-brand-fg: #0a0f1e;
@@ -187,7 +187,7 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    color: #fff;
+    color: var(--color-brand-fg);
     background: linear-gradient(160deg, #ff8a3d 0%, #ff6a00 46%, #e24100 100%);
     border-radius: var(--radius-xl);
   }
@@ -248,10 +248,10 @@
     padding: 10px;
     isolation: isolate;
     overflow: hidden;
-    background: rgb(8 12 16 / 0.55);
-    backdrop-filter: blur(20px) saturate(1.45);
-    -webkit-backdrop-filter: blur(20px) saturate(1.45);
-    border: 1px solid rgb(255 255 255 / 0.26);
+    background: rgb(10 15 30 / 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 0;
     border-radius: var(--radius-lg);
   }
 
@@ -421,16 +421,12 @@
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .panel,
-  .panel-hero,
   .glass,
   .glass-frost,
-  .panel-glow,
   .dense-toolbar,
-  .data-table-wrap,
-  .stat-cell {
+  .data-table-wrap {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: #111827;
+    background: #0a0f1e;
   }
 }
