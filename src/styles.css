@@ -2,7 +2,7 @@
 
 @theme {
   --font-sans: "Anuphan", "IBM Plex Sans Thai", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Sora", "Anuphan", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cinzel", "Times New Roman", serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --color-bg: #0a0f1e;
@@ -134,14 +134,39 @@
   .atmosphere {
     background:
       radial-gradient(42% 28% at 50% -8%, rgb(212 175 87 / 0.18), transparent 58%),
-      radial-gradient(30% 40% at 100% 0%, rgb(30 58 186 / 0.18), transparent 50%),
+      radial-gradient(28% 38% at 100% 0%, rgb(30 58 186 / 0.16), transparent 52%),
       linear-gradient(180deg, #111857 0%, #0a0f1e 48%, #070b16 100%);
   }
   .atmosphere::before {
-    content: none;
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgb(212 175 87 / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(212 175 87 / 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 10%, transparent 72%);
   }
   .atmosphere::after {
-    content: none;
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 8% 92%, rgb(212 175 87 / 0.07), transparent 28%),
+      radial-gradient(circle at 92% 18%, rgb(30 58 186 / 0.1), transparent 26%);
+  }
+
+  .stack-dense {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .group-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .panel {
@@ -161,8 +186,10 @@
     border-radius: var(--radius-xl);
   }
   .kicker {
-    font-size: 0.6875rem;
-    letter-spacing: 0.18em;
+    font-family: var(--font-display);
+    font-size: 0.625rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
     color: var(--color-brand);
   }
   .stat-strip {

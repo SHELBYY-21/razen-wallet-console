@@ -68,7 +68,7 @@ export function DeskDash() {
 
   return (
     <motion.div
-      className="mx-auto max-w-6xl space-y-4"
+      className="stack-dense mx-auto max-w-6xl"
       initial={reduce ? false : "hidden"}
       animate="visible"
       variants={stagger}
@@ -85,7 +85,7 @@ export function DeskDash() {
           </span>
         </div>
         <p className="mt-6 text-sm text-white/75">{hello} · ยอดพร้อมโอน</p>
-        <p className="mt-1 font-display text-4xl font-semibold leading-none tracking-tight tabular-nums sm:text-5xl">
+        <p className="mt-1 font-sans text-4xl font-semibold leading-none tracking-tight tabular-nums sm:text-5xl">
           {synced ? baht(balance) : "—"}
         </p>
         <div className="mt-5">
@@ -206,7 +206,7 @@ function Stat({ k, v, tone, pending }: { k: string; v: string; tone?: "pos"; pen
       <Glyph icon={icon} tone={gTone} />
       <div className="min-w-0">
         <p className="text-[11px] tracking-wide text-subtle">{k}</p>
-        <p className={cn("mt-0.5 font-display text-xl font-semibold tabular-nums", tone === "pos" && "text-in")}>{v}</p>
+        <p className={cn("mt-0.5 font-sans text-xl font-semibold tabular-nums", tone === "pos" && "text-in")}>{v}</p>
       </div>
     </div>
   );

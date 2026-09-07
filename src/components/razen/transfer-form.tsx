@@ -348,7 +348,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
               </div>
               <p className="text-lg font-semibold">{rec.full_name_th}</p>
               <p className="text-xs text-muted">{rec.masked}</p>
-              <p className="mt-4 font-display text-4xl font-semibold tabular-nums">{baht(n)}</p>
+              <p className="mt-4 font-sans text-4xl font-semibold tabular-nums">{baht(n)}</p>
             </div>
             <dl className="mt-4 space-y-2 text-sm">
               <Row k="ช่องทาง" v={heading.replace("ยืนยันโอน", "")} />

@@ -34,7 +34,7 @@ function TransferPage() {
             <p className="mt-1 text-sm text-white/80">ยอดพร้อมโอน</p>
           </div>
         </div>
-        <p className="font-display text-2xl font-semibold tabular-nums">{baht(balance)}</p>
+        <p className="font-sans text-2xl font-semibold tabular-nums">{baht(balance)}</p>
       </div>
 
       <Tabs

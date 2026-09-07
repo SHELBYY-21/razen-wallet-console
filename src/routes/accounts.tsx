@@ -74,7 +74,7 @@ function AccountsPage() {
               </span>
             </span>
             <span className="text-right">
-              <span className="block font-display text-lg font-semibold tabular-nums">{baht(getBalance(a.id))}</span>
+              <span className="block font-sans text-lg font-semibold tabular-nums">{baht(getBalance(a.id))}</span>
               <span className={cn("text-[11px]", a.status === "active" ? (active === a.id ? "text-white/80" : "text-in") : "text-subtle")}>
                 {a.status === "active" ? "พร้อมใช้" : "พัก"}
               </span>
