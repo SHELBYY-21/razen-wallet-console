@@ -42,6 +42,7 @@ type SendInput = {
   note: string;
   bankCode?: string;
   draftId?: string;
+  reportId?: string;
   payee?: string;
 };
 
@@ -88,7 +89,7 @@ type RazenState = {
   cancelPin: () => void;
   askFace: () => Promise<boolean>;
   resolveFace: (ok: boolean) => void;
-  send: (input: SendInput) => { ok: true; tx: Transaction } | { ok: false; error: string };
+  send: (input: SendInput, opts?: { posted?: boolean; status?: Transaction["status"] }) => { ok: true; tx: Transaction } | { ok: false; error: string };
   transferViaApi: (
     input: SendInput,
   ) => Promise<{ ok: true; tx: Transaction } | { ok: false; error: string }>;
@@ -314,9 +315,10 @@ export const useRazen = create<RazenState>()(
         set({ faceOpen: false, faceSeconds: 0 });
       },
 
-      send: (input) => {
+      send: (input, opts) => {
         const s = get();
         const amount = Math.round(input.amount * 100) / 100;
+        const posted = opts?.posted === true;
         if (!Number.isFinite(amount) || amount < MIN_TX) {
           return { ok: false, error: `ยอดขั้นต่ำ ${MIN_TX.toLocaleString("th-TH")} บาท` };
         }
@@ -325,32 +327,37 @@ export const useRazen = create<RazenState>()(
         }
         const fee = input.method === "bank" ? bankFee(input.bankCode) : 0;
         const spent = s.dailySpent();
-        if (spent + amount + fee > s.settings.dailyLimit) {
+        if (!posted && spent + amount + fee > s.settings.dailyLimit) {
           return { ok: false, error: "เกินวงเงินรายวัน กรุณาลองใหม่พรุ่งนี้" };
         }
         const bal = s.balance();
-        if (amount + fee > bal) {
+        if (!posted && amount + fee > bal) {
           return { ok: false, error: "ยอดเงินในบัญชีไม่พอ" };
         }
         if (!input.counterpart.trim()) {
           return { ok: false, error: "กรุณาระบุผู้รับ" };
         }
         const seq = s.seq + 1;
+        const status =
+          opts?.status ?? (posted ? (input.draftId ? "processing" : "completed") : "pending");
+        const now = Date.now();
         const tx: Transaction = {
           id: `t-${seq}`,
           ref: nextRef(seq),
           method: input.method,
           direction: "out",
-          status: "pending",
+          status,
           amount,
           fee,
           counterpart: input.counterpart.trim(),
           counterpartMeta: input.counterpartMeta,
           note: input.note.trim(),
           accountId: s.activeAccountId,
-          createdAt: Date.now(),
+          createdAt: now,
+          settledAt: status === "completed" ? now : undefined,
           bankCode: input.bankCode,
           draftId: input.draftId,
+          reportId: input.reportId,
         };
         set({
           txs: [tx, ...s.txs],
@@ -358,7 +365,7 @@ export const useRazen = create<RazenState>()(
           lastReceiptId: tx.id,
         });
         get().pushNotice(
-          "กำลังจ่าย",
+          status === "completed" ? "จ่ายแล้ว" : "กำลังจ่าย",
           `${amount.toLocaleString("th-TH")} บาท · ${tx.counterpart}`,
           "out",
           { txId: tx.id, href: "/history" },
@@ -411,8 +418,34 @@ export const useRazen = create<RazenState>()(
         }
         const res = await tmnInvoke<{ draft_transaction_id?: string }>(method, params, ctx);
         if (!res.ok) return { ok: false, error: res.error };
-        const sent = get().send({ ...input, draftId: res.data.draft_transaction_id });
+        const draftId = res.data?.draft_transaction_id;
+        let reportId: string | undefined;
+        let status: Transaction["status"] = draftId ? "processing" : "completed";
+        if (draftId) {
+          const st = await tmnInvoke<{ status?: string; report_id?: string }>(
+            "getTransferP2PStatus",
+            [draftId],
+            ctxOf(get()),
+          );
+          if (st.ok) {
+            const ok =
+              !st.data.status ||
+              /success|ok|complete/i.test(String(st.data.status));
+            if (ok) status = "completed";
+            reportId = st.data.report_id;
+          }
+        }
+        const sent = get().send(
+          { ...input, draftId, reportId },
+          { posted: true, status },
+        );
         if (sent.ok) get().flashMascot();
+        void get().refreshBalance();
+        if (get().settings.mode === "live") {
+          const start = new Date(Date.now() - 7 * 86_400_000).toISOString().slice(0, 10);
+          const end = new Date().toISOString().slice(0, 10);
+          void get().pullHistory(start, end);
+        }
         return sent;
       },
 
@@ -609,9 +642,22 @@ export const useRazen = create<RazenState>()(
       tickPending: () => {
         const s = get();
         const now = Date.now();
+        if (s.faceOpen && s.faceSeconds > 0) {
+          const next = s.faceSeconds - 3;
+          if (next <= 0) {
+            faceDeferred?.resolve(false);
+            faceDeferred = null;
+            set({ faceOpen: false, faceSeconds: 0 });
+            toast.error("หมดเวลายืนยันใบหน้า");
+            return;
+          }
+          set({ faceSeconds: next });
+        }
+        if (s.settings.mode === "live") return;
         let changed = false;
         const txs = s.txs.map((t) => {
           if (t.status !== "pending" && t.status !== "processing") return t;
+          if (t.draftId) return t;
           if (now - t.createdAt < SETTLE_AFTER) {
             if (t.status === "pending" && now - t.createdAt > 4_000) {
               changed = true;
@@ -627,18 +673,6 @@ export const useRazen = create<RazenState>()(
             reportId: t.reportId ?? `umk${String(now).slice(-10)}`,
           };
         });
-        if (s.faceOpen && s.faceSeconds > 0) {
-          const next = s.faceSeconds - 3;
-          if (next <= 0) {
-            faceDeferred?.resolve(false);
-            faceDeferred = null;
-            set({ faceOpen: false, faceSeconds: 0, txs });
-            toast.error("หมดเวลายืนยันใบหน้า");
-            return;
-          }
-          set({ faceSeconds: next, txs: changed ? txs : s.txs });
-          return;
-        }
         if (!changed) return;
         const justDone = txs.filter(
           (t, i) => t.status === "completed" && s.txs[i]?.status !== "completed",

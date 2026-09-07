@@ -160,7 +160,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
       bankCode: method === "bank" ? bankCode : undefined,
       payee:
         method === "p2p"
-          ? phone.replace(/\D/g, "")
+          ? rec?.payee_wallet_id || phone.replace(/\D/g, "")
           : method === "promptpay"
             ? ppValue.replace(/\D/g, "")
             : accNo.replace(/\D/g, ""),
