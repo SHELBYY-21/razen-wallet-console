@@ -61,6 +61,10 @@ export const PUBLIC_FUNCTIONS = [
   { name: "getAmityToken", args: "", note: "Chat บน tmn.one/amity.html" },
 ] as const;
 
+export function usesRecipientInfo(method: string) {
+  return method === "p2p";
+}
+
 export function histLimit(n: unknown) {
   const v = typeof n === "number" ? n : Number(n);
   if (!Number.isFinite(v) || v <= 0) return 10;

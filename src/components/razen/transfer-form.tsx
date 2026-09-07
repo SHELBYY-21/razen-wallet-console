@@ -10,6 +10,7 @@ import {
 } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
 import { tmnConfigured } from "@/lib/tmnone/creds";
+import { usesRecipientInfo } from "@/lib/tmnone/apidoc";
 import { recallLocal } from "@/lib/memory/client";
 import { parsePayee } from "@/lib/memory/payee";
 import type { TransferMethod } from "@/lib/razen/types";
@@ -126,14 +127,22 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
     }
     setBusy(true);
     try {
-      if (method === "p2p" || method === "promptpay") {
-        const target = method === "p2p" ? phone : ppValue;
-        const info = await lookup(target);
+      if (usesRecipientInfo(method)) {
+        const info = await lookup(phone.replace(/\D/g, ""));
         if (!info.ok) {
           setError(info.error);
           return;
         }
         setRec(info.data);
+      } else if (method === "promptpay") {
+        const d = ppValue.replace(/\D/g, "");
+        setRec({
+          payee_wallet_id: d,
+          full_name_th: `พร้อมเพย์ ${d}`,
+          full_name_en: d,
+          status: "ปกติ",
+          masked: d.length >= 4 ? `***${d.slice(-4)}` : d,
+        });
       } else {
         setRec({
           payee_wallet_id: accNo,
