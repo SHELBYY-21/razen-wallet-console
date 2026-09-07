@@ -2,6 +2,7 @@
 
 @theme {
   --font-sans: "Anuphan", "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
+  --font-thai: "Noto Sans Thai", ui-sans-serif, sans-serif;
   --font-display: "Cinzel", "Times New Roman", serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
