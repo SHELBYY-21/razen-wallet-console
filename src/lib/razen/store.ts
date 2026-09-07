@@ -7,6 +7,7 @@ import { buildSeed, SEED_PIN } from "./seed";
 import { browserNotify, makeNotice, markOneRead, prependNotices, type NoticeLink } from "./notice";
 import { tmnConfigured } from "@/lib/tmnone/creds";
 import { rememberLocal } from "@/lib/memory/client";
+import { payeeKey } from "@/lib/memory/payee";
 import { mapHistory, parseBalance } from "@/lib/tmnone/parse";
 import type {
   Account,
@@ -375,10 +376,14 @@ export const useRazen = create<RazenState>()(
         rememberLocal(
           "episodic",
           `out:${tx.method}:${tx.ref}`,
-          `${amount} THB → ${tx.counterpart}`,
+          `${amount} → ${tx.counterpart} ${tx.counterpartMeta}`,
           s.activeAccountId,
         );
         rememberLocal("semantic", "last_payee", tx.counterpart, s.activeAccountId);
+        const digits = tx.counterpartMeta.replace(/\D/g, "");
+        if (digits) {
+          rememberLocal("semantic", payeeKey(tx.method, digits), tx.counterpart, s.activeAccountId);
+        }
         return { ok: true, tx };
       },
 

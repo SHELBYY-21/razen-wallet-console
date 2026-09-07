@@ -1,4 +1,4 @@
-import { useMemo, useState, useId } from "react";
+import { useEffect, useMemo, useState, useId } from "react";
 import { BANKS, HOME_BANK, bankByCode, bankFee } from "@/lib/razen/banks";
 import {
   baht,
@@ -10,6 +10,8 @@ import {
 } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
 import { tmnConfigured } from "@/lib/tmnone/creds";
+import { recallLocal } from "@/lib/memory/client";
+import { parsePayee } from "@/lib/memory/payee";
 import type { TransferMethod } from "@/lib/razen/types";
 import type { RecipientInfo } from "@/lib/tmn/client";
 import { BrandMark } from "@/components/razen/brand-mark";
@@ -40,6 +42,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [rec, setRec] = useState<RecipientInfo | null>(null);
+  const [memRecents, setMemRecents] = useState<{ name: string; value: string }[]>([]);
 
   const n = Number(amount.replace(/,/g, ""));
   const fee = method === "bank" ? bankFee(bankCode) : 0;
@@ -49,16 +52,35 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
   const recents = useMemo(() => {
     const seen = new Set<string>();
     const out: { name: string; value: string }[] = [];
+    const push = (name: string, value: string) => {
+      if (!value || seen.has(value)) return;
+      seen.add(value);
+      out.push({ name, value });
+    };
+    for (const row of memRecents) push(row.name, row.value);
     for (const t of txs) {
       if (t.accountId !== activeId || t.direction !== "out" || t.method !== method) continue;
-      const value = t.counterpartMeta.replace(/\D/g, "");
-      if (!value || seen.has(value)) continue;
-      seen.add(value);
-      out.push({ name: t.counterpart, value });
+      push(t.counterpart, t.counterpartMeta.replace(/\D/g, ""));
       if (out.length >= 6) break;
     }
-    return out;
-  }, [txs, activeId, method]);
+    return out.slice(0, 6);
+  }, [txs, activeId, method, memRecents]);
+
+  useEffect(() => {
+    let live = true;
+    void recallLocal(method, activeId, "semantic").then((items) => {
+      if (!live) return;
+      const out: { name: string; value: string }[] = [];
+      for (const m of items) {
+        const value = parsePayee(m.key, method);
+        if (value) out.push({ name: m.value, value });
+      }
+      setMemRecents(out);
+    });
+    return () => {
+      live = false;
+    };
+  }, [activeId, method]);
 
   const preview = useMemo(() => {
     if (method === "p2p") {

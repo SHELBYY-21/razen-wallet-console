@@ -43,7 +43,7 @@ export function MemoryPanel() {
         <Glyph icon={Brain} tone="teal" />
         <div>
           <h2 className="text-sm font-medium">ความจำเอเจนต์</h2>
-          <p className="text-[11px] text-subtle">semantic · episodic · procedural · กรองต่อกระเป๋า</p>
+          <p className="text-[11px] text-subtle">ความจริง · เหตุการณ์ · วิธีทำ — กรองต่อกระเป๋า</p>
         </div>
       </div>
       <div className="mb-3 flex gap-2">
