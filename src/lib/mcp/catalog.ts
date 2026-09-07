@@ -21,7 +21,7 @@ Workflow: tmn_bootstrap (setData→login→balance→history→txinfo) then tmn_
 History: start inclusive YYYY-MM-DD, end exclusive, limit ≤ 50.
 Face webhook POSTs {"wallet_msisdn":"..."} then waits faceauth_wait_timeout (default 180).
 Memory: razen_memory_remember / recall / forget — CoALA kinds semantic (facts), episodic (events), procedural (how-tos). Recall always filters by wallet accountId; procedural skills stay shared. Ranked by keyword + recency + frequency; stale low-importance episodes decay.
-Artifacts: razen_artifact_receipt returns a self-contained HTML slip.`;
+Artifacts: razen_artifact_receipt returns a self-contained HTML slip. razen_artifact_desk returns the TMNOne operator runbook.`;
 
 export const MCP_TOOLS: McpTool[] = [
   {
@@ -226,6 +226,12 @@ export const MCP_TOOLS: McpTool[] = [
       },
       required: ["ref", "amount", "counterpart"],
     },
+    annotations: { readOnlyHint: true, idempotentHint: true },
+  },
+  {
+    name: "razen_artifact_desk",
+    description: "Self-contained HTML operator runbook: setData → loginWithPin6 → getBalance → pay rails",
+    inputSchema: { type: "object", properties: {}, required: [] },
     annotations: { readOnlyHint: true, idempotentHint: true },
   },
 ];

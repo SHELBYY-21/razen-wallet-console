@@ -26,7 +26,8 @@ describe("mcp catalog", () => {
     assert.ok(names.includes("razen_status"));
     assert.ok(names.includes("razen_memory_remember"));
     assert.ok(names.includes("razen_artifact_receipt"));
-    assert.equal(MCP_TOOLS.length, 21);
+    assert.ok(names.includes("razen_artifact_desk"));
+    assert.equal(MCP_TOOLS.length, 22);
   });
 });
 

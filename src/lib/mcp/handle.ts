@@ -1,6 +1,7 @@
 import { tmnInvoke } from "@/lib/tmn/client";
 import type { TmnCredentials, TmnMode } from "@/lib/razen/types";
 import { receiptHtml } from "@/lib/artifact/receipt";
+import { deskHtml } from "@/lib/artifact/desk";
 import { forget, recall, remember, type MemoryKind } from "@/lib/memory/store";
 import { MCP_INSTRUCTIONS, MCP_TOOLS } from "./catalog";
 
@@ -144,6 +145,8 @@ async function callTool(name: string, args: Record<string, unknown>) {
           }),
         },
       };
+    case "razen_artifact_desk":
+      return { ok: true as const, data: { html: deskHtml() } };
     default:
       return { ok: false as const, error: `unknown tool ${name}` };
   }

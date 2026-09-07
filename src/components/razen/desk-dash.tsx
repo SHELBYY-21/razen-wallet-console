@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowDownLeft, ArrowUpRight, Clock3, Gift, Landmark, QrCode, Search, Send } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Clock3, Gift, History, Landmark, QrCode, Search, Send, Settings2, Store, Wallet } from "lucide-react";
 import { FlowChart } from "@/components/razen/flow-chart";
 import { BrandMark } from "@/components/razen/brand-mark";
 import { Glyph } from "@/components/razen/glyph";
@@ -73,16 +73,21 @@ export function DeskDash() {
     >
       <motion.section className="tmn-card px-5 py-6 sm:px-7 sm:py-7" variants={fadeUp}>
         <div className="flex items-center gap-3">
-          <BrandMark id="truemoney" alt="TrueMoney" className="size-10 rounded-full bg-white p-0.5" />
+          <img
+            src="/landing/hostess.webp"
+            alt=""
+            width={40}
+            height={40}
+            className="size-10 rounded-full object-cover object-top ring-1 ring-white/40"
+          />
           <div className="min-w-0 flex-1">
-            <p className="text-xs tracking-[0.16em] uppercase opacity-80">TrueMoney Wallet</p>
+            <p className="text-xs opacity-80">สวัสดี</p>
             <p className="truncate text-sm font-medium">{acc?.nickname || "ยังไม่เชื่อมกระเป๋า"}</p>
           </div>
-          <span className="rounded-full bg-black/20 px-2.5 py-1 text-[11px] font-medium">
-            {synced ? "ซิงก์แล้ว" : "รอเชื่อม"}
-          </span>
+          <BrandMark id="truemoney" alt="TrueMoney" className="size-9 rounded-full bg-white p-0.5" />
         </div>
-        <p className="mt-6 text-sm opacity-80">ยอดพร้อมโอน</p>
+        <p className="mt-6 text-xs tracking-[0.16em] uppercase opacity-80">TrueMoney Wallet</p>
+        <p className="mt-1 text-sm opacity-80">ยอดพร้อมโอน</p>
         <p className="mt-1 font-sans text-4xl font-semibold leading-none tracking-tight tabular-nums sm:text-5xl">
           {synced ? baht(balance) : "—"}
         </p>
@@ -109,6 +114,10 @@ export function DeskDash() {
         <DashAction to="/transfer" search={{ method: "promptpay" }} icon={QrCode} label="สแกน" />
         <DashAction to="/transfer" search={{ method: "bank" }} icon={Landmark} label="ธนาคาร" />
         <DashAction to="/gifts" icon={Gift} label="ซอง" />
+        <DashAction to="/history" icon={History} label="ประวัติ" />
+        <DashAction to="/accounts" icon={Wallet} label="กระเป๋า" />
+        <DashAction to="/tools" icon={Store} label="จ่ายร้าน" />
+        <DashAction to="/tools" icon={Settings2} label="ตั้งค่า" />
       </motion.div>
 
       <motion.div className="grid gap-3 sm:grid-cols-3" variants={fadeUp}>
@@ -175,7 +184,7 @@ function DashAction({
   label,
   primary,
 }: {
-  to: "/transfer" | "/gifts" | "/tools";
+  to: "/transfer" | "/gifts" | "/tools" | "/history" | "/accounts";
   search?: { method: "p2p" | "promptpay" | "bank" };
   icon: typeof Send;
   label: string;
