@@ -4,7 +4,7 @@ import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { Shell } from "@/components/razen/shell";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "RAZEN Transfer Console";
+const APP_NAME = "CE Empire";
 
 export const Route = createRootRoute({
   head: () => ({
