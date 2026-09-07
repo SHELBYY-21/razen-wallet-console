@@ -39,8 +39,17 @@ export function configureTmn(instance: InstanceType<typeof TMNOne>, _TMN: Offici
   }
 }
 
-export function ymd(offsetDays: number) {
-  return new Date(Date.now() + offsetDays * 86_400_000).toISOString().slice(0, 10);
+export function ymd(offsetDays: number, at = Date.now()) {
+  const t = new Date(at + offsetDays * 86_400_000);
+  return t.toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" });
+}
+
+/** Calendar add on a YYYY-MM-DD string — no UTC parse of the date-only form. */
+export function addYmd(iso: string, days: number) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim());
+  if (!m) return iso;
+  const dt = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]) + days));
+  return dt.toISOString().slice(0, 10);
 }
 
 export function firstReportId(transactions: unknown): string {

@@ -4,13 +4,10 @@ import { RefreshCw, Search } from "lucide-react";
 import { toast } from "sonner";
 import { TxRow } from "@/components/razen/tx-row";
 import { dayLabel } from "@/lib/razen/format";
+import { ymd } from "@/lib/tmnone/bootstrap";
 import { useRazen } from "@/lib/razen/store";
 
 export const Route = createFileRoute("/history")({ component: HistoryPage });
-
-function iso(d: Date) {
-  return d.toISOString().slice(0, 10);
-}
 
 function HistoryPage() {
   const txs = useRazen((s) => s.txs);
@@ -20,10 +17,8 @@ function HistoryPage() {
   const mode = useRazen((s) => s.settings.mode);
   const accounts = useRazen((s) => s.accounts);
   const linked = accounts.find((a) => a.id === active)?.walletBalance != null;
-  const today = new Date();
-  const week = new Date(today.getTime() - 7 * 86400000);
-  const [start, setStart] = useState(iso(week));
-  const [end, setEnd] = useState(iso(today));
+  const [start, setStart] = useState(ymd(-7));
+  const [end, setEnd] = useState(ymd(0));
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState(false);
   const [applied, setApplied] = useState({ start, end, q: "" });

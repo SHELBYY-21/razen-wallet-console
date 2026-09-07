@@ -9,6 +9,7 @@ import { tmnConfigured } from "@/lib/tmnone/creds";
 import { rememberLocal } from "@/lib/memory/client";
 import { payeeKey } from "@/lib/memory/payee";
 import { mapHistory, parseBalance } from "@/lib/tmnone/parse";
+import { addYmd, ymd } from "@/lib/tmnone/bootstrap";
 import type {
   Account,
   Contact,
@@ -442,8 +443,8 @@ export const useRazen = create<RazenState>()(
         if (sent.ok) get().flashMascot();
         void get().refreshBalance();
         if (get().settings.mode === "live") {
-          const start = new Date(Date.now() - 7 * 86_400_000).toISOString().slice(0, 10);
-          const end = new Date().toISOString().slice(0, 10);
+          const start = ymd(-7);
+          const end = ymd(0);
           void get().pullHistory(start, end);
         }
         return sent;
@@ -780,8 +781,8 @@ export const useRazen = create<RazenState>()(
       testLogin: async () => {
         const s = get();
         const ctx = ctxOf(s);
-        const start = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
-        const end = new Date(Date.now() + 86_400_000).toISOString().slice(0, 10);
+        const start = ymd(-30);
+        const end = ymd(1);
         const res = await tmnInvoke<{
           login?: { access_token?: string };
           balance?: unknown;
@@ -862,18 +863,16 @@ export const useRazen = create<RazenState>()(
           return;
         }
         get().flashMascot();
-        const start = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
-        const end = new Date().toISOString().slice(0, 10);
+        const start = ymd(-30);
+        const end = ymd(0);
         await get().pullHistory(start, end);
       },
 
       pullHistory: async (start, end) => {
         const s = get();
-        const endEx = new Date(end);
-        endEx.setDate(endEx.getDate() + 1);
         const res = await tmnInvoke<unknown>(
           "fetchTransactionHistory",
-          [start, endEx.toISOString().slice(0, 10), 50, 1],
+          [start, addYmd(end, 1), 50, 1],
           ctxOf(s),
         );
         if (!res.ok) return res;

@@ -1,6 +1,7 @@
 import { authorize } from "@/lib/mcp/auth";
 import { ctxFromEnv } from "@/lib/mcp/handle";
 import { tmnConfigured } from "@/lib/tmnone/creds";
+import { ymd } from "@/lib/tmnone/bootstrap";
 import { tmnInvoke } from "@/lib/tmn/client";
 import type { TmnCredentials } from "@/lib/razen/types";
 import { health, openapi } from "./spec";
@@ -54,8 +55,8 @@ export async function walletLogin(body: Record<string, unknown>) {
 
 export async function txList(query: { start?: string; end?: string }) {
   const ctx = ctxFromEnv();
-  const start = query.start || new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10);
-  const end = query.end || new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+  const start = query.start || ymd(-7);
+  const end = query.end || ymd(1);
   return tmnInvoke("fetchTransactionHistory", [start, end, 50, 1], ctx);
 }
 

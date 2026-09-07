@@ -1,4 +1,5 @@
 import { tmnInvoke } from "@/lib/tmn/client";
+import { ymd } from "@/lib/tmnone/bootstrap";
 import type { TmnCredentials, TmnMode } from "@/lib/razen/types";
 import { receiptHtml } from "@/lib/artifact/receipt";
 import { deskHtml } from "@/lib/artifact/desk";
@@ -84,9 +85,8 @@ async function callTool(name: string, args: Record<string, unknown>) {
     case "tmn_fees":
       return tmnInvoke("getWalletFee", [str(args.channel) || "p2p"], ctx);
     case "tmn_history": {
-      const end = str(args.end) || new Date(Date.now() + 864e5).toISOString().slice(0, 10);
-      const start =
-        str(args.start) || new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+      const end = str(args.end) || ymd(1);
+      const start = str(args.start) || ymd(-7);
       return tmnInvoke("fetchTransactionHistory", [start, end, num(args.limit, 10), 1], ctx);
     }
     case "tmn_txinfo":
