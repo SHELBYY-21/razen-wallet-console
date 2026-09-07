@@ -36,5 +36,6 @@ describe("mcp initialize", () => {
     assert.match(MCP_INSTRUCTIONS, /loginWithPin6/);
     assert.match(MCP_INSTRUCTIONS, /semantic/);
     assert.ok(MCP_INSTRUCTIONS.length > 80);
+    assert.ok(MCP_INSTRUCTIONS.length < 500);
   });
 });
