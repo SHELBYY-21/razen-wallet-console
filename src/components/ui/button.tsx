@@ -7,10 +7,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-brand text-brand-fg hover:bg-brand-deep",
-        secondary: "glass text-fg hover:bg-fg/8",
+        default:
+          "bg-[linear-gradient(180deg,#f0d78a_0%,#d4af57_48%,#b8892a_100%)] text-brand-fg shadow-[var(--shadow-gold)] hover:brightness-105",
+        secondary:
+          "bg-elevated text-fg shadow-[var(--shadow-border)] hover:shadow-[var(--shadow-border-hover)]",
         ghost: "text-fg hover:bg-fg/8",
-        outline: "glass bg-transparent text-fg hover:bg-fg/8",
+        outline:
+          "bg-transparent text-fg shadow-[var(--shadow-border)] hover:shadow-[var(--shadow-border-hover)]",
         danger: "bg-danger text-fg hover:opacity-90",
       },
       size: {

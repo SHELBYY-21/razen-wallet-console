@@ -120,7 +120,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "flex min-h-11 items-center gap-2.5 rounded-xl px-2 text-sm transition-colors duration-200",
-                  active ? "bg-white/8 text-fg" : "text-muted hover:bg-white/5 hover:text-fg",
+                  active ? "bg-brand/12 text-brand" : "text-muted hover:bg-white/5 hover:text-fg",
                 )}
               >
                 <Glyph icon={item.icon} tone={item.tone as GlyphTone} size="sm" />
@@ -194,7 +194,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 text-[11px] transition-colors duration-200",
-                  active ? "text-fg" : "text-muted",
+                  active ? "text-brand" : "text-muted",
                 )}
               >
                 <Glyph icon={item.icon} tone={active ? item.tone : "muted"} size="sm" />

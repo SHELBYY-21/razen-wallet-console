@@ -188,7 +188,9 @@ function DashAction({
         search={search}
         className={cn(
           "flex min-h-16 flex-col items-center justify-center gap-1 rounded-lg text-xs font-medium transition-opacity duration-150 hover:opacity-90",
-          primary ? "bg-brand text-brand-fg" : "panel text-muted",
+          primary
+            ? "bg-[linear-gradient(180deg,#f0d78a_0%,#d4af57_48%,#b8892a_100%)] text-brand-fg shadow-[var(--shadow-gold)]"
+            : "panel text-muted",
         )}
       >
         <Icon className="size-5" strokeWidth={1.75} />

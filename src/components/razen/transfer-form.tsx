@@ -318,11 +318,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
       )}
 
       <Button
-        className={cn(
-          "w-full",
-          method === "promptpay" && "bg-cyan text-bg hover:opacity-90",
-          method === "bank" && "bg-in text-bg hover:opacity-90",
-        )}
+        className="w-full"
         disabled={busy}
         aria-busy={busy}
         onClick={() => void onSubmit()}
