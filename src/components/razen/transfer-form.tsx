@@ -29,6 +29,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
   const transfer = useRazen((s) => s.transferViaApi);
   const accounts = useRazen((s) => s.accounts);
   const activeId = useRazen((s) => s.activeAccountId);
+  const txs = useRazen((s) => s.txs);
 
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
@@ -44,6 +45,20 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
   const fee = method === "bank" ? bankFee(bankCode) : 0;
   const total = (Number.isFinite(n) ? n : 0) + fee;
   const remain = Math.max(0, limit - daily);
+
+  const recents = useMemo(() => {
+    const seen = new Set<string>();
+    const out: { name: string; value: string }[] = [];
+    for (const t of txs) {
+      if (t.accountId !== activeId || t.direction !== "out" || t.method !== method) continue;
+      const value = t.counterpartMeta.replace(/\D/g, "");
+      if (!value || seen.has(value)) continue;
+      seen.add(value);
+      out.push({ name: t.counterpart, value });
+      if (out.length >= 6) break;
+    }
+    return out;
+  }, [txs, activeId, method]);
 
   const preview = useMemo(() => {
     if (method === "p2p") {
@@ -157,7 +172,21 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
               onChange={(e) => setPhone(e.target.value)}
             />
           </Field>
-          {contacts.length > 0 && (
+          {recents.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {recents.map((c) => (
+                <button
+                  key={c.value}
+                  type="button"
+                  onClick={() => setPhone(c.value)}
+                  className="min-h-11 rounded-full border border-line px-3 text-xs text-muted hover:border-brand/50 hover:text-fg"
+                >
+                  {c.name}
+                </button>
+              ))}
+            </div>
+          )}
+          {contacts.length > 0 && recents.length === 0 && (
             <div className="flex flex-wrap gap-2">
               {contacts.slice(0, 4).map((c) => (
                 <button
@@ -188,6 +217,20 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
             <PromptPayScan onHit={(v) => setPpValue(v)} />
           </div>
         </Field>
+      )}
+      {method === "promptpay" && recents.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {recents.map((c) => (
+            <button
+              key={c.value}
+              type="button"
+              onClick={() => setPpValue(c.value)}
+              className="min-h-11 rounded-full border border-line px-3 text-xs text-muted hover:border-brand/50 hover:text-fg"
+            >
+              {c.name}
+            </button>
+          ))}
+        </div>
       )}
 
       {method === "bank" && (
@@ -236,6 +279,18 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
+        <div className="mt-2 flex gap-2">
+          {[100, 500, 1000, 5000].map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setAmount(String(v))}
+              className="min-h-11 flex-1 rounded-lg border border-line text-xs tabular-nums text-muted hover:border-brand/50 hover:text-fg"
+            >
+              {v.toLocaleString("th-TH")}
+            </button>
+          ))}
+        </div>
       </Field>
 
       {method === "p2p" && (
@@ -272,7 +327,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
         aria-busy={busy}
         onClick={() => void onSubmit()}
       >
-        {busy ? "กำลังตรวจสอบผู้รับ…" : "โอนเงิน"}
+        {busy ? "กำลังตรวจสอบผู้รับ…" : "ถัดไป"}
       </Button>
 
       {rec && (
@@ -284,24 +339,26 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
             aria-labelledby="confirm-title"
           >
             <div className="mx-auto mb-2 h-1 w-10 rounded-full bg-line" />
-            <p id="confirm-title" className="text-center font-mono text-xs tracking-[0.2em] text-cyan uppercase">
-              {heading}
+            <p id="confirm-title" className="text-center text-xs tracking-[0.18em] text-brand uppercase">
+              จ่ายเงิน
             </p>
             <div className="mt-4 text-center">
               <div className="mx-auto mb-2 flex size-14 items-center justify-center rounded-full bg-elevated text-lg text-muted">
                 {rec.full_name_th.slice(0, 1)}
               </div>
               <p className="text-lg font-semibold">{rec.full_name_th}</p>
-              <p className="text-xs text-muted">{rec.full_name_en}</p>
+              <p className="text-xs text-muted">{rec.masked}</p>
+              <p className="mt-4 font-display text-4xl font-semibold tabular-nums">{baht(n)}</p>
             </div>
             <dl className="mt-4 space-y-2 text-sm">
-              <Row k="เบอร์ผู้รับ" v={rec.masked} />
-              <Row k="จำนวน" v={baht(total)} strong />
+              <Row k="ช่องทาง" v={heading.replace("ยืนยันโอน", "")} />
+              {fee > 0 && <Row k="ค่าธรรมเนียม" v={baht(fee)} />}
+              <Row k="รวมหัก" v={baht(total)} strong />
               <Row k="สถานะผู้รับ" v={rec.status} ok={rec.status === "ปกติ"} />
             </dl>
             <div className="mt-5 flex flex-col gap-2">
               <Button disabled={busy} aria-busy={busy} onClick={() => void confirm()}>
-                โอนเงิน
+                {busy ? "กำลังโอน…" : `จ่าย ${baht(n)} ให้ ${rec.full_name_th.split(" ")[0]}`}
               </Button>
               <Button variant="secondary" onClick={() => setRec(null)}>
                 ยกเลิก

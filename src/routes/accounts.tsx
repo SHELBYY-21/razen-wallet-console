@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Wallet } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Glyph } from "@/components/razen/glyph";
+import { BrandMark } from "@/components/razen/brand-mark";
 import { baht, formatPhone } from "@/lib/razen/format";
 import { useRazen, type ConnectInput } from "@/lib/razen/store";
 import { cn } from "@/lib/utils";
@@ -55,33 +55,28 @@ function AccountsPage() {
         </Button>
       </header>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
         {accounts.map((a, i) => (
           <button
             key={a.id}
             type="button"
             onClick={() => setActive(a.id)}
             className={cn(
-              "flex w-full items-center gap-3 rounded-xl bg-surface p-4 text-left panel-glow",
-              active === a.id && "shadow-[0_0_0_1px_var(--color-cyan)]",
+              "flex w-full items-center gap-3 rounded-xl p-4 text-left",
+              active === a.id ? "tmn-card" : "panel",
             )}
           >
-            <Glyph icon={Wallet} tone={active === a.id ? "teal" : "muted"} />
+            <BrandMark id="truemoney" alt="" className="size-11 rounded-full bg-white p-0.5" />
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-medium">{a.nickname}</span>
-              <span className="block text-xs text-muted">
-                {a.masked} · TMN {a.creds.tmn_id || "—"}
+              <span className={cn("block text-xs", active === a.id ? "text-white/70" : "text-muted")}>
+                {a.masked}
               </span>
             </span>
             <span className="text-right">
-              <span className="block font-semibold tabular-nums">{baht(getBalance(a.id))}</span>
-              <span
-                className={cn(
-                  "text-[11px]",
-                  a.status === "active" ? "text-in" : "text-subtle",
-                )}
-              >
-                {a.status === "active" ? "ใช้งาน" : "ไม่ใช้งาน"}
+              <span className="block font-display text-lg font-semibold tabular-nums">{baht(getBalance(a.id))}</span>
+              <span className={cn("text-[11px]", a.status === "active" ? (active === a.id ? "text-white/80" : "text-in") : "text-subtle")}>
+                {a.status === "active" ? "พร้อมใช้" : "พัก"}
               </span>
             </span>
             <span
@@ -92,7 +87,10 @@ function AccountsPage() {
                 toggle(a.id);
               }}
               onKeyDown={(e) => e.stopPropagation()}
-              className="rounded-md border border-line px-2 py-1 text-[10px] text-muted"
+              className={cn(
+                "rounded-md border px-2 py-1 text-[10px]",
+                active === a.id ? "border-white/30 text-white/80" : "border-line text-muted",
+              )}
             >
               {a.status === "active" ? "พัก" : "เปิด"}
             </span>

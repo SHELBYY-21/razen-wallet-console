@@ -59,6 +59,16 @@ export function weekdayShort(ts: number) {
   return new Date(ts).toLocaleDateString("th-TH", { weekday: "short" });
 }
 
+export function dayLabel(ts: number, now = Date.now()) {
+  const d = new Date(ts);
+  const n = new Date(now);
+  const start = (x: Date) => Date.UTC(x.getFullYear(), x.getMonth(), x.getDate());
+  const diff = Math.round((start(n) - start(d)) / 86400000);
+  if (diff === 0) return "วันนี้";
+  if (diff === 1) return "เมื่อวาน";
+  return d.toLocaleDateString("th-TH", { weekday: "short", day: "numeric", month: "short" });
+}
+
 export function accountAgeDays(openedAt: number, now = Date.now()) {
   return Math.max(1, Math.floor((now - openedAt) / 86_400_000));
 }

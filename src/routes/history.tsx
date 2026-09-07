@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { RefreshCw, Search } from "lucide-react";
 import { toast } from "sonner";
-import { TxTable } from "@/components/razen/tx-table";
+import { TxRow } from "@/components/razen/tx-row";
+import { dayLabel } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
 
 export const Route = createFileRoute("/history")({ component: HistoryPage });
@@ -40,6 +41,17 @@ function HistoryPage() {
       );
     });
   }, [txs, active, applied]);
+
+  const groups = useMemo(() => {
+    const map = new Map<string, typeof rows>();
+    for (const t of rows) {
+      const k = dayLabel(t.createdAt);
+      const list = map.get(k) ?? [];
+      list.push(t);
+      map.set(k, list);
+    }
+    return [...map.entries()];
+  }, [rows]);
 
   async function search() {
     setBusy(true);
@@ -89,7 +101,22 @@ function HistoryPage() {
           </button>
         </div>
       </div>
-      <TxTable rows={rows} onOpen={setReceipt} />
+      <div className="space-y-5">
+        {groups.length === 0 ? (
+          <p className="panel px-4 py-8 text-center text-sm text-muted">ไม่มีรายการ</p>
+        ) : (
+          groups.map(([day, list]) => (
+            <section key={day}>
+              <h2 className="mb-2 px-1 text-xs font-medium tracking-wide text-subtle">{day}</h2>
+              <div className="panel divide-y divide-line/60 px-1 py-1">
+                {list.map((tx) => (
+                  <TxRow key={tx.id} tx={tx} onClick={() => setReceipt(tx.id)} />
+                ))}
+              </div>
+            </section>
+          ))
+        )}
+      </div>
     </div>
   );
 }

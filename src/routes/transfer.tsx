@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Wallet } from "lucide-react";
 import { TransferForm } from "@/components/razen/transfer-form";
 import { BrandMark } from "@/components/razen/brand-mark";
-import { Glyph } from "@/components/razen/glyph";
 import { baht } from "@/lib/razen/format";
 import { useRazen } from "@/lib/razen/store";
 import type { TransferMethod } from "@/lib/razen/types";
@@ -28,15 +26,15 @@ function TransferPage() {
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
-      <div className="panel-hero flex items-center justify-between gap-4 px-5 py-5">
+      <div className="tmn-card flex items-center justify-between gap-4 px-5 py-5">
         <div className="flex items-center gap-3">
-          <Glyph icon={Wallet} tone="gold" />
+          <BrandMark id="truemoney" alt="TrueMoney" className="size-10 rounded-full bg-white p-0.5" />
           <div>
-            <p className="kicker">จ่ายออก</p>
-            <p className="mt-1 text-sm text-muted">ยอดใช้ได้</p>
+            <p className="text-xs tracking-[0.16em] uppercase text-white/70">TrueMoney Wallet</p>
+            <p className="mt-1 text-sm text-white/80">ยอดพร้อมโอน</p>
           </div>
         </div>
-        <p className="font-display text-2xl font-semibold tabular-nums text-brand">{baht(balance)}</p>
+        <p className="font-display text-2xl font-semibold tabular-nums">{baht(balance)}</p>
       </div>
 
       <Tabs

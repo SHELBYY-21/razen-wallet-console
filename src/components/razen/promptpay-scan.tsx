@@ -106,45 +106,44 @@ export function PromptPayScan({ onHit }: Props) {
         สแกน QR
       </Button>
       {open && (
-        <div className="fixed inset-0 z-[var(--z-modal)] flex items-end justify-center bg-bg/70 p-3 sm:items-center">
-          <div className="w-full max-w-md rounded-2xl border border-line bg-surface p-4" role="dialog" aria-modal="true" aria-labelledby="scan-title">
-            <div className="mb-3 flex items-center justify-between">
-              <p id="scan-title" className="flex items-center gap-2 text-sm font-medium">
-                <BrandMark id="promptpay" alt="" className="size-6" />
-                สแกน QR พร้อมเพย์
-              </p>
-              <button type="button" className="min-h-11 px-3 text-sm text-muted" onClick={() => setOpen(false)} aria-label="ปิดหน้าต่างสแกน">
-                ปิด
-              </button>
-            </div>
-            <video ref={videoRef} className="razen-enter aspect-[4/3] w-full rounded-lg bg-bg object-cover" playsInline muted />
-            <canvas ref={canvasRef} className="hidden" />
+        <div className="fixed inset-0 z-[var(--z-modal)] bg-black" role="dialog" aria-modal="true" aria-labelledby="scan-title">
+          <video ref={videoRef} className="absolute inset-0 h-full w-full object-cover" playsInline muted />
+          <canvas ref={canvasRef} className="hidden" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_38%,rgb(0_0_0/0.55)_39%)]" />
+          <div className="absolute left-1/2 top-1/2 size-[min(72vw,280px)] -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-white/80" />
+          <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
+            <p id="scan-title" className="flex items-center gap-2 text-sm font-medium text-white">
+              <BrandMark id="promptpay" alt="" className="size-6" />
+              สแกน QR พร้อมเพย์
+            </p>
+            <button type="button" className="min-h-11 px-3 text-sm text-white/80" onClick={() => setOpen(false)} aria-label="ปิดหน้าต่างสแกน">
+              ปิด
+            </button>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 space-y-2 p-4 pb-8">
             {err && (
-              <p role="alert" className="mt-2 text-sm text-danger">
+              <p role="alert" className="text-center text-sm text-red-300">
                 {err}
               </p>
             )}
-            <div className="mt-3 flex gap-2">
+            <div className="flex gap-2">
               <Button type="button" variant="outline" className="flex-1" onClick={() => fileRef.current?.click()}>
                 วางรูป QR
               </Button>
-              <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
-                ยกเลิก
-              </Button>
             </div>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) void onFile(f);
-              }}
-            />
-            <p className="mt-2 text-xs text-subtle">สแกนแล้วใส่เบอร์ให้ — ยังไม่โอนจนกดยืนยัน</p>
+            <p className="text-center text-xs text-white/60">สแกนแล้วใส่เบอร์ให้ — ยังไม่โอนจนกดยืนยัน</p>
           </div>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) void onFile(f);
+            }}
+          />
         </div>
       )}
     </>
