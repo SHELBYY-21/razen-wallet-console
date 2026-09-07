@@ -5,23 +5,23 @@
   --font-display: "Sora", "Anuphan", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --color-bg: #0a0a0a;
-  --color-surface: #111111;
-  --color-elevated: #171717;
-  --color-panel: #1a1a1a;
-  --color-fg: #fafafa;
-  --color-muted: #a3a3a3;
-  --color-subtle: #737373;
-  --color-line: rgb(255 255 255 / 0.08);
-  --color-brand: #ff6a00;
-  --color-brand-fg: #ffffff;
-  --color-brand-deep: #e85d00;
+  --color-bg: #0a0f1e;
+  --color-surface: #111857;
+  --color-elevated: #182040;
+  --color-panel: #151d3a;
+  --color-fg: #e6eef7;
+  --color-muted: #9aa8c2;
+  --color-subtle: #6b7a99;
+  --color-line: rgb(212 175 87 / 0.16);
+  --color-brand: #d4af57;
+  --color-brand-fg: #0a0f1e;
+  --color-brand-deep: #c4a046;
   --color-cyan: #3ee0b4;
   --color-in: #10b981;
-  --color-out: #c9a84c;
+  --color-out: #d4af57;
   --color-warn: #f59e0b;
   --color-danger: #f43f5e;
-  --color-info: #2dd4bf;
+  --color-info: #1e3aba;
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -133,8 +133,9 @@
 @layer utilities {
   .atmosphere {
     background:
-      radial-gradient(42% 28% at 50% -8%, rgb(255 106 0 / 0.16), transparent 58%),
-      linear-gradient(180deg, #111111 0%, #0a0a0a 42%, #050505 100%);
+      radial-gradient(42% 28% at 50% -8%, rgb(212 175 87 / 0.18), transparent 58%),
+      radial-gradient(30% 40% at 100% 0%, rgb(30 58 186 / 0.18), transparent 50%),
+      linear-gradient(180deg, #111857 0%, #0a0f1e 48%, #070b16 100%);
   }
   .atmosphere::before {
     content: none;
@@ -155,7 +156,7 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    color: var(--color-brand-fg);
+    color: #fff;
     background: linear-gradient(160deg, #ff8a3d 0%, #ff6a00 46%, #e24100 100%);
     border-radius: var(--radius-xl);
   }
@@ -191,7 +192,7 @@
   }
 
   .glass-frost {
-    background: rgb(10 10 10 / 0.86);
+    background: rgb(10 15 30 / 0.88);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-color: var(--color-line);
@@ -248,8 +249,8 @@
   }
 
   .dense-btn {
-    background: var(--color-cyan);
-    color: #0a1020;
+    background: var(--color-brand);
+    color: var(--color-brand-fg);
     border: 0;
     min-height: 44px;
     padding: 8px 16px;
@@ -259,7 +260,7 @@
   }
   .dense-btn:hover {
     opacity: 0.9;
-    color: #0a1020;
+    color: var(--color-brand-fg);
   }
   .dense-btn:disabled {
     opacity: 0.45;
