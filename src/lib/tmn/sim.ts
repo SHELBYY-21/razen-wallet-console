@@ -3,7 +3,7 @@ import { isThaiMobile, maskPhone } from "../razen/format.ts";
 import type { TmnCredentials, WalletFeeChannel } from "../razen/types.ts";
 
 export type TmnOk<T> = { ok: true; data: T };
-export type TmnErr = { ok: false; error: string };
+export type TmnErr = { ok: false; error: string; kind?: "fail" | "expired" | "face" | "pin" };
 export type TmnResult<T> = TmnOk<T> | TmnErr;
 
 export type RecipientInfo = {

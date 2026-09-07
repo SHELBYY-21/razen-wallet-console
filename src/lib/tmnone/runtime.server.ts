@@ -4,8 +4,13 @@ import { configureTmn, runOfficialExample } from "./bootstrap";
 import { safeErrMessage, verdictOf } from "./errors";
 import type { TmnCreds, TmnOp, TmnRequest, TmnWire } from "./types";
 
-function wire(ok: boolean, error: string, data?: unknown): TmnWire {
-  return { ok, error, json: JSON.stringify(data ?? null) };
+function wire(
+  ok: boolean,
+  error: string,
+  data?: unknown,
+  kind?: TmnWire["kind"],
+): TmnWire {
+  return { ok, error, json: JSON.stringify(data ?? null), kind };
 }
 
 async function session(creds: TmnCreds) {
@@ -127,7 +132,7 @@ export async function runTmn(req: TmnRequest): Promise<TmnWire> {
       data = await dispatch(tmn, op, payload);
       v = verdictOf(data);
     }
-    if (v.kind !== "ok") return wire(false, v.error, data);
+    if (v.kind !== "ok") return wire(false, v.error, data, v.kind);
     return wire(true, "", data);
   } catch (e) {
     return wire(false, safeErrMessage(e));

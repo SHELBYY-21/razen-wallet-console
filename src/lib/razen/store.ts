@@ -425,7 +425,19 @@ export const useRazen = create<RazenState>()(
           ];
         }
         const res = await tmnInvoke<unknown>(method, params, ctx);
-        if (!res.ok) return { ok: false, error: res.error };
+        if (!res.ok) {
+          if (res.kind === "face") {
+            get().pushNotice("รอยืนยันใบหน้า", res.error, "face", { href: "/desk" });
+            void get().askFace();
+          } else if (res.kind === "pin") {
+            get().pushNotice("ต้องยืนยัน PIN", res.error, "fail", { href: "/desk" });
+          } else if (res.kind === "expired") {
+            get().pushNotice("เซสชันหมดอายุ", res.error, "fail", { href: "/desk" });
+          } else {
+            get().pushNotice("ไม่ผ่าน", res.error, "fail", { href: "/history" });
+          }
+          return { ok: false, error: res.error };
+        }
         const draftId = pickDeepStr(res.data, "draft_transaction_id");
         let reportId: string | undefined;
         let status: Transaction["status"] = draftId && input.method === "p2p" ? "processing" : "completed";

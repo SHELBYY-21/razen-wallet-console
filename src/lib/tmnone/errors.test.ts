@@ -33,6 +33,12 @@ describe("verdictOf", () => {
     assert.equal(pin.kind, "pin");
   });
 
+  it("classifies SDK { error } strings from transfer catch", () => {
+    assert.equal(verdictOf({ error: "TRC-428 - ต้องยืนยันใบหน้า" }).kind, "face");
+    assert.equal(verdictOf({ error: "liveness check failed" }).kind, "face");
+    assert.equal(verdictOf({ error: "FND-428 pin required" }).kind, "pin");
+  });
+
   it("fails other non-200 codes", () => {
     const v = verdictOf({ code: "P2P-400", message: "ยอดไม่พอ" });
     assert.equal(v.kind, "fail");
@@ -40,7 +46,7 @@ describe("verdictOf", () => {
   });
 
   it("safeErrMessage does not throw without stack", () => {
-    assert.equal(safeErrMessage({}), "[object Object]");
+    assert.equal(safeErrMessage({}), "ไม่สามารถติดต่อ TMNOne ได้");
     assert.equal(safeErrMessage({ error: "x" }), "x");
     assert.equal(safeErrMessage(new Error("boom")), "boom");
   });

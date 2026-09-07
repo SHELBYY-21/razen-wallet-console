@@ -40,4 +40,5 @@ export type TmnWire = {
   ok: boolean;
   error: string;
   json: string;
+  kind?: "fail" | "expired" | "face" | "pin";
 };

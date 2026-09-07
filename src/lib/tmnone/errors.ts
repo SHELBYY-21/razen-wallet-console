@@ -5,12 +5,16 @@ export type WalletVerdict =
   | { kind: "face"; error: string }
   | { kind: "pin"; error: string };
 
+export type FailKind = Exclude<WalletVerdict["kind"], "ok">;
+
 export function safeErrMessage(e: unknown) {
-  if (e instanceof Error) return e.message || "unknown error";
+  if (e instanceof Error) return e.message || "ไม่สามารถติดต่อ TMNOne ได้";
   if (e && typeof e === "object" && "error" in e && typeof (e as { error: unknown }).error === "string") {
     return (e as { error: string }).error;
   }
-  return String(e || "ไม่สามารถติดต่อ TMNOne ได้");
+  if (e && typeof e === "object") return "ไม่สามารถติดต่อ TMNOne ได้";
+  const s = String(e ?? "");
+  return s && s !== "undefined" ? s : "ไม่สามารถติดต่อ TMNOne ได้";
 }
 
 function methodOf(data: unknown): string {
@@ -19,26 +23,37 @@ function methodOf(data: unknown): string {
   return typeof m === "string" ? m : "";
 }
 
+function fromErrorString(e: string): WalletVerdict | null {
+  if (/MAS-401/.test(e)) {
+    return { kind: "expired", error: "MAS-401 session หมดอายุ — loginWithPin6 ใหม่" };
+  }
+  if (
+    /liveness/i.test(e) ||
+    /verifyface/i.test(e) ||
+    /ใบหน้า/.test(e) ||
+    (/face/i.test(e) && (/-428/.test(e) || /timeout/i.test(e)))
+  ) {
+    return { kind: "face", error: e };
+  }
+  if (/-428/.test(e) && /pin/i.test(e)) {
+    return { kind: "pin", error: e };
+  }
+  return null;
+}
+
 export function verdictOf(data: unknown): WalletVerdict {
   if (data == null || data === "") {
     return { kind: "fail", error: "ไม่มีคำตอบจาก Wallet" };
   }
   if (typeof data === "string") {
     if (!data.trim()) return { kind: "fail", error: "ไม่มีคำตอบจาก Wallet" };
-    return { kind: "ok" };
+    return fromErrorString(data) ?? { kind: "ok" };
   }
   if (typeof data !== "object") return { kind: "ok" };
 
   const rec = data as Record<string, unknown>;
   if (typeof rec.error === "string" && rec.error.trim()) {
-    const e = rec.error;
-    if (/MAS-401/.test(e)) {
-      return { kind: "expired", error: "MAS-401 session หมดอายุ — loginWithPin6 ใหม่" };
-    }
-    if (/liveness/i.test(e) || /face/i.test(e) && /timeout/i.test(e)) {
-      return { kind: "face", error: `หมดเวลายืนยันใบหน้า (${e})` };
-    }
-    return { kind: "fail", error: e };
+    return fromErrorString(rec.error) ?? { kind: "fail", error: rec.error };
   }
 
   const code = typeof rec.code === "string" ? rec.code : "";

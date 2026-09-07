@@ -102,7 +102,7 @@ async function sdkCall<T>(
         payload: payloadOf(method, params),
       },
     });
-    if (!wire.ok) return { ok: false, error: wire.error || "TMNOne ไม่สำเร็จ" };
+    if (!wire.ok) return { ok: false, error: wire.error || "TMNOne ไม่สำเร็จ", kind: wire.kind };
     const data = wire.json ? (JSON.parse(wire.json) as T) : (null as T);
     return { ok: true, data };
   } catch (e) {
