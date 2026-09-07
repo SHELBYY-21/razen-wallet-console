@@ -35,6 +35,7 @@ export function ReceiptSheet() {
 
 function ReceiptBody({ tx }: { tx: Transaction }) {
   const [copied, setCopied] = useState(false);
+  const info = useRazen((s) => s.lastTxInfo);
   const bank = bankByCode(tx.bankCode);
   async function copy() {
     try {
@@ -68,6 +69,12 @@ function ReceiptBody({ tx }: { tx: Transaction }) {
         <Row label="รายละเอียด" value={tx.counterpartMeta} />
         {tx.note && <Row label="บันทึก" value={tx.note} />}
         <Row label="เวลา" value={formatDateTime(tx.createdAt)} />
+        {tx.reportId && <Row label="report_id" value={tx.reportId} />}
+        {info != null && (
+          <pre className="max-h-40 overflow-auto rounded-md bg-black/40 p-3 font-mono text-[10px] text-cyan">
+            {JSON.stringify(info, null, 2)}
+          </pre>
+        )}
         <Separator />
         <div className="flex items-center justify-between gap-3">
           <div>

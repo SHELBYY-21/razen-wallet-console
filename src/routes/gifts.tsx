@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,12 @@ function GiftsPage() {
   const create = useRazen((s) => s.createEnvelope);
   const claim = useRazen((s) => s.claimEnvelope);
   const envelopes = useRazen((s) => s.envelopes);
+  const pullVouchers = useRazen((s) => s.pullVouchers);
   const getBalance = useRazen((s) => s.balance);
+
+  useEffect(() => {
+    void pullVouchers();
+  }, [pullVouchers]);
   const [total, setTotal] = useState("");
   const [count, setCount] = useState("1");
   const [msg, setMsg] = useState("");

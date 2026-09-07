@@ -8,7 +8,7 @@ import { browserNotify, makeNotice, markOneRead, prependNotices, type NoticeLink
 import { tmnConfigured } from "@/lib/tmnone/creds";
 import { rememberLocal } from "@/lib/memory/client";
 import { payeeKey } from "@/lib/memory/payee";
-import { mapHistory, parseBalance } from "@/lib/tmnone/parse";
+import { asList, mapHistory, parseBalance, pickDeepStr, pickStr } from "@/lib/tmnone/parse";
 import { addYmd, ymd } from "@/lib/tmnone/bootstrap";
 import type {
   Account,
@@ -77,6 +77,8 @@ type RazenState = {
   lastQr: QrSlip | null;
   lastFees: FeeInfo[];
   lastProbe: Record<string, unknown> | null;
+  lastTxInfo: unknown;
+  lastAmity: string | null;
   sessionToken: string | null;
   mascotUntil: number;
   setHydrated: (v: boolean) => void;
@@ -122,6 +124,9 @@ type RazenState = {
   inspectQr: (raw: string) => Promise<{ ok: true; data: QrSlip } | { ok: false; error: string }>;
   makePaymentCode: () => Promise<{ ok: true; data: PaymentCodeOut } | { ok: false; error: string }>;
   loadFees: () => Promise<void>;
+  loadTxInfo: (reportId: string) => Promise<{ ok: true; data: unknown } | { ok: false; error: string }>;
+  pullAmity: () => Promise<{ ok: true; token: string } | { ok: false; error: string }>;
+  pullVouchers: () => Promise<{ ok: true; count: number } | { ok: false; error: string }>;
   testLogin: () => Promise<{ ok: true } | { ok: false; error: string }>;
   updateCreds: (id: string, patch: Partial<TmnCredentials>) => void;
   pullHistory: (
@@ -168,6 +173,8 @@ function applySeed() {
     lastQr: null as QrSlip | null,
     lastFees: [] as FeeInfo[],
     lastProbe: null as Record<string, unknown> | null,
+    lastTxInfo: null as unknown,
+    lastAmity: null as string | null,
     sessionToken: null as string | null,
     mascotUntil: 0,
   };
@@ -417,23 +424,18 @@ export const useRazen = create<RazenState>()(
             s.pin,
           ];
         }
-        const res = await tmnInvoke<{ draft_transaction_id?: string }>(method, params, ctx);
+        const res = await tmnInvoke<unknown>(method, params, ctx);
         if (!res.ok) return { ok: false, error: res.error };
-        const draftId = res.data?.draft_transaction_id;
+        const draftId = pickDeepStr(res.data, "draft_transaction_id");
         let reportId: string | undefined;
-        let status: Transaction["status"] = draftId ? "processing" : "completed";
-        if (draftId) {
-          const st = await tmnInvoke<{ status?: string; report_id?: string }>(
-            "getTransferP2PStatus",
-            [draftId],
-            ctxOf(get()),
-          );
+        let status: Transaction["status"] = draftId && input.method === "p2p" ? "processing" : "completed";
+        if (input.method === "p2p" && draftId) {
+          const st = await tmnInvoke<unknown>("getTransferP2PStatus", [draftId], ctxOf(get()));
           if (st.ok) {
-            const ok =
-              !st.data.status ||
-              /success|ok|complete/i.test(String(st.data.status));
+            const stStatus = pickDeepStr(st.data, "status");
+            const ok = !stStatus || /success|ok|complete/i.test(stStatus);
             if (ok) status = "completed";
-            reportId = st.data.report_id;
+            reportId = pickDeepStr(st.data, "report_id") || undefined;
           }
         }
         const sent = get().send(
@@ -748,7 +750,12 @@ export const useRazen = create<RazenState>()(
         toast.message("รีเซ็ตโต๊ะปฏิบัติการแล้ว");
       },
 
-      setLastReceipt: (id) => set({ lastReceiptId: id }),
+      setLastReceipt: (id) => {
+        set({ lastReceiptId: id, lastTxInfo: null });
+        if (!id) return;
+        const tx = get().txs.find((t) => t.id === id);
+        if (tx?.reportId) void get().loadTxInfo(tx.reportId);
+      },
 
       inspectQr: async (raw) => {
         const res = await tmnInvoke<QrSlip>("fetchQRDetail", [raw], ctxOf(get()));
@@ -776,6 +783,47 @@ export const useRazen = create<RazenState>()(
           if (res.ok) out.push(res.data);
         }
         set({ lastFees: out });
+      },
+
+      loadTxInfo: async (reportId) => {
+        const res = await tmnInvoke<unknown>("fetchTransactionInfo", [reportId], ctxOf(get()));
+        if (res.ok) set({ lastTxInfo: res.data });
+        return res;
+      },
+
+      pullAmity: async () => {
+        const res = await tmnInvoke<unknown>("getAmityToken", [], ctxOf(get()));
+        if (!res.ok) return res;
+        const token = pickDeepStr(res.data, "token", "amity_token", "access_token");
+        if (!token) return { ok: false as const, error: "ไม่มี token จาก getAmityToken" };
+        set({ lastAmity: token });
+        return { ok: true as const, token };
+      },
+
+      pullVouchers: async () => {
+        const s = get();
+        const res = await tmnInvoke<unknown>("fetchVoucherHistory", [], ctxOf(s));
+        if (!res.ok) return res;
+        const rows = asList(res.data);
+        if (!rows.length) return { ok: true as const, count: 0 };
+        const mapped: Envelope[] = rows.map((row, i) => {
+          const id = pickStr(row, "voucher_id", "id", "code") || `v-${i}`;
+          const amt = Number(pickStr(row, "amount", "total") || 0);
+          return {
+            id: `vh-${id}`,
+            code: id.slice(-8).toUpperCase(),
+            amount: amt,
+            message: pickStr(row, "detail", "message", "note"),
+            fromName: "TMN",
+            createdAt: Date.now(),
+            txId: `vh-${id}`,
+            status: pickStr(row, "status").toLowerCase().includes("claim") ? "claimed" : "open",
+            voucherLink: pickStr(row, "link", "url") || undefined,
+          };
+        });
+        const local = s.envelopes.filter((e) => !e.id.startsWith("vh-"));
+        set({ envelopes: [...mapped, ...local] });
+        return { ok: true as const, count: mapped.length };
       },
 
       testLogin: async () => {

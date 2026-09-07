@@ -17,8 +17,12 @@ export type McpTool = {
 export const MCP_INSTRUCTIONS = `RAZEN TMNOne operator MCP.
 Default mode is SIM unless TMN_MODE=live and TMN_KEY_ID / TMN_MSISDN / TMN_LOGIN_TOKEN / TMN_ID / TMN_PIN are set.
 Wallet PIN is used only inside loginWithPin6 — never prompt the operator for PIN on each transfer.
-Workflow: tmn_bootstrap (setData→login→balance→history→txinfo) then tmn_recipient before tmn_transfer_p2p / promptpay / bank.
-History: start inclusive YYYY-MM-DD, end exclusive, limit ≤ 50.
+Workflow: tmn_bootstrap (setData→loginWithPin6→getBalance→fetchTransactionHistory→fetchTransactionInfo).
+P2P: tmn_recipient (getRecipientInfo) then tmn_transfer_p2p then tmn_p2p_status.
+PromptPay: tmn_transfer_promptpay only (no getRecipientInfo).
+Bank: tmn_transfer_bank (PIN from creds inside transferBankAC).
+Voucher: tmn_voucher / tmn_vouchers. Shop QR: tmn_payment_code. Slip: tmn_qr. Chat: tmn_amity.
+History: start inclusive YYYY-MM-DD, end exclusive, limit ≤ 50. Dates are Asia/Bangkok.
 Face webhook POSTs {"wallet_msisdn":"..."} then waits faceauth_wait_timeout (default 180).
 Memory: razen_memory_remember / recall / forget — CoALA kinds semantic (facts), episodic (events), procedural (how-tos). Recall always filters by wallet accountId; procedural skills stay shared. Ranked by keyword + recency + frequency; stale low-importance episodes decay.
 Artifacts: razen_artifact_receipt returns a self-contained HTML slip. razen_artifact_desk returns the TMNOne operator runbook.`;

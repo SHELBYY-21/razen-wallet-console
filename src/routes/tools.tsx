@@ -30,6 +30,8 @@ export function ToolsPage() {
   const paymentCode = useRazen((s) => s.paymentCode);
   const inspectQr = useRazen((s) => s.inspectQr);
   const lastQr = useRazen((s) => s.lastQr);
+  const pullAmity = useRazen((s) => s.pullAmity);
+  const lastAmity = useRazen((s) => s.lastAmity);
   const session = useRazen((s) => s.sessionToken);
   const lastProbe = useRazen((s) => s.lastProbe);
   const accounts = useRazen((s) => s.accounts);
@@ -350,6 +352,24 @@ export function ToolsPage() {
               </dd>
             </div>
           </dl>
+        )}
+      </section>
+
+      <section className="panel p-5">
+        <h2 className="mb-1 text-sm font-medium">getAmityToken</h2>
+        <p className="mb-3 text-xs text-muted">แชทบน tmn.one/amity.html</p>
+        <Button
+          variant="secondary"
+          onClick={async () => {
+            const r = await pullAmity();
+            if (!r.ok) toast.error(r.error);
+            else toast.success("ได้ token แล้ว");
+          }}
+        >
+          ดึง token
+        </Button>
+        {lastAmity && (
+          <p className="mt-3 break-all font-mono text-[11px] text-cyan">{lastAmity}</p>
         )}
       </section>
 

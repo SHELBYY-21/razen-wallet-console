@@ -2,6 +2,7 @@ import { authorize } from "@/lib/mcp/auth";
 import { ctxFromEnv } from "@/lib/mcp/handle";
 import { tmnConfigured } from "@/lib/tmnone/creds";
 import { ymd } from "@/lib/tmnone/bootstrap";
+import { pickDeepStr } from "@/lib/tmnone/parse";
 import { tmnInvoke } from "@/lib/tmn/client";
 import type { TmnCredentials } from "@/lib/razen/types";
 import { health, openapi } from "./spec";
@@ -66,11 +67,22 @@ export async function txSend(body: Record<string, unknown>) {
   const amount = Number(body.amount);
   const note = String(body.note ?? "");
   if (!Number.isFinite(amount) || amount <= 0) return { ok: false as const, error: "ยอดไม่ถูกต้อง" };
+  const payee = String(body.payee ?? "");
   if (method === "promptpay") {
-    return tmnInvoke("transferQRPromptpay", [String(body.payee ?? ""), amount, note], ctx);
+    return tmnInvoke("transferQRPromptpay", [payee, amount, note], ctx);
   }
   if (method === "bank") {
-    return tmnInvoke("transferBankAC", [String(body.bank ?? ""), String(body.payee ?? ""), amount, ctx.pin], ctx);
+    return tmnInvoke("transferBankAC", [String(body.bank ?? ""), payee, amount, ctx.pin], ctx);
   }
-  return tmnInvoke("transferP2P", [String(body.payee ?? ""), amount, note], ctx);
+  const rec = await tmnInvoke("getRecipientInfo", [payee], ctx);
+  if (!rec.ok) return rec;
+  const sent = await tmnInvoke("transferP2P", [payee, amount, note], ctx);
+  if (!sent.ok) return sent;
+  const draft = pickDeepStr(sent.data, "draft_transaction_id");
+  if (!draft) return { ok: true as const, data: { recipient: rec.data, transfer: sent.data } };
+  const st = await tmnInvoke("getTransferP2PStatus", [draft], ctx);
+  return {
+    ok: true as const,
+    data: { recipient: rec.data, transfer: sent.data, status: st.ok ? st.data : null },
+  };
 }

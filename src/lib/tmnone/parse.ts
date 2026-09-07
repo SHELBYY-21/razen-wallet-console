@@ -22,6 +22,33 @@ function walk(value: unknown, keys: string[]): number | null {
   return null;
 }
 
+export function pickDeepStr(data: unknown, ...keys: string[]): string {
+  const walk = (v: unknown): string => {
+    if (!v) return "";
+    if (Array.isArray(v)) {
+      for (const item of v) {
+        const hit = walk(item);
+        if (hit) return hit;
+      }
+      return "";
+    }
+    if (typeof v === "object") {
+      const rec = v as Record<string, unknown>;
+      for (const k of keys) {
+        const val = rec[k];
+        if (typeof val === "string" && val.trim()) return val.trim();
+        if (typeof val === "number" && Number.isFinite(val)) return String(val);
+      }
+      if ("data" in rec) {
+        const hit = walk(rec.data);
+        if (hit) return hit;
+      }
+    }
+    return "";
+  };
+  return walk(data);
+}
+
 export function parseBalance(data: unknown): number | null {
   return walk(data, [
     "current_balance",
