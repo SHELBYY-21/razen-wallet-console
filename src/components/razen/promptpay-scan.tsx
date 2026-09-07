@@ -131,7 +131,7 @@ export function PromptPayScan({ onHit }: Props) {
                 วางรูป QR
               </Button>
             </div>
-            <p className="text-center text-xs text-white/60">สแกนแล้วใส่เบอร์ให้ — ยังไม่โอนจนกดยืนยัน</p>
+            <p className="text-center text-xs text-white/60">สแกนแล้วใส่เบอร์ — กดถัดไปถึงโอน</p>
           </div>
           <input
             ref={fileRef}

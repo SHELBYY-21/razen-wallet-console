@@ -62,8 +62,6 @@ export function DeskDash() {
       .slice(0, 6);
   }, [txs, activeId, q]);
 
-  const hour = new Date().getHours();
-  const hello = hour < 12 ? "สวัสดีตอนเช้า" : hour < 18 ? "สวัสดีตอนบ่าย" : "สวัสดีตอนเย็น";
   const reduce = useReducedMotion();
 
   return (
@@ -78,13 +76,13 @@ export function DeskDash() {
           <BrandMark id="truemoney" alt="TrueMoney" className="size-10 rounded-full bg-white p-0.5" />
           <div className="min-w-0 flex-1">
             <p className="text-xs tracking-[0.16em] uppercase opacity-80">TrueMoney Wallet</p>
-            <p className="truncate text-sm font-medium">{acc?.nickname || "ยังไม่เชื่อม"}</p>
+            <p className="truncate text-sm font-medium">{acc?.nickname || "ยังไม่เชื่อมกระเป๋า"}</p>
           </div>
           <span className="rounded-full bg-black/20 px-2.5 py-1 text-[11px] font-medium">
             {synced ? "ซิงก์แล้ว" : "รอเชื่อม"}
           </span>
         </div>
-        <p className="mt-6 text-sm opacity-80">{hello} · ยอดพร้อมโอน</p>
+        <p className="mt-6 text-sm opacity-80">ยอดพร้อมโอน</p>
         <p className="mt-1 font-sans text-4xl font-semibold leading-none tracking-tight tabular-nums sm:text-5xl">
           {synced ? baht(balance) : "—"}
         </p>
@@ -156,7 +154,9 @@ export function DeskDash() {
           <ul className="min-h-0 flex-1">
             <AnimatePresence initial={false}>
               {recent.length === 0 ? (
-                <li className="py-10 text-center text-sm text-muted">ยังไม่มีรายการในกระเป๋านี้</li>
+                <li className="py-10 text-center text-sm text-muted">
+                  {synced ? "ยังไม่มีรายการ" : "ยังไม่เชื่อมกระเป๋า"}
+                </li>
               ) : (
                 recent.map((tx) => <TxRow key={tx.id} tx={tx} onOpen={() => setReceipt(tx.id)} />)
               )}

@@ -18,6 +18,8 @@ function HistoryPage() {
   const setReceipt = useRazen((s) => s.setLastReceipt);
   const pullHistory = useRazen((s) => s.pullHistory);
   const mode = useRazen((s) => s.settings.mode);
+  const accounts = useRazen((s) => s.accounts);
+  const linked = accounts.find((a) => a.id === active)?.walletBalance != null;
   const today = new Date();
   const week = new Date(today.getTime() - 7 * 86400000);
   const [start, setStart] = useState(iso(week));
@@ -103,7 +105,9 @@ function HistoryPage() {
       </div>
       <div className="space-y-5">
         {groups.length === 0 ? (
-          <p className="panel px-4 py-8 text-center text-sm text-muted">ไม่มีรายการ</p>
+          <p className="panel px-4 py-8 text-center text-sm text-muted">
+            {linked ? "ยังไม่มีรายการ" : "ยังไม่เชื่อมกระเป๋า"}
+          </p>
         ) : (
           groups.map(([day, list]) => (
             <section key={day}>

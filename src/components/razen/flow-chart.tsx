@@ -19,8 +19,8 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
   const inSum = data.reduce((n, d) => n + d.inn, 0);
   const outSum = data.reduce((n, d) => n + d.out, 0);
   const summary = empty
-    ? "ยังไม่มีรายการใน 7 วันนี้"
-    : `รับเข้า ${baht(inSum)} จ่ายออก ${baht(outSum)} ใน 7 วัน`;
+    ? "ยังไม่มีรายการ"
+    : `เข้า ${baht(inSum)} · ออก ${baht(outSum)}`;
 
   return (
     <div className="relative h-64 w-full sm:h-72" role="img" aria-label={summary}>
@@ -115,7 +115,7 @@ export function FlowChart({ data }: { data: FlowPoint[] }) {
       </ResponsiveContainer>
       {empty && (
         <p className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm text-subtle">
-          ยังไม่มีรายการใน 7 วันนี้ — ซิงก์ประวัติวอลเล็ต
+          ยังไม่มีรายการ — ซิงก์ประวัติ
         </p>
       )}
     </div>

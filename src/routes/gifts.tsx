@@ -28,7 +28,7 @@ function GiftsPage() {
     const res = await create({
       amount: Number(total),
       message: msg,
-      fromName: "RAZEN",
+      fromName: "CE",
       count: Number(count) || 1,
     });
     setBusy(false);

@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/desk", label: "ภาพรวม", short: "ภาพรวม", icon: Home, tone: "gold" },
-  { to: "/transfer", label: "โอนเงิน", short: "โอน", icon: Send, tone: "teal" },
+  { to: "/transfer", label: "โอน", short: "โอน", icon: Send, tone: "teal" },
   { to: "/history", label: "ประวัติ", short: "ประวัติ", icon: Clock3, tone: "warn" },
   { to: "/accounts", label: "กระเป๋า", short: "กระเป๋า", icon: Wallet, tone: "in" },
   { to: "/gifts", label: "ซองอั่งเปา", short: "ซอง", icon: Gift, tone: "danger" },
@@ -30,12 +30,12 @@ const NAV = [
 ] as const;
 
 const TITLE: Record<string, { kicker: string; title: string }> = {
-  "/desk": { kicker: "โต๊ะวันนี้", title: "ภาพรวม" },
-  "/transfer": { kicker: "จ่ายออก", title: "โอนเงิน" },
-  "/history": { kicker: "ตรวจสอบ", title: "ประวัติ" },
+  "/desk": { kicker: "วันนี้", title: "ภาพรวม" },
+  "/transfer": { kicker: "โอน", title: "จ่าย" },
+  "/history": { kicker: "ตรวจ", title: "ประวัติ" },
   "/accounts": { kicker: "วอลเล็ต", title: "กระเป๋า" },
-  "/gifts": { kicker: "อั่งเปา", title: "ซอง" },
-  "/tools": { kicker: "TMNOne", title: "ตั้งค่า" },
+  "/gifts": { kicker: "ซอง", title: "อั่งเปา" },
+  "/tools": { kicker: "ระบบ", title: "ตั้งค่า" },
 };
 
 const MOBILE_NAV = NAV.filter((n) =>
@@ -132,7 +132,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="m-3 flex items-center gap-2 rounded-lg bg-elevated px-3 py-2.5 shadow-[var(--shadow-border)]">
           <BrandMark id="truemoney" alt="TrueMoney" className="size-8 rounded-full" />
           <div className="min-w-0">
-            <p className="truncate text-sm">{acc?.nickname || "ยังไม่เชื่อม"}</p>
+            <p className="truncate text-sm">{acc?.nickname || "ยังไม่เชื่อมกระเป๋า"}</p>
             <p className="font-mono text-[10px] text-brand">
               {acc?.masked || "ตั้งค่ากระเป๋า"} · {mode === "live" ? "LIVE" : "SIM"}
             </p>

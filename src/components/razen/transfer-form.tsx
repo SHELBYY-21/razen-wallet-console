@@ -83,10 +83,10 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
 
   function validate(): string | null {
     const acc = accounts.find((a) => a.id === activeId);
-    if (!acc || !tmnConfigured(acc.creds)) return "เชื่อมกระเป๋าที่เครื่องมือก่อนโอน";
-    if (acc.walletBalance == null) return "ซิงก์ยอด getBalance ก่อนโอน";
-    if (!Number.isFinite(n) || n <= 0) return "กรุณาใส่จำนวนเงิน";
-    if (method === "p2p" && !isThaiMobile(phone)) return "เบอร์มือถือไม่ถูกต้อง";
+    if (!acc || !tmnConfigured(acc.creds)) return "ยังไม่เชื่อมกระเป๋า";
+    if (acc.walletBalance == null) return "ซิงก์ยอดก่อนโอน";
+    if (!Number.isFinite(n) || n <= 0) return "ใส่จำนวน";
+    if (method === "p2p" && !isThaiMobile(phone)) return "เบอร์ไม่ถูกต้อง";
     if (method === "promptpay") {
       const d = ppValue.replace(/\D/g, "");
       if (!(isThaiMobile(d) || isThaiNationalId(d))) return "หมายเลขพร้อมเพย์ไม่ถูกต้อง";

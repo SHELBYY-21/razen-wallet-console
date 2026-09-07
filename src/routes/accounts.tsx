@@ -56,6 +56,9 @@ function AccountsPage() {
       </header>
 
       <div className="space-y-3">
+        {accounts.length === 0 && (
+          <p className="panel px-4 py-8 text-center text-sm text-muted">ยังไม่เชื่อมกระเป๋า</p>
+        )}
         {accounts.map((a, i) => (
           <button
             key={a.id}

@@ -18,7 +18,7 @@ export function RazenWordmark({ compact = false }: { compact?: boolean }) {
       <RazenMark />
       <div className="min-w-0 leading-tight">
         <div className="font-display text-[11px] font-semibold tracking-[0.28em] text-brand">CE EMPIRE</div>
-        {!compact && <div className="text-xs text-subtle">RAZEN · TrueMoney</div>}
+        {!compact && <div className="text-xs text-subtle">TrueMoney</div>}
       </div>
     </div>
   );
