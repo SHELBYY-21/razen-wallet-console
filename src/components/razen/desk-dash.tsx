@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowDownLeft, ArrowUpRight, Clock3, Gift, Landmark, QrCode, Search, Send } from "lucide-react";
 import { FlowChart } from "@/components/razen/flow-chart";
 import { BrandMark } from "@/components/razen/brand-mark";
 import { Glyph } from "@/components/razen/glyph";
+import { fadeUp, stagger, enterEase } from "@/components/razen/motion";
 import { baht } from "@/lib/razen/format";
 import { bankByCode } from "@/lib/razen/banks";
 import { useRazen } from "@/lib/razen/store";
@@ -62,10 +64,16 @@ export function DeskDash() {
 
   const hour = new Date().getHours();
   const hello = hour < 12 ? "สวัสดีตอนเช้า" : hour < 18 ? "สวัสดีตอนบ่าย" : "สวัสดีตอนเย็น";
+  const reduce = useReducedMotion();
 
   return (
-    <div className="mx-auto max-w-6xl space-y-4">
-      <section className="tmn-card px-5 py-6 sm:px-7 sm:py-7">
+    <motion.div
+      className="mx-auto max-w-6xl space-y-4"
+      initial={reduce ? false : "hidden"}
+      animate="visible"
+      variants={stagger}
+    >
+      <motion.section className="tmn-card px-5 py-6 sm:px-7 sm:py-7" variants={fadeUp}>
         <div className="flex items-center gap-3">
           <BrandMark id="truemoney" alt="TrueMoney" className="size-10 rounded-full bg-white p-0.5" />
           <div className="min-w-0 flex-1">
@@ -88,25 +96,30 @@ export function DeskDash() {
             </span>
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/20">
-            <div className="h-full rounded-full bg-white" style={{ width: `${usedPct}%` }} />
+            <motion.div
+              className="h-full rounded-full bg-white"
+              initial={reduce ? false : { width: 0 }}
+              animate={{ width: `${usedPct}%` }}
+              transition={enterEase}
+            />
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <div className="grid grid-cols-4 gap-2">
+      <motion.div className="grid grid-cols-4 gap-2" variants={fadeUp}>
         <DashAction to="/transfer" search={{ method: "p2p" }} icon={Send} label="โอน" primary />
         <DashAction to="/transfer" search={{ method: "promptpay" }} icon={QrCode} label="สแกน" />
         <DashAction to="/transfer" search={{ method: "bank" }} icon={Landmark} label="ธนาคาร" />
         <DashAction to="/gifts" icon={Gift} label="ซอง" />
-      </div>
+      </motion.div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <motion.div className="grid gap-3 sm:grid-cols-3" variants={fadeUp}>
         <Stat k="รับเข้า" v={baht(stats.incoming)} tone="pos" />
         <Stat k="จ่ายออก" v={baht(stats.outgoing)} />
         <Stat k="ค้างส่ง" v={String(stats.pending)} pending />
-      </div>
+      </motion.div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(20rem,1fr)]">
+      <motion.div className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(20rem,1fr)]" variants={fadeUp}>
         <section className="panel p-5">
           <div className="mb-3 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
@@ -141,15 +154,17 @@ export function DeskDash() {
             />
           </label>
           <ul className="min-h-0 flex-1">
-            {recent.length === 0 ? (
-              <li className="py-10 text-center text-sm text-muted">ยังไม่มีรายการในกระเป๋านี้</li>
-            ) : (
-              recent.map((tx) => <TxRow key={tx.id} tx={tx} onOpen={() => setReceipt(tx.id)} />)
-            )}
+            <AnimatePresence initial={false}>
+              {recent.length === 0 ? (
+                <li className="py-10 text-center text-sm text-muted">ยังไม่มีรายการในกระเป๋านี้</li>
+              ) : (
+                recent.map((tx) => <TxRow key={tx.id} tx={tx} onOpen={() => setReceipt(tx.id)} />)
+              )}
+            </AnimatePresence>
           </ul>
         </section>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -167,17 +182,19 @@ function DashAction({
   primary?: boolean;
 }) {
   return (
-    <Link
-      to={to}
-      search={search}
-      className={cn(
-        "flex min-h-16 flex-col items-center justify-center gap-1 rounded-lg text-xs font-medium transition-opacity duration-150 hover:opacity-90",
-        primary ? "bg-brand text-brand-fg" : "panel text-muted",
-      )}
-    >
-      <Icon className="size-5" strokeWidth={1.75} />
-      {label}
-    </Link>
+    <motion.div variants={fadeUp} whileTap={{ scale: 0.96 }}>
+      <Link
+        to={to}
+        search={search}
+        className={cn(
+          "flex min-h-16 flex-col items-center justify-center gap-1 rounded-lg text-xs font-medium transition-opacity duration-150 hover:opacity-90",
+          primary ? "bg-brand text-brand-fg" : "panel text-muted",
+        )}
+      >
+        <Icon className="size-5" strokeWidth={1.75} />
+        {label}
+      </Link>
+    </motion.div>
   );
 }
 
@@ -202,7 +219,14 @@ function TxRow({ tx, onOpen }: { tx: Transaction; onOpen: () => void }) {
     tx.method === "promptpay" ? "promptpay" : tx.method === "p2p" || tx.method === "gift" ? "truemoney" : bank?.abbr ?? "KBANK";
   const inn = tx.direction === "in";
   return (
-    <li className="border-t border-white/10 first:border-t-0">
+    <motion.li
+      layout
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.15 }}
+      className="border-t border-white/10 first:border-t-0"
+    >
       <button
         type="button"
         onClick={onOpen}
@@ -219,6 +243,6 @@ function TxRow({ tx, onOpen }: { tx: Transaction; onOpen: () => void }) {
           {baht(inn ? tx.amount : tx.amount + tx.fee)}
         </p>
       </button>
-    </li>
+    </motion.li>
   );
 }

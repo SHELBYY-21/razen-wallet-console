@@ -9,7 +9,9 @@ import {
   Wallet,
 } from "lucide-react";
 import { Toaster } from "sonner";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { RazenWordmark } from "@/components/razen/logo";
+import { enterEase, exitEase } from "@/components/razen/motion";
 import { BrandMark } from "@/components/razen/brand-mark";
 import { Glyph, type GlyphTone } from "@/components/razen/glyph";
 import { NoticeBell } from "@/components/razen/notice-bell";
@@ -51,6 +53,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const activeId = useRazen((s) => s.activeAccountId);
   const acc = accounts.find((a) => a.id === activeId) ?? accounts[0];
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     try {
@@ -162,8 +165,18 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
         <div className="razen-hud-line" aria-hidden />
-        <main id="main" className="razen-enter min-h-[calc(100dvh-56px)] w-full px-4 py-5 pb-24 md:px-8 md:py-6 md:pb-8">
-          {mounted ? children : <SkeletonDash />}
+        <main id="main" className="min-h-[calc(100dvh-56px)] w-full px-4 py-5 pb-24 md:px-8 md:py-6 md:pb-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={pathname}
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8, transition: exitEase }}
+              transition={enterEase}
+            >
+              {mounted ? children : <SkeletonDash />}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
 
