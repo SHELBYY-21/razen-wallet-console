@@ -19,126 +19,93 @@
     --ink: #e6eef7;
     --mute: #9aa8c2;
     --bg: #0a0f1e;
-    --tmn: #ff6a00;
+    --line: rgba(212,175,87,.28);
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font: 16px/1.5 Anuphan, system-ui, sans-serif; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font: 16px/1.45 Anuphan, system-ui, sans-serif; }
   .stage {
     min-height: 100dvh;
-    display: grid;
-    place-items: center;
-    padding: 24px 16px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 16px 14px 20px;
     position: relative;
     background:
-      radial-gradient(50% 40% at 50% 0%, rgba(212,175,87,.18), transparent 58%),
-      radial-gradient(28% 36% at 100% 0%, rgba(30,58,186,.14), transparent 52%),
+      radial-gradient(50% 40% at 50% 0%, rgba(212,175,87,.16), transparent 58%),
       #0a0f1e;
   }
-  .stage::before {
-    content: "";
-    position: absolute; inset: 0; pointer-events: none;
-    background-image:
-      linear-gradient(rgba(212,175,87,.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(212,175,87,.05) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 10%, transparent 72%);
-  }
-  .wrap { position: relative; z-index: 1; width: min(1080px, 100%); }
-  .hero {
-    display: grid;
-    gap: 28px;
-    align-items: center;
-  }
-  @media (min-width: 900px) {
-    .hero { grid-template-columns: .9fr 1.1fr; }
-  }
-  .brand {
-    font-family: Cinzel, "Times New Roman", serif;
-    letter-spacing: .28em;
-    font-size: 12px;
-    color: var(--gold);
+  .wrap { position: relative; z-index: 1; width: min(1080px, 100%); margin: 0 auto; }
+  .bar {
     display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
   }
-  .who { display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; }
-  .who img { width: 56px; height: 56px; border-radius: 999px; object-fit: cover; object-position: top; border: 2px solid var(--gold); }
-  h1 { margin: 0; font-size: clamp(28px, 5vw, 44px); font-weight: 700; letter-spacing: -.03em; line-height: 1.15; }
+  .bar img.mark { width: 28px; height: 28px; border-radius: 8px; }
+  .bar img.mira { width: 36px; height: 36px; border-radius: 999px; object-fit: cover; object-position: top; border: 1.5px solid var(--gold); margin-left: auto; }
+  .brand { font-family: Cinzel, "Times New Roman", serif; letter-spacing: .24em; font-size: 11px; color: var(--gold); margin: 0; }
+  .role { margin: 0; font-size: 12px; color: var(--mute); }
+  h1 { margin: 0 0 8px; font-size: 22px; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; }
   h1 span { color: var(--gold-2); }
-  .kicker { color: var(--mute); font-size: 14px; margin: 10px 0 0; }
-  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 22px; }
-  .pills span {
-    border-radius: 999px; padding: 8px 14px; font-size: 13px;
-    background: rgba(255,255,255,.06); border: 1px solid rgba(212,175,87,.28);
-  }
+  .kicker { color: var(--mute); font-size: 13px; margin: 0 0 14px; }
   .go {
-    width: min(100%, 280px); min-height: 52px;
+    width: 100%; min-height: 48px;
     border: 0; border-radius: 999px; cursor: pointer;
     background: linear-gradient(180deg, #f3e0a0, #b8892a);
     color: #1a1206;
     font: 650 16px/1 Anuphan, sans-serif;
-    box-shadow: 0 10px 28px rgba(212,175,55,.28);
+    box-shadow: 0 8px 20px rgba(212,175,55,.24);
   }
   .go:focus-visible { outline: 2px solid var(--gold-2); outline-offset: 3px; }
-  .rails {
-    display: grid;
-    gap: 10px;
-    margin-top: 28px;
-    grid-template-columns: 1fr;
-  }
-  @media (min-width: 700px) { .rails { grid-template-columns: repeat(3, 1fr); } }
-  .rails article {
-    border: 1px solid rgba(212,175,87,.22);
-    border-radius: 16px;
-    padding: 16px 16px 14px;
-    background: rgba(255,255,255,.04);
-  }
-  .rails h3 { margin: 0 0 6px; font-size: 15px; }
-  .rails p { margin: 0; font-size: 13px; color: var(--mute); font-family: ui-monospace, monospace; }
-  .devices { position: relative; min-height: 380px; }
-  .laptop {
-    display: none;
+  table.rails {
     width: 100%;
-    aspect-ratio: 16 / 10;
-    border-radius: 14px 14px 8px 8px;
-    background: #121826;
-    border: 1px solid rgba(212,175,87,.28);
-    box-shadow: 0 30px 60px rgba(0,0,0,.45);
-    overflow: hidden;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 12px;
+    font-family: ui-monospace, ui-sans-serif, Anuphan, monospace;
   }
-  .laptop .bar { height: 22px; background: #0b101c; display: flex; align-items: center; gap: 5px; padding: 0 10px; }
-  .laptop .bar i { width: 7px; height: 7px; border-radius: 99px; background: #3a4458; }
-  .laptop .screen { padding: 14px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 10px; height: calc(100% - 22px); }
-  .tmn {
-    background: linear-gradient(160deg, #ff8a2a, #e85d04);
-    border-radius: 20px; padding: 20px; color: #fff;
-    display: flex; flex-direction: column; gap: 16px;
+  .rails th, .rails td {
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
   }
-  .tmn small { opacity: .85; font-size: 11px; letter-spacing: .12em; }
-  .tmn b { display: block; font-size: 22px; margin: 0; }
-  .icons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0; }
-  .icons span {
-    background: rgba(255,255,255,.16); border-radius: 12px; text-align: center;
-    font-size: 10px; min-height: 44px; display: grid; place-items: center; padding: 4px 2px;
-  }
-  .panel { background: rgba(255,255,255,.05); border-radius: 12px; padding: 10px; font-size: 11px; color: var(--mute); }
-  .phone {
-    width: min(240px, 62vw);
-    margin: 0 auto;
-    aspect-ratio: 280 / 560;
-    border-radius: 36px;
-    background: #0b101c;
-    border: 6px solid #2a3144;
-    box-shadow: 0 24px 50px rgba(0,0,0,.5);
-    overflow: hidden;
-    padding: 20px;
-  }
-  .phone .tmn { height: 100%; }
+  .rails th { color: var(--gold-2); font-weight: 600; font-family: Anuphan, sans-serif; width: 34%; background: rgba(212,175,87,.08); }
+  .rails td { color: var(--mute); }
+  .devices { display: none; }
   @media (min-width: 900px) {
-    .devices { min-height: 480px; padding-bottom: 72px; }
-    .laptop { display: block; }
-    .phone {
-      position: absolute; right: 6%; bottom: 0;
-      width: 210px; margin: 0;
+    .stage { padding: 28px 24px; justify-content: center; }
+    .hero { display: grid; grid-template-columns: .85fr 1.15fr; gap: 32px; align-items: center; }
+    h1 { font-size: 36px; }
+    .go { width: min(100%, 260px); }
+    .devices { display: block; position: relative; min-height: 440px; }
+    .laptop {
+      width: 100%; aspect-ratio: 16 / 10;
+      border-radius: 14px 14px 8px 8px;
+      background: #121826; border: 1px solid var(--line);
+      overflow: hidden;
     }
+    .laptop .chrome { height: 22px; background: #0b101c; display: flex; align-items: center; gap: 5px; padding: 0 10px; }
+    .laptop .chrome i { width: 7px; height: 7px; border-radius: 99px; background: #3a4458; }
+    .laptop .screen { padding: 12px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 8px; height: calc(100% - 22px); }
+    .tmn {
+      background: linear-gradient(160deg, #ff8a2a, #e85d04);
+      border-radius: 16px; padding: 14px; color: #fff;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .tmn small { opacity: .85; font-size: 11px; letter-spacing: .12em; }
+    .tmn b { font-size: 18px; }
+    .icons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .icons span {
+      background: rgba(255,255,255,.16); border-radius: 10px;
+      font-size: 10px; min-height: 36px; display: grid; place-items: center;
+    }
+    .panel { background: rgba(255,255,255,.05); border-radius: 10px; padding: 10px; font-size: 11px; color: var(--mute); font-family: ui-monospace, monospace; }
+    .phone {
+      position: absolute; right: 4%; bottom: 8px;
+      width: 180px; aspect-ratio: 280 / 560;
+      border-radius: 28px; background: #0b101c;
+      border: 5px solid #2a3144; padding: 12px; overflow: hidden;
+    }
+    .phone .tmn { height: 100%; }
   }
   .gate {
     position: fixed; inset: 0; z-index: 20;
@@ -149,7 +116,7 @@
   .gate-card { width: min(360px, 100%); text-align: center; }
   .host {
     position: relative; border-radius: 28px; overflow: hidden;
-    aspect-ratio: 2 / 3; max-height: 56dvh; margin-inline: auto;
+    aspect-ratio: 2 / 3; max-height: 52dvh; margin-inline: auto;
     background: #111;
     box-shadow: 0 24px 60px rgba(0,0,0,.45), 0 0 0 1px rgba(212,175,55,.28);
   }
@@ -174,26 +141,26 @@
     <div class="wrap">
       <div class="hero">
         <div>
-          <p class="brand"><img src="/brand/ce/mark-64.png" width="28" height="28" alt="" style="border-radius:8px"/>CE EMPIRE</p>
-          <div class="who">
-            <img src="/landing/hostess.webp" alt="มิร่า"/>
+          <div class="bar">
+            <img class="mark" src="/brand/ce/mark-64.png" width="28" height="28" alt=""/>
             <div>
-              <p class="kicker" style="margin:0">มิร่า · แอดมิน AI</p>
-              <p style="margin:0;font-weight:600">ระบบปิดพนักงาน</p>
+              <p class="brand">CE EMPIRE</p>
+              <p class="role">ระบบปิดพนักงาน</p>
             </div>
+            <img class="mira" src="/landing/hostess.webp" alt="มิร่า"/>
           </div>
           <h1>โต๊ะ TrueMoney<br><span>P2P · พร้อมเพย์ · ธนาคาร</span></h1>
-          <p class="kicker">ยอดจาก getBalance · โอนด้วยคลาส TMNOne ตามเอกสาร</p>
-          <div class="pills">
-            <span>โอนวอลเล็ต</span>
-            <span>สแกน QR</span>
-            <span>ซองอั่งเปา</span>
-          </div>
+          <p class="kicker">ยอดจาก getBalance · โอนด้วย TMNOne</p>
           <button class="go" id="enter" type="button">เข้าสู่ระบบ</button>
+          <table class="rails">
+            <tr><th>โอนวอลเล็ต</th><td>getRecipientInfo → transferP2P</td></tr>
+            <tr><th>พร้อมเพย์</th><td>transferQRPromptpay</td></tr>
+            <tr><th>ธนาคาร / ซอง</th><td>transferBankAC · generateVoucher</td></tr>
+          </table>
         </div>
         <div class="devices" aria-hidden="true">
           <div class="laptop">
-            <div class="bar"><i></i><i></i><i></i></div>
+            <div class="chrome"><i></i><i></i><i></i></div>
             <div class="screen">
               <div class="tmn">
                 <small>TRUEMONEY WALLET</small>
@@ -206,13 +173,9 @@
             </div>
           </div>
           <div class="phone">
-            <div class="tmn" style="height:100%;justify-content:flex-start">
-              <div>
-                <small>สวัสดี</small>
-                <p style="margin:4px 0 0;font-weight:600">มิร่า</p>
-                <p style="margin:16px 0 0;opacity:.85;font-size:12px">ยอดพร้อมโอน</p>
-                <p style="margin:4px 0 0;font-size:22px;font-weight:700">getBalance</p>
-              </div>
+            <div class="tmn">
+              <small>สวัสดี</small>
+              <b>getBalance</b>
               <div class="icons">
                 <span>โอน</span><span>สแกน</span><span>ธนาคาร</span><span>ซอง</span>
                 <span>ประวัติ</span><span>กระเป๋า</span><span>ร้าน</span><span>ตั้งค่า</span>
@@ -220,20 +183,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="rails">
-        <article>
-          <h3>โอนวอลเล็ต</h3>
-          <p>getRecipientInfo → transferP2P</p>
-        </article>
-        <article>
-          <h3>พร้อมเพย์</h3>
-          <p>transferQRPromptpay</p>
-        </article>
-        <article>
-          <h3>ธนาคาร / ซอง</h3>
-          <p>transferBankAC · generateVoucher</p>
-        </article>
       </div>
     </div>
   </main>
@@ -244,7 +193,7 @@
         <video id="talk" muted loop playsinline poster="/landing/hostess-talk.webp">
           <source src="/landing/talk.mp4" type="video/mp4"/>
         </video>
-        <p class="bubble" id="line">ยินดีต้อนรับค่ะ<br><b>รวยรวย เฮงเฮงนะคะ</b></p>
+        <p class="bubble">ยินดีต้อนรับค่ะ<br><b>รวยรวย เฮงเฮงนะคะ</b></p>
       </div>
       <p class="say">ยินดีต้อนรับค่ะ</p>
       <p class="kicker">กำลังพาเข้าโต๊ะ…</p>
