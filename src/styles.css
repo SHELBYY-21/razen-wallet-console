@@ -74,7 +74,7 @@
   h3 {
     text-wrap: balance;
     letter-spacing: -0.03em;
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
   }
   p {
     text-wrap: pretty;

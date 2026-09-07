@@ -48,7 +48,7 @@ function AccountsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="stack-dense">
       <header className="flex items-end justify-end gap-3">
         <Button onClick={() => setOpen(true)}>
           <Plus className="size-4" strokeWidth={1.75} /> เพิ่มบัญชี

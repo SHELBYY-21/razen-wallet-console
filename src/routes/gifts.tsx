@@ -49,7 +49,7 @@ function GiftsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg space-y-6">
+    <div className="stack-dense mx-auto max-w-lg">
       <header className="flex items-center justify-between gap-3">
         <p className="text-sm text-muted">generateVoucher · ยอดใช้ได้ {baht(getBalance())}</p>
       </header>

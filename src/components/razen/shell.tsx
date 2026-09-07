@@ -133,7 +133,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <BrandMark id="truemoney" alt="TrueMoney" className="size-8 rounded-full" />
           <div className="min-w-0">
             <p className="truncate text-sm">{acc?.nickname || "ยังไม่เชื่อม"}</p>
-            <p className="font-mono text-[10px] text-cyan">
+            <p className="font-mono text-[10px] text-brand">
               {acc?.masked || "ตั้งค่ากระเป๋า"} · {mode === "live" ? "LIVE" : "SIM"}
             </p>
           </div>
@@ -157,8 +157,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
           <div className="ml-auto flex items-center gap-1 sm:gap-3">
             <NoticeBell />
-            <span className="hidden items-center gap-1.5 rounded-full bg-elevated px-2.5 py-1 text-[11px] font-medium text-cyan sm:inline-flex">
-              <i className="size-1.5 rounded-full bg-cyan" />
+            <span className="hidden items-center gap-1.5 rounded-full bg-elevated px-2.5 py-1 text-[11px] font-medium text-brand sm:inline-flex">
+              <i className="size-1.5 rounded-full bg-brand" />
               {mode === "live" ? "LIVE" : "SIM"}
             </span>
             <div className="font-mono text-[11px] tabular-nums text-subtle">{clock}</div>

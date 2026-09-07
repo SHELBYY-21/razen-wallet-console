@@ -25,7 +25,7 @@ function TransferPage() {
   const balance = getBalance();
 
   return (
-    <div className="mx-auto max-w-xl space-y-4">
+    <div className="stack-dense mx-auto max-w-xl">
       <div className="tmn-card flex items-center justify-between gap-4 px-5 py-5">
         <div className="flex items-center gap-3">
           <BrandMark id="truemoney" alt="TrueMoney" className="size-10 rounded-full bg-white p-0.5" />

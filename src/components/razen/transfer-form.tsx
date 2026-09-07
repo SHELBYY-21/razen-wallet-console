@@ -160,7 +160,7 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
     method === "p2p" ? "ยืนยันโอน P2P" : method === "promptpay" ? "ยืนยันโอนพร้อมเพย์" : "ยืนยันโอนธนาคาร";
 
   return (
-    <div className="space-y-4">
+    <div className="stack-dense">
       {method === "p2p" && (
         <>
           <Field label="เบอร์ปลายทาง">

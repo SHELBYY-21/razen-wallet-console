@@ -112,7 +112,7 @@ export function ToolsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg space-y-6">
+    <div className="stack-dense mx-auto max-w-lg">
       <header className="text-sm text-muted">
         ตามเอกสาร{" "}
         <a
