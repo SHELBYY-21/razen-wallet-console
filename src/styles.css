@@ -225,9 +225,9 @@
   }
 
   .glass-frost {
-    background: rgb(10 15 30 / 0.88);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgb(10 15 30 / 0.72);
+    backdrop-filter: blur(16px) saturate(1.12);
+    -webkit-backdrop-filter: blur(16px) saturate(1.12);
     box-shadow: var(--shadow-border);
   }
 
@@ -248,9 +248,9 @@
     padding: 10px;
     isolation: isolate;
     overflow: hidden;
-    background: rgb(10 15 30 / 0.88);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgb(10 15 30 / 0.72);
+    backdrop-filter: blur(16px) saturate(1.12);
+    -webkit-backdrop-filter: blur(16px) saturate(1.12);
     border: 0;
     border-radius: var(--radius-lg);
   }
@@ -304,10 +304,8 @@
     overflow: auto;
     isolation: isolate;
     border-radius: var(--radius-lg);
-    background: rgb(8 12 16 / 0.55);
-    backdrop-filter: blur(20px) saturate(1.45);
-    -webkit-backdrop-filter: blur(20px) saturate(1.45);
-    border: 1px solid rgb(255 255 255 / 0.26);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
   }
 
   .data-table {
@@ -417,6 +415,21 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .glass-frost,
+  .dense-toolbar {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass-frost,
+  .dense-toolbar {
+    background: #0a0f1e;
   }
 }
 
