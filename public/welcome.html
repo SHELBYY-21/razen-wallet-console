@@ -93,7 +93,7 @@
   }
   .rails h3 { margin: 0 0 6px; font-size: 15px; }
   .rails p { margin: 0; font-size: 13px; color: var(--mute); font-family: ui-monospace, monospace; }
-  .devices { position: relative; min-height: 340px; }
+  .devices { position: relative; min-height: 380px; }
   .laptop {
     display: none;
     width: 100%;
@@ -106,35 +106,38 @@
   }
   .laptop .bar { height: 22px; background: #0b101c; display: flex; align-items: center; gap: 5px; padding: 0 10px; }
   .laptop .bar i { width: 7px; height: 7px; border-radius: 99px; background: #3a4458; }
-  .laptop .screen { padding: 14px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 10px; }
+  .laptop .screen { padding: 14px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 10px; height: calc(100% - 22px); }
   .tmn {
     background: linear-gradient(160deg, #ff8a2a, #e85d04);
-    border-radius: 14px; padding: 14px; color: #fff;
+    border-radius: 20px; padding: 20px; color: #fff;
+    display: flex; flex-direction: column; gap: 16px;
   }
   .tmn small { opacity: .85; font-size: 11px; letter-spacing: .12em; }
-  .tmn b { display: block; font-size: 22px; margin-top: 8px; }
-  .icons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; }
+  .tmn b { display: block; font-size: 22px; margin: 0; }
+  .icons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0; }
   .icons span {
-    background: rgba(255,255,255,.14); border-radius: 10px; text-align: center;
-    font-size: 10px; padding: 8px 2px;
+    background: rgba(255,255,255,.16); border-radius: 12px; text-align: center;
+    font-size: 10px; min-height: 44px; display: grid; place-items: center; padding: 4px 2px;
   }
   .panel { background: rgba(255,255,255,.05); border-radius: 12px; padding: 10px; font-size: 11px; color: var(--mute); }
   .phone {
-    width: min(220px, 58vw);
+    width: min(240px, 62vw);
     margin: 0 auto;
-    aspect-ratio: 9 / 17;
-    border-radius: 28px;
+    aspect-ratio: 280 / 560;
+    border-radius: 36px;
     background: #0b101c;
-    border: 3px solid #2a3144;
+    border: 6px solid #2a3144;
     box-shadow: 0 24px 50px rgba(0,0,0,.5);
     overflow: hidden;
-    padding: 12px 10px;
+    padding: 20px;
   }
+  .phone .tmn { height: 100%; }
   @media (min-width: 900px) {
+    .devices { min-height: 480px; padding-bottom: 72px; }
     .laptop { display: block; }
     .phone {
-      position: absolute; right: 8%; bottom: -18%;
-      width: 190px; margin: 0;
+      position: absolute; right: 6%; bottom: 0;
+      width: 210px; margin: 0;
     }
   }
   .gate {
@@ -203,7 +206,7 @@
             </div>
           </div>
           <div class="phone">
-            <div class="tmn" style="height:100%;display:flex;flex-direction:column;justify-content:space-between">
+            <div class="tmn" style="height:100%;justify-content:flex-start">
               <div>
                 <small>สวัสดี</small>
                 <p style="margin:4px 0 0;font-weight:600">มิร่า</p>
