@@ -1,4 +1,4 @@
-import { ScanFace } from "lucide-react";
+import { Check, ScanFace, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -42,9 +42,11 @@ export function FaceDialog() {
         </div>
         <div className="flex gap-2">
           <Button className="flex-1" onClick={() => resolve(true)}>
+            <Check />
             ยืนยันแล้ว
           </Button>
           <Button variant="secondary" className="flex-1" onClick={() => resolve(false)}>
+            <X />
             ยกเลิก
           </Button>
         </div>

@@ -18,6 +18,7 @@ import type { RecipientInfo } from "@/lib/tmn/client";
 import { BrandMark } from "@/components/razen/brand-mark";
 import { PromptPayScan } from "@/components/razen/promptpay-scan";
 import { Button } from "@/components/ui/button";
+import { Check, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
@@ -385,9 +386,11 @@ export function TransferForm({ method }: { method: Exclude<TransferMethod, "gift
             </dl>
             <div className="mt-5 flex flex-col gap-2">
               <Button disabled={busy} aria-busy={busy} onClick={() => void confirm()}>
-                {busy ? "กำลังโอน…" : `จ่าย ${baht(n)} ให้ ${rec.full_name_th.split(" ")[0]}`}
+                <Check />
+                {busy ? "กำลังโอน…" : `ยืนยันจ่าย ${baht(n)}`}
               </Button>
               <Button variant="secondary" onClick={() => setRec(null)}>
+                <X />
                 ยกเลิก
               </Button>
             </div>
